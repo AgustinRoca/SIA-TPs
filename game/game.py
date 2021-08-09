@@ -16,6 +16,9 @@ class Point:
     def __str__(self):
         return '(' + str(self.x) + ', ' + str(self.y) + ')'
 
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
 
 class Game:
     FREE_SPACE = ' '
@@ -27,6 +30,7 @@ class Game:
     board = []
     goals = []
     player = Player()
+    moves = 0
 
     def __init__(self):
         pass
@@ -79,19 +83,112 @@ class Game:
             print(goal, end='')
         print()
         print('Player position: (' + str(self.player.x) + ', ' + str(self.player.y) + ')')
+        print('Boxes left: ' + str(self.getBoxesLeft()))
+        print('Moves: ' + str(self.moves))
 
 
     def moveUp(self):
         if self.player.y == 0:
             return
 
-        if self.board[self.player.y - 1] == self.FREE_SPACE:
-            self.board[self.player.x][self.player.y] = self.FREE_SPACE
+        if self.board[self.player.y - 1][self.player.x] == self.FREE_SPACE or self.board[self.player.y - 1][self.player.x] == self.GOAL:
+            if self.__existsGoal(self.player.x, self.player.y):
+                self.board[self.player.y][self.player.x] = self.GOAL
+            else:
+                self.board[self.player.y][self.player.x] = self.FREE_SPACE
             self.player.setPos(self.player.x, self.player.y - 1)
-            self.board[self.player.x][self.player.y] = self.PLAYER
+            self.board[self.player.y][self.player.x] = self.PLAYER
+        elif self.board[self.player.y - 1][self.player.x] == self.BOX and self.player.y > 1 and (self.board[self.player.y - 2][self.player.x] == self.FREE_SPACE or self.board[self.player.y - 2][self.player.x] == self.GOAL):
+            if self.__existsGoal(self.player.x, self.player.y):
+                self.board[self.player.y][self.player.x] = self.GOAL
+            else:
+                self.board[self.player.y][self.player.x] = self.FREE_SPACE
+            self.player.setPos(self.player.x, self.player.y - 1)
+            self.board[self.player.y][self.player.x] = self.PLAYER
+            self.board[self.player.y - 1][self.player.x] = self.BOX
 
-        if self.board[self.player.y - 1] == self.BOX and self.player.y > 1 and self.board[self.player.y - 2] == self.FREE_SPACE:
-            self.board[self.player.x][self.player.y] = self.FREE_SPACE
-            self.player.setPos(self.player.x, self.player.y - 1)
-            self.board[self.player.x][self.player.y] = self.PLAYER
-            self.board[self.player.x][self.player.y - 1] = self.BOX
+        self.moves += 1
+
+    def moveDown(self):
+        if self.player.y == len(self.board) - 1:
+            return
+
+        if self.board[self.player.y + 1][self.player.x] == self.FREE_SPACE or self.board[self.player.y + 1][self.player.x] == self.GOAL:
+            if self.__existsGoal(self.player.x, self.player.y):
+                self.board[self.player.y][self.player.x] = self.GOAL
+            else:
+                self.board[self.player.y][self.player.x] = self.FREE_SPACE
+            self.player.setPos(self.player.x, self.player.y + 1)
+            self.board[self.player.y][self.player.x] = self.PLAYER
+        elif self.board[self.player.y + 1][self.player.x] == self.BOX and self.player.y < len(self.board) - 2 and (self.board[self.player.y + 2][self.player.x] == self.FREE_SPACE or self.board[self.player.y + 2][self.player.x] == self.GOAL):
+            if self.__existsGoal(self.player.x, self.player.y):
+                self.board[self.player.y][self.player.x] = self.GOAL
+            else:
+                self.board[self.player.y][self.player.x] = self.FREE_SPACE
+            self.player.setPos(self.player.x, self.player.y + 1)
+            self.board[self.player.y][self.player.x] = self.PLAYER
+            self.board[self.player.y + 1][self.player.x] = self.BOX
+
+        self.moves += 1
+
+    def moveLeft(self):
+        if self.player.x == 0:
+            return
+
+        if self.board[self.player.y][self.player.x - 1] == self.FREE_SPACE or self.board[self.player.y][self.player.x - 1] == self.GOAL:
+            if self.__existsGoal(self.player.x, self.player.y):
+                self.board[self.player.y][self.player.x] = self.GOAL
+            else:
+                self.board[self.player.y][self.player.x] = self.FREE_SPACE
+            self.player.setPos(self.player.x - 1, self.player.y)
+            self.board[self.player.y][self.player.x] = self.PLAYER
+        elif self.board[self.player.y][self.player.x - 1] == self.BOX and self.player.x > 1 and (self.board[self.player.y][self.player.x - 2] == self.FREE_SPACE or self.board[self.player.y][self.player.x - 2] == self.GOAL):
+            if self.__existsGoal(self.player.x, self.player.y):
+                self.board[self.player.y][self.player.x] = self.GOAL
+            else:
+                self.board[self.player.y][self.player.x] = self.FREE_SPACE
+            self.player.setPos(self.player.x - 1, self.player.y)
+            self.board[self.player.y][self.player.x] = self.PLAYER
+            self.board[self.player.y][self.player.x - 1] = self.BOX
+
+        self.moves += 1
+
+    def moveRight(self):
+        if self.player.x == len(self.board[0]) - 1:
+            return
+
+        if self.board[self.player.y][self.player.x + 1] == self.FREE_SPACE or self.board[self.player.y][self.player.x + 1] == self.GOAL:
+            if self.__existsGoal(self.player.x, self.player.y):
+                self.board[self.player.y][self.player.x] = self.GOAL
+            else:
+                self.board[self.player.y][self.player.x] = self.FREE_SPACE
+            self.player.setPos(self.player.x + 1, self.player.y)
+            self.board[self.player.y][self.player.x] = self.PLAYER
+        elif self.board[self.player.y][self.player.x + 1] == self.BOX and self.player.x < len(self.board[0]) - 2 and (self.board[self.player.y][self.player.x + 2] == self.FREE_SPACE or self.board[self.player.y][self.player.x + 2] == self.GOAL):
+            if self.__existsGoal(self.player.x, self.player.y):
+                self.board[self.player.y][self.player.x] = self.GOAL
+            else:
+                self.board[self.player.y][self.player.x] = self.FREE_SPACE
+            self.player.setPos(self.player.x + 1, self.player.y)
+            self.board[self.player.y][self.player.x] = self.PLAYER
+            self.board[self.player.y][self.player.x + 1] = self.BOX
+
+        self.moves += 1
+
+    def getBoxesLeft(self):
+        boxesLeft = len(self.goals)
+        for goal in self.goals:
+            if self.board[goal.y][goal.x] == self.BOX:
+                boxesLeft -= 1
+
+        return boxesLeft
+
+    def hasWon(self):
+        return self.getBoxesLeft() == 0
+
+    def __existsGoal(self, x, y):
+        p = Point(x, y)
+        for goal in self.goals:
+            if goal == p:
+                return True
+        return False
