@@ -1,22 +1,22 @@
-from game.game import Game
+from game.game import Game, Direction
 
 
 def run():
     game = Game()
-    game.parseBoard()
-    game.showBoard()
+    game.parse_board()
+    game.show_board()
     while True:
         i = input()
         if i == 'w':
-            game.moveUp()
+            game.move(Direction.UP)
         elif i == 's':
-            game.moveDown()
-        elif i == 'd':
-            game.moveRight()
+            game.move(Direction.DOWN)
         elif i == 'a':
-            game.moveLeft()
-        game.showBoard()
-        if game.hasWon():
+            game.move(Direction.LEFT)
+        elif i == 'd':
+            game.move(Direction.RIGHT)
+        game.show_board()
+        if game.has_won():
             print('Congratulations, you won!')
             return
 
