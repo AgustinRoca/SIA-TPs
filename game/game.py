@@ -1,4 +1,6 @@
 from enum import Enum
+from tree import GameState
+from copy import deepcopy
 
 
 class Point:
@@ -17,6 +19,12 @@ class Player:
     def __init__(self):
         self.x = None
         self.y = None
+
+    def __str__(self):
+        return '(' + str(self.x) + ', ' + str(self.y) + ')'
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
 
     def set_pos(self, pos: Point):
         self.x = pos.x
@@ -54,13 +62,14 @@ class Game:
     BOX = '$'
     PLAYER = '@'
     GOALS_AND_BOXES_DONT_MATCH = -1
-    board = []
-    goals = []
-    player = Player()
-    moves = 0
+    state = None
 
     def __init__(self):
-        pass
+        self.state = GameState()
+        self.state.board = []
+        self.state.goals = []
+        self.state.player = Player()
+        self.state.moves = 0
 
     def parse_board(self):
         b = open('board.txt', 'r')
@@ -71,17 +80,17 @@ class Game:
         longest_line = 0
 
         for line in b.readlines():
-            self.board.append([])
+            self.state.board.append([])
             for c in line:
                 if c == self.GOAL:
-                    self.goals.append(Point(x, y))
+                    self.state.goals.append(Point(x, y))
                     goals += 1
                 if c == self.BOX:
                     boxes += 1
                 if c == self.PLAYER:
-                    self.player.set_pos(Point(x, y))
+                    self.state.player.set_pos(Point(x, y))
                 if c != '\n':
-                    self.board[y].append(c)
+                    self.state.board[y].append(c)
                 x += 1
             x = 0
             y += 1
@@ -89,55 +98,55 @@ class Game:
         if goals != boxes:
             return self.GOALS_AND_BOXES_DONT_MATCH
 
-        for line in self.board:
+        for line in self.state.board:
             if len(line) > longest_line:
                 longest_line = len(line)
 
-        for line in self.board:
+        for line in self.state.board:
             while len(line) < longest_line:
                 line.append(self.FREE_SPACE)
 
     def show_board(self):
-        for line in self.board:
+        for line in self.state.board:
             for c in line:
                 print(c, end='')
             print()
         print()
         print('Goals: ', end='')
-        for goal in self.goals:
+        for goal in self.state.goals:
             print(goal, end='')
         print()
-        print('Player position: (' + str(self.player.x) + ', ' + str(self.player.y) + ')')
+        print('Player position: (' + str(self.state.player.x) + ', ' + str(self.state.player.y) + ')')
         print('Boxes left: ' + str(self.get_boxes_left()))
-        print('Moves: ' + str(self.moves))
+        print('Moves: ' + str(self.state.moves))
 
     def move(self, direction: Direction):
-        player_move_position = Point(self.player.x + direction.direction.x, self.player.y + direction.direction.y)
-        push_box_position = Point(self.player.x + 2*direction.direction.x, self.player.y + 2*direction.direction.y)
+        player_move_position = Point(self.state.player.x + direction.direction.x, self.state.player.y + direction.direction.y)
+        push_box_position = Point(self.state.player.x + 2*direction.direction.x, self.state.player.y + 2*direction.direction.y)
 
         can_move = False
         if self.valid_position(player_move_position) and self.is_free_place(player_move_position):
             can_move = True
 
-        elif self.board[player_move_position.y][player_move_position.x] == self.BOX and \
+        elif self.state.board[player_move_position.y][player_move_position.x] == self.BOX and \
                 self.valid_position(push_box_position) and self.is_free_place(push_box_position):
-            self.board[push_box_position.y][push_box_position.x] = self.BOX  # push box
+            self.state.board[push_box_position.y][push_box_position.x] = self.BOX  # push box
             can_move = True
 
         # move player
         if can_move:
-            if self.__exists_goal(Point(self.player.x, self.player.y)):
-                self.board[self.player.y][self.player.x] = self.GOAL
+            if self.__exists_goal(Point(self.state.player.x, self.state.player.y)):
+                self.state.board[self.state.player.y][self.state.player.x] = self.GOAL
             else:
-                self.board[self.player.y][self.player.x] = self.FREE_SPACE
-            self.player.set_pos(player_move_position)
-            self.board[self.player.y][self.player.x] = self.PLAYER
-            self.moves += 1
+                self.state.board[self.state.player.y][self.state.player.x] = self.FREE_SPACE
+            self.state.player.set_pos(player_move_position)
+            self.state.board[self.state.player.y][self.state.player.x] = self.PLAYER
+            self.state.moves += 1
 
     def get_boxes_left(self):
-        boxes_left = len(self.goals)
-        for goal in self.goals:
-            if self.board[goal.y][goal.x] == self.BOX:
+        boxes_left = len(self.state.goals)
+        for goal in self.state.goals:
+            if self.state.board[goal.y][goal.x] == self.BOX:
                 boxes_left -= 1
 
         return boxes_left
@@ -146,15 +155,21 @@ class Game:
         return self.get_boxes_left() == 0
 
     def is_free_place(self, position: Point):
-        return (self.board[position.y][position.x] == self.GOAL) or \
-               (self.board[position.y][position.x] == self.FREE_SPACE)
+        return (self.state.board[position.y][position.x] == self.GOAL) or \
+               (self.state.board[position.y][position.x] == self.FREE_SPACE)
 
     def valid_position(self, position: Point):
-        return 0 <= position.x < len(self.board[0]) - 1 and \
-               0 <= position.y < len(self.board) - 1
+        return 0 <= position.x < len(self.state.board[0]) - 1 and \
+               0 <= position.y < len(self.state.board) - 1
 
     def __exists_goal(self, position: Point):
-        for goal in self.goals:
+        for goal in self.state.goals:
             if goal == position:
                 return True
         return False
+
+    def set_state(self, state):
+        self.state = deepcopy(state)
+
+    def get_state(self):
+        return deepcopy(self.state)

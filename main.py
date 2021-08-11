@@ -1,24 +1,19 @@
+from not_informed_searches import Bfs
 from game.game import Game, Direction
 
 
 def run():
-    game = Game()
-    game.parse_board()
-    game.show_board()
-    while True:
-        i = input()
-        if i == 'w':
-            game.move(Direction.UP)
-        elif i == 's':
-            game.move(Direction.DOWN)
-        elif i == 'a':
-            game.move(Direction.LEFT)
-        elif i == 'd':
-            game.move(Direction.RIGHT)
-        game.show_board()
-        if game.has_won():
-            print('Congratulations, you won!')
-            return
+    bfs = Bfs()
+    final_state = bfs.process()
+    print(final_state.moves)
+    # l = []
+    # for i in range(0, 100):
+    #     l.append(i)
+    #
+    # print(l)
+    #
+    # while len(l) > 0:
+    #     print(l.pop(0))
 
 
 if __name__ == '__main__':
