@@ -45,8 +45,8 @@ class GameState:
     def __str__(self):
         s = str(self.moves) + ': '
         for move in self.last_moves:
-            s += str(move) + ', '
-        return s[:-2]
+            s += str(move)
+        return s
 
     def __eq__(self, other):
         for row_index in range(len(self.board)):
