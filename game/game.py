@@ -1,5 +1,4 @@
 from enum import Enum
-from tree import GameState
 from copy import deepcopy
 
 
@@ -31,11 +30,40 @@ class Player:
         self.y = pos.y
 
 
+class GameState:
+    def __init__(self, board=None, goals=None, player=Player(), moves=0):
+        if goals is None:
+            goals = []
+        if board is None:
+            board = []
+        self.board = board
+        self.goals = goals
+        self.player = player
+        self.moves = moves
+        self.last_moves = []
+
+    def __str__(self):
+        s = str(self.moves) + ': '
+        for move in self.last_moves:
+            s += str(move) + ', '
+        return s[:-2]
+
+    def __eq__(self, other):
+        for row_index in range(len(self.board)):
+            for cell_index in range(len(self.board[0])):
+                if self.board[row_index][cell_index] != other.board[row_index][cell_index]:
+                    return False
+        return True
+
+    def get_heuristic_1(self):
+        return
+
+
 class Direction(Enum):
-    UP = 0, Point(0, -1)
-    DOWN = 1, Point(0, 1)
-    LEFT = 2, Point(-1, 0)
-    RIGHT = 3, Point(1, 0)
+    UP = 0, Point(0, -1), 'u'
+    DOWN = 1, Point(0, 1), 'd'
+    LEFT = 2, Point(-1, 0), 'l'
+    RIGHT = 3, Point(1, 0), 'r'
 
     def __new__(cls, *args, **kwds):
         obj = object.__new__(cls)
@@ -43,11 +71,12 @@ class Direction(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, direction: Point = None):
+    def __init__(self, _: str, direction: Point, s: str):
         self._direction = direction
+        self.string = s
 
     def __str__(self):
-        return self.value
+        return self.string
 
     # this makes sure that the description is read-only
     @property
@@ -60,16 +89,13 @@ class Game:
     WALL = '#'
     GOAL = '.'
     BOX = '$'
+    BOX_OVER_GOAL = '*'
     PLAYER = '@'
     GOALS_AND_BOXES_DONT_MATCH = -1
     state = None
 
     def __init__(self):
         self.state = GameState()
-        self.state.board = []
-        self.state.goals = []
-        self.state.player = Player()
-        self.state.moves = 0
 
     def parse_board(self):
         b = open('board.txt', 'r')
@@ -89,6 +115,10 @@ class Game:
                     boxes += 1
                 if c == self.PLAYER:
                     self.state.player.set_pos(Point(x, y))
+                if c == self.BOX_OVER_GOAL:
+                    boxes += 1
+                    self.state.goals.append(Point(x, y))
+                    goals += 1
                 if c != '\n':
                     self.state.board[y].append(c)
                 x += 1
@@ -128,9 +158,13 @@ class Game:
         if self.valid_position(player_move_position) and self.is_free_place(player_move_position):
             can_move = True
 
-        elif self.state.board[player_move_position.y][player_move_position.x] == self.BOX and \
+        elif (self.state.board[player_move_position.y][player_move_position.x] == self.BOX or
+                self.state.board[player_move_position.y][player_move_position.x] == self.BOX_OVER_GOAL) and \
                 self.valid_position(push_box_position) and self.is_free_place(push_box_position):
-            self.state.board[push_box_position.y][push_box_position.x] = self.BOX  # push box
+            if self.state.board[push_box_position.y][push_box_position.x] == self.GOAL:
+                self.state.board[push_box_position.y][push_box_position.x] = self.BOX_OVER_GOAL
+            else:
+                self.state.board[push_box_position.y][push_box_position.x] = self.BOX  # push box
             can_move = True
 
         # move player
@@ -142,11 +176,12 @@ class Game:
             self.state.player.set_pos(player_move_position)
             self.state.board[self.state.player.y][self.state.player.x] = self.PLAYER
             self.state.moves += 1
+            self.state.last_moves.append(direction)
 
     def get_boxes_left(self):
         boxes_left = len(self.state.goals)
         for goal in self.state.goals:
-            if self.state.board[goal.y][goal.x] == self.BOX:
+            if self.state.board[goal.y][goal.x] == self.BOX_OVER_GOAL:
                 boxes_left -= 1
 
         return boxes_left
@@ -172,4 +207,4 @@ class Game:
         self.state = deepcopy(state)
 
     def get_state(self):
-        return deepcopy(self.state)
+        return self.state

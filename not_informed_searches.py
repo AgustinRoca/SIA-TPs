@@ -1,6 +1,5 @@
 from game.game import Game, Direction
-from copy import deepcopy
-
+from tree import Tree
 
 class Dfs:
     def __init__(self):
@@ -14,45 +13,27 @@ class Bfs:
     def __init__(self):
         self.game = Game()
         self.game.parse_board()
-        self.state_root = self.game.get_state()
         self.has_won = False
+        self.tree = Tree(self.game.get_state())
         self.bfs_queue = []
-        self.bfs_queue.append(self.state_root)
+        self.bfs_queue.append(self.tree.root.elem)
 
     def process(self):
-        for i in range(0, 5):
+        if self.game.has_won():
+            print('Solution:', None)
+            return self.game.get_state()
+
+        while True:
             state = self.bfs_queue.pop(0)
+            current_node = self.tree.find(state)
 
-            self.game.set_state(state)
-            print('Checking state:')
-            print(state)
-
-            if self.game.has_won():
-                return state
-
-            self.game.move(Direction.UP)
-            aux_state = deepcopy(self.game.get_state())
-            if aux_state not in self.bfs_queue:
-                self.bfs_queue.append(aux_state)
-
-            self.game.set_state(state)
-            self.game.move(Direction.DOWN)
-            aux_state = deepcopy(self.game.get_state())
-            if aux_state not in self.bfs_queue:
-                self.bfs_queue.append(aux_state)
-
-            self.game.set_state(state)
-            self.game.move(Direction.LEFT)
-            aux_state = deepcopy(self.game.get_state())
-            if aux_state not in self.bfs_queue:
-                self.bfs_queue.append(aux_state)
-
-            self.game.set_state(state)
-            self.game.move(Direction.RIGHT)
-            aux_state = deepcopy(self.game.get_state())
-            if aux_state not in self.bfs_queue:
-                self.bfs_queue.append(aux_state)
-
-            for e in self.bfs_queue:
-                print(e, end=' | ')
-            print()
+            for direction in Direction:
+                self.game.set_state(state)
+                self.game.move(direction)
+                aux_state = self.game.get_state()
+                if self.game.has_won():
+                    print('Solution:', aux_state)
+                    return aux_state
+                if aux_state not in self.tree:
+                    self.bfs_queue.append(aux_state)
+                    current_node.add_child(aux_state)
