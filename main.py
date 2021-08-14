@@ -1,6 +1,7 @@
-from not_informed_searches import BFS, DFS
+from not_informed_searches import BFS
 from game.game import Game, Direction
 from time import time
+from output_tester import OutputTester
 
 
 def run():
@@ -37,6 +38,10 @@ def run():
     t1 = time()
     print(t1 - t0)
     print(final_state.moves)
+    print(final_state)
+    ot = OutputTester('lluuuulldldlddrrruruuurrddddrluuuulldddlddruuuuddddlullluurururrddddrruuuullddddrruuuurrdddrddluuuuddddrurrruululullddddlluuuulldddddlullluurururldldlddrrrururruurlddddlluldllluurururrddddrruuuullddddrruuuurrddddlluuuulldddddlullluurururldldlddrrrururruurrdddddrurrruulululllrddddlluuuuudddddlluldllluurururrrlddddrruuuu')
+    ot.test()
+
 
 if __name__ == '__main__':
     run()
