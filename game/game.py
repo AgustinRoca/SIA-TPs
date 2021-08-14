@@ -1,5 +1,5 @@
 from enum import Enum
-from copy import deepcopy
+import pickle as pickle
 
 
 class Point:
@@ -60,6 +60,15 @@ class GameState:
 
     def get_heuristic_1(self):
         return
+
+    def copy(self):
+        new_state = GameState()
+        new_state.board = pickle.loads(pickle.dumps(self.board))
+        new_state.goals = self.goals
+        new_state.player = pickle.loads(pickle.dumps(self.player))
+        new_state.moves = self.moves
+        new_state.last_moves = []
+        return new_state
 
 
 class Direction(Enum):
@@ -206,8 +215,9 @@ class Game:
                 return True
         return False
 
-    def set_state(self, state : GameState):
-        self.state = deepcopy(state)
+    def set_state(self, state: GameState):
+        # self.state = deepcopy(state)
+        self.state = state.copy()
 
     def get_state(self):
         return self.state
