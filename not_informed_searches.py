@@ -32,7 +32,6 @@ class BFS:
     def __init__(self):
         self.game = Game()
         self.game.parse_board()
-        self.has_won = False
         self.expanded_nodes = {}
         self.queue_dictionary = {}
         self.queue = []

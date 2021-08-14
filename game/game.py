@@ -1,5 +1,4 @@
 from enum import Enum
-from copy import deepcopy
 
 
 class Point:
@@ -206,8 +205,26 @@ class Game:
                 return True
         return False
 
-    def set_state(self, state : GameState):
-        self.state = deepcopy(state)
+    def set_state(self, state: GameState):
+        new_state = GameState()
+
+        for row in range(0, len(state.board)):
+            new_state.board.append([])
+            for cell in range(0, len(state.board[0])):
+                new_state.board[row].append(state.board[row][cell])
+
+        new_state.player = Player()
+        new_state.player.set_pos(Point(state.player.x, state.player.y))
+
+        new_state.moves = state.moves
+
+        for goal in state.goals:
+            new_state.goals.append(goal)
+
+        for direction in state.last_moves:
+            new_state.last_moves.append(direction)
+
+        self.state = new_state
 
     def get_state(self):
         return self.state
