@@ -20,10 +20,13 @@ class DFS:
         self.expanded_nodes[state] = True
 
         for direction in Direction:
+            self.game.set_state(state)
             self.game.move(direction)
             new_state = self.game.get_state()
             if new_state not in self.expanded_nodes:
-                return self._process_rec(new_state)
+                ans = self._process_rec(new_state)
+                if ans is not None:
+                    return ans
 
         return None
 

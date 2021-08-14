@@ -34,6 +34,7 @@ def run():
     t1 = time()
     print(t1 - t0)
     print(final_state.moves)
+    print(final_state)
 
 
 if __name__ == '__main__':
