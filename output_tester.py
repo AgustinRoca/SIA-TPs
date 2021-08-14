@@ -17,6 +17,8 @@ class OutputTester:
         i = 0
 
         for c in self.sequence:
+            print('Move ' + str(i) + ' - ' + c + ':')
+
             if c == 'u':
                 self.game.move(Direction.UP)
             elif c == 'd':
@@ -28,5 +30,4 @@ class OutputTester:
 
             i += 1
 
-            print('Move ' + str(i) + ' - ' + c + ':')
             self.game.show_board()
