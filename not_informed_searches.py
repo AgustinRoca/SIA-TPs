@@ -1,12 +1,31 @@
 from game.game import Game, Direction
-from tree import Tree
 
-class Dfs:
+
+class DFS:
     def __init__(self):
-        pass
+        self.game = Game()
+        self.game.parse_board()
+        self.has_won = False
+        self.expanded_nodes = {}
 
     def process(self):
-        pass
+        return self._process_rec(self.game.get_state())
+
+    def _process_rec(self, state):
+        self.game.set_state(state)
+
+        if self.game.has_won():
+            return self.game.get_state()
+
+        self.expanded_nodes[state] = True
+
+        for direction in Direction:
+            self.game.move(direction)
+            new_state = self.game.get_state()
+            if new_state not in self.expanded_nodes:
+                return self._process_rec(new_state)
+
+        return None
 
 
 class BFS:
@@ -39,6 +58,6 @@ class BFS:
                 if self.game.has_won():
                     print('Solution:', next_state)
                     return next_state
-                if (next_state not in self.expanded_nodes) and (next_state not in self.queue_dictionary):
+                if next_state not in self.expanded_nodes and next_state not in self.queue_dictionary:
                     self.queue.append(next_state)
                     self.queue_dictionary[next_state] = True

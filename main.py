@@ -1,5 +1,4 @@
-from not_informed_searches import BFS
-from game.game import Game, Direction
+from not_informed_searches import BFS, DFS
 from time import time
 
 
@@ -22,9 +21,16 @@ def run():
     #         print('Congratulations, you won!')
     #         return
 
-    bfs = BFS()
+    # bfs = BFS()
+    # t0 = time()
+    # final_state = bfs.process()
+    # t1 = time()
+    # print(t1 - t0)
+    # print(final_state.moves)
+
+    dfs = DFS()
     t0 = time()
-    final_state = bfs.process()
+    final_state = dfs.process()
     t1 = time()
     print(t1 - t0)
     print(final_state.moves)
