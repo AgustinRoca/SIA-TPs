@@ -55,6 +55,9 @@ class GameState:
                     return False
         return True
 
+    def __hash__(self):
+        return hash(str(self.board))
+
     def get_heuristic_1(self):
         return
 
@@ -203,7 +206,7 @@ class Game:
                 return True
         return False
 
-    def set_state(self, state):
+    def set_state(self, state : GameState):
         self.state = deepcopy(state)
 
     def get_state(self):

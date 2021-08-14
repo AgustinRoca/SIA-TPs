@@ -5,7 +5,6 @@ class Tree:
     def __iter__(self):
         yield from self._next(self.root)
 
-
     def find(self, elem):
         if self.root.elem == elem:
             return self.root
