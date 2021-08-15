@@ -1,4 +1,4 @@
-from game.game import Game, Direction, GameState
+from game.game import Game, Direction
 
 
 class DFS:
@@ -6,100 +6,50 @@ class DFS:
         self.game = Game()
         self.game.parse_board()
         self.expanded_nodes = {}
-
-    # def process(self):
-    #     return self._process_rec(self.game.get_state())
-    # 
-    # def _process_rec(self, state):
-    #     self.game.set_state(state)
-    # 
-    #     if self.game.has_won():
-    #         return self.game.get_state()
-    # 
-    #     self.expanded_nodes[state] = True
-    # 
-    #     for direction in Direction:
-    #         self.game.set_state(state)
-    #         self.game.move(direction)
-    #         new_state = self.game.get_state()
-    #         if new_state not in self.expanded_nodes:
-    #             ans = self._process_rec(new_state)
-    #             if ans is not None:
-    #                 return ans
-    # 
-    #     return None
-
-    def process_rec_direction(self, direction: Direction, moves: int, state: GameState) -> (int, GameState):
-        self.expanded_nodes[state] = True
-        self.game.set_state(state)
-        self.game.move(direction)
-        new_state = self.game.get_state()
-
-        # If both states are equal or the game has won, that means that we cannot longer traverse that path
-        if new_state == state or self.game.has_won():
-            return moves, state
-        return moves + 1, new_state
-
-    def process_rec(self, moves: int, state: GameState) -> (int, GameState):
-        if state in self.expanded_nodes:
-            return moves, state
-
-        won_moves = []
-
-        self.game.set_state(state)
-        left = self.process_rec_direction(Direction.LEFT, moves, state)
-        # New state has not already been processed
-        if left[1] not in self.expanded_nodes:
-            left = self.process_rec(left[0], left[1])
-        if not self.game.has_won():
-            left = None
-        else:
-            won_moves.append(left)
-
-        self.game.set_state(state)
-        down = self.process_rec_direction(Direction.DOWN, moves, state)
-        # New state has not already been processed
-        if down[1] not in self.expanded_nodes:
-            down = self.process_rec(down[0], down[1])
-        if not self.game.has_won():
-            down = None
-        else:
-            won_moves.append(down)
-
-        self.game.set_state(state)
-        up = self.process_rec_direction(Direction.UP, moves, state)
-        # New state has not already been processed
-        if up[1] not in self.expanded_nodes:
-            up = self.process_rec(up[0], up[1])
-        if not self.game.has_won():
-            up = None
-        else:
-            won_moves.append(up)
-
-        self.game.set_state(state)
-        right = self.process_rec_direction(Direction.RIGHT, moves, state)
-        # New state has not already been processed
-        if right[1] not in self.expanded_nodes:
-            right = self.process_rec(right[0], right[1])
-        if not self.game.has_won():
-            right = None
-        else:
-            won_moves.append(right)
-
-        # Sort by smallest moves
-        won_moves = sorted(won_moves, key=lambda move: move[0])
-        if len(won_moves) > 0:
-            return won_moves[0]
-        return None
-
+        self.queues = [[] for _ in list(Direction)] # Array of queues of direction
+        self.queue_dict = {}
 
     def process(self):
-        if self.game.has_won():
-            return self.game.get_state()
+        least_moves_state = None
+        directions = list(Direction)
 
-        result = self.process_rec(0, self.game.get_state())
-        print(result)
-        return result[1]
+        starting_state = self.game.get_state()
+        while self._has_next_queue() or starting_state is not None:
+            if starting_state is None:
+                queue = self._next_queue()
+                state = queue.pop(0)
+            else:
+                state = starting_state
+                starting_state = None
+
+            if (least_moves_state is not None and state.moves >= least_moves_state.moves) or state in self.expanded_nodes:
+                continue
+
+            self.expanded_nodes[state] = True
+
+            self.game.set_state(state)
+            if self.game.has_won():
+                least_moves_state = state
+                print(state)
+                continue
+
+            for i in range(len(directions)):
+                self.game.set_state(state)
+                self.game.move(directions[i])
+                new_state = self.game.get_state()
+                if new_state not in self.expanded_nodes and new_state not in self.queue_dict:
+                    self.queues[i].insert(0, new_state)
+
+        return least_moves_state
+
+    def _has_next_queue(self):
+        return any(len(queue) > 0 for queue in self.queues)
+
+    def _next_queue(self):
+        for i in range(len(list(Direction))):
+            if len(self.queues[i]) > 0:
+                return self.queues[i]
+        return None
 
 
 class BFS:
@@ -108,8 +58,7 @@ class BFS:
         self.game.parse_board()
         self.expanded_nodes = {}
         self.queue_dictionary = {}
-        self.queue = []
-        self.queue.append(self.game.get_state())  # pongo el estado inicial en la cola
+        self.queue = [self.game.get_state()] # pongo el estado inicial en la cola
 
     def process(self):
         if self.game.has_won():

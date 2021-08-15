@@ -67,7 +67,7 @@ class GameState:
         new_state.goals = self.goals
         new_state.player = pickle.loads(pickle.dumps(self.player))
         new_state.moves = self.moves
-        new_state.last_moves = []
+        new_state.last_moves = pickle.loads(pickle.dumps(self.last_moves))
         return new_state
 
 
@@ -216,29 +216,7 @@ class Game:
         return False
 
     def set_state(self, state: GameState):
-        new_state = GameState()
-
-        for row in range(0, len(state.board)):
-            new_state.board.append([])
-            for cell in range(0, len(state.board[0])):
-                new_state.board[row].append(state.board[row][cell])
-
-        new_state.player = Player()
-        new_state.player.set_pos(Point(state.player.x, state.player.y))
-
-        new_state.moves = state.moves
-
-        for goal in state.goals:
-            new_state.goals.append(goal)
-
-        for direction in state.last_moves:
-            new_state.last_moves.append(direction)
-
-        self.state = new_state
-
-    # def set_state(self, state: GameState):
-        # self.state = deepcopy(state)
-        # self.state = state.copy()
+        self.state = state.copy()
 
     def get_state(self):
         return self.state
