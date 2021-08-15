@@ -1,4 +1,5 @@
 from enum import Enum
+import pickle
 
 
 class Point:
@@ -33,6 +34,16 @@ class GameState:
 
     def __hash__(self):
         return hash((str(self.boxes), self.player))
+
+    def copy(self):
+        new_state = GameState()
+        new_state.static_board = pickle.loads(pickle.dumps(self.static_board))
+        new_state.boxes = pickle.loads(pickle.dumps(self.boxes))
+        new_state.goals = self.goals
+        new_state.player = pickle.loads(pickle.dumps(self.player))
+        new_state.moves = self.moves
+        new_state.last_moves = pickle.loads(pickle.dumps(self.last_moves))
+        return new_state
 
 
 class Direction(Enum):

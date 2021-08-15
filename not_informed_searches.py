@@ -59,7 +59,7 @@ class DFS:
         self.game = Game()
         self.game.parse_board()
         self.expanded_nodes = {}
-        self.queues = [[] for _ in list(Direction)] # Array of queues of direction
+        self.queues = [[] for _ in list(Direction)]  # Array of queues of direction
         self.queue_dict = {}
 
     def process(self):
