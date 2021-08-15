@@ -1,5 +1,4 @@
 from enum import Enum
-import _pickle as pickle
 from utils.direction import Direction
 
 
@@ -27,11 +26,11 @@ class GameState:
     def copy(self):
         new_state = GameState()
         new_state.static_board = self.static_board
-        new_state.boxes = pickle.loads(pickle.dumps(self.boxes))
+        new_state.boxes = [*self.boxes]
         new_state.goals = self.goals
-        new_state.player = pickle.loads(pickle.dumps(self.player))
+        new_state.player = self.player  # Tuples are immutable
         new_state.moves = self.moves
-        new_state.last_moves = pickle.loads(pickle.dumps(self.last_moves))
+        new_state.last_moves = [*self.last_moves]
         return new_state
 
 
