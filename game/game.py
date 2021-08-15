@@ -1,5 +1,4 @@
 from enum import Enum
-import pickle as pickle
 
 
 class Point:
@@ -14,31 +13,12 @@ class Point:
         return self.x == other.x and self.y == other.y
 
 
-class Player:
-    def __init__(self):
-        self.x = None
-        self.y = None
-
-    def __str__(self):
-        return '(' + str(self.x) + ', ' + str(self.y) + ')'
-
-    def __eq__(self, other):
-        return self.x == other.x and self.y == other.y
-
-    def set_pos(self, pos: Point):
-        self.x = pos.x
-        self.y = pos.y
-
-
 class GameState:
-    def __init__(self, board=None, goals=None, player=Player(), moves=0):
-        if goals is None:
-            goals = []
-        if board is None:
-            board = []
-        self.board = board
-        self.goals = goals
-        self.player = player
+    def __init__(self, moves=0):
+        self.static_board = []
+        self.goals = []
+        self.boxes = []
+        self.player = None
         self.moves = moves
         self.last_moves = []
 
@@ -49,26 +29,10 @@ class GameState:
         return s
 
     def __eq__(self, other):
-        for row_index in range(len(self.board)):
-            for cell_index in range(len(self.board[0])):
-                if self.board[row_index][cell_index] != other.board[row_index][cell_index]:
-                    return False
-        return True
+        return self.boxes == other.boxes and self.player == other.player
 
     def __hash__(self):
-        return hash(str(self.board))
-
-    def get_heuristic_1(self):
-        return
-
-    def copy(self):
-        new_state = GameState()
-        new_state.board = pickle.loads(pickle.dumps(self.board))
-        new_state.goals = self.goals
-        new_state.player = pickle.loads(pickle.dumps(self.player))
-        new_state.moves = self.moves
-        new_state.last_moves = pickle.loads(pickle.dumps(self.last_moves))
-        return new_state
+        return hash((str(self.boxes), self.player))
 
 
 class Direction(Enum):
@@ -96,15 +60,32 @@ class Direction(Enum):
         return self._direction
 
 
-class Game:
+class BoardCell(Enum):
     FREE_SPACE = ' '
     WALL = '#'
     GOAL = '.'
     BOX = '$'
     BOX_OVER_GOAL = '*'
     PLAYER = '@'
+
+    def __new__(cls, *args, **kwds):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(self, s: str):
+        self.string = s
+
+    def __str__(self):
+        return self.string
+
+    def __eq__(self, other):
+        return self.string == other
+
+
+class Game:
     GOALS_AND_BOXES_DONT_MATCH = -1
-    state = None
 
     def __init__(self):
         self.state = GameState()
@@ -113,107 +94,104 @@ class Game:
         b = open('board.txt', 'r')
         x = 0
         y = 0
-        goals = 0
-        boxes = 0
         longest_line = 0
 
         for line in b.readlines():
-            self.state.board.append([])
+            self.state.static_board.append([])
             for c in line:
-                if c == self.GOAL:
-                    self.state.goals.append(Point(x, y))
-                    goals += 1
-                if c == self.BOX:
-                    boxes += 1
-                if c == self.PLAYER:
-                    self.state.player.set_pos(Point(x, y))
-                if c == self.BOX_OVER_GOAL:
-                    boxes += 1
-                    self.state.goals.append(Point(x, y))
-                    goals += 1
-                if c != '\n':
-                    self.state.board[y].append(c)
+                if c == BoardCell.FREE_SPACE:
+                    self.state.static_board[y].append(BoardCell.FREE_SPACE)
+                elif c == BoardCell.WALL:
+                    self.state.static_board[y].append(BoardCell.WALL)
+                elif c == BoardCell.GOAL:
+                    self.state.goals.append((x, y))
+                    self.state.static_board[y].append(BoardCell.FREE_SPACE)
+                elif c == BoardCell.BOX:
+                    self.state.boxes.append((x, y))
+                    self.state.static_board[y].append(BoardCell.FREE_SPACE)
+                elif c == BoardCell.BOX_OVER_GOAL:
+                    self.state.boxes.append((x, y))
+                    self.state.goals.append((x, y))
+                    self.state.static_board[y].append(BoardCell.FREE_SPACE)
+                elif c == BoardCell.PLAYER:
+                    self.state.player = (x, y)
+                    self.state.static_board[y].append(BoardCell.FREE_SPACE)
                 x += 1
             x = 0
             y += 1
 
-        if goals != boxes:
+        if len(self.state.goals) != len(self.state.boxes):
             return self.GOALS_AND_BOXES_DONT_MATCH
 
-        for line in self.state.board:
+        for line in self.state.static_board:
             if len(line) > longest_line:
                 longest_line = len(line)
 
-        for line in self.state.board:
+        for line in self.state.static_board:
             while len(line) < longest_line:
-                line.append(self.FREE_SPACE)
+                line.append(BoardCell.FREE_SPACE)
 
     def show_board(self):
-        for line in self.state.board:
-            for c in line:
-                print(c, end='')
+        for y in range(0, len(self.state.static_board)):
+            for x in range(0, len(self.state.static_board[0])):
+                if (x, y) == self.state.player:
+                    print(BoardCell.PLAYER.string, end='')
+                elif (x, y) in self.state.boxes:
+                    if (x, y) in self.state.goals:
+                        print(BoardCell.BOX_OVER_GOAL.string, end='')
+                    else:
+                        print(BoardCell.BOX.string, end='')
+                elif (x, y) in self.state.goals:
+                    print(BoardCell.GOAL.string, end='')
+                else:
+                    print(self.state.static_board[y][x], end='')
             print()
         print()
         print('Goals: ', end='')
         for goal in self.state.goals:
             print(goal, end='')
         print()
-        print('Player position: (' + str(self.state.player.x) + ', ' + str(self.state.player.y) + ')')
-        print('Boxes left: ' + str(self.get_boxes_left()))
-        print('Moves: ' + str(self.state.moves))
+        print('Player position:', self.state.player)
+        print('Boxes left:', self.get_boxes_left())
+        print('Moves:', self.state.moves)
 
     def move(self, direction: Direction):
-        player_move_position = Point(self.state.player.x + direction.direction.x, self.state.player.y + direction.direction.y)
-        push_box_position = Point(self.state.player.x + 2*direction.direction.x, self.state.player.y + 2*direction.direction.y)
+        player_move_position = (self.state.player[0] + direction.direction.x, self.state.player[1] + direction.direction.y)
+        push_box_position = (self.state.player[0] + 2*direction.direction.x, self.state.player[1] + 2*direction.direction.y)
 
         can_move = False
         if self.valid_position(player_move_position) and self.is_free_place(player_move_position):
             can_move = True
 
-        elif (self.state.board[player_move_position.y][player_move_position.x] == self.BOX or
-                self.state.board[player_move_position.y][player_move_position.x] == self.BOX_OVER_GOAL) and \
-                self.valid_position(push_box_position) and self.is_free_place(push_box_position):
-            if self.state.board[push_box_position.y][push_box_position.x] == self.GOAL:
-                self.state.board[push_box_position.y][push_box_position.x] = self.BOX_OVER_GOAL
-            else:
-                self.state.board[push_box_position.y][push_box_position.x] = self.BOX  # push box
+        elif (player_move_position in self.state.boxes) and self.valid_position(push_box_position) and self.is_free_place(push_box_position):
+            self.state.boxes.remove(player_move_position)
+            self.state.boxes.append(push_box_position)
             can_move = True
-
         # move player
         if can_move:
-            if self.__exists_goal(Point(self.state.player.x, self.state.player.y)):
-                self.state.board[self.state.player.y][self.state.player.x] = self.GOAL
-            else:
-                self.state.board[self.state.player.y][self.state.player.x] = self.FREE_SPACE
-            self.state.player.set_pos(player_move_position)
-            self.state.board[self.state.player.y][self.state.player.x] = self.PLAYER
+            self.state.player = player_move_position
             self.state.moves += 1
             self.state.last_moves.append(direction)
 
     def get_boxes_left(self):
-        boxes_left = len(self.state.goals)
+        boxes_left = len(self.state.boxes)
         for goal in self.state.goals:
-            if self.state.board[goal.y][goal.x] == self.BOX_OVER_GOAL:
-                boxes_left -= 1
+            for box in self.state.boxes:
+                if goal == box:
+                    boxes_left -= 1
 
         return boxes_left
 
     def has_won(self):
         return self.get_boxes_left() == 0
 
-    def is_free_place(self, position: Point):
-        return (self.state.board[position.y][position.x] == self.GOAL) or \
-               (self.state.board[position.y][position.x] == self.FREE_SPACE)
+    def is_free_place(self, position):
+        return (self.state.static_board[position[1]][position[0]] == BoardCell.FREE_SPACE) and \
+               (position not in self.state.boxes)
 
-    def valid_position(self, position: Point):
-        return 0 <= position.x < len(self.state.board[0]) - 1 and \
-               0 <= position.y < len(self.state.board) - 1
-
-    def __exists_goal(self, position: Point):
-        for goal in self.state.goals:
-            if goal == position:
-                return True
-        return False
+    def valid_position(self, position):
+        return 0 <= position[0] < len(self.state.static_board[0]) - 1 and \
+               0 <= position[1] < len(self.state.static_board) - 1
 
     def set_state(self, state: GameState):
         self.state = state.copy()

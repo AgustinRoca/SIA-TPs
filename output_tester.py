@@ -14,7 +14,7 @@ class OutputTester:
 
         print('Starting board:')
         self.game.show_board()
-        i = 0
+        i = 1
 
         for c in self.sequence:
             print('Move ' + str(i) + ' - ' + c + ':')
