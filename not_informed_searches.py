@@ -9,6 +9,7 @@ class IDDFS:
         self.init_max_depth = init_max_depth
         self.visited_nodes = {}
         self.frontier = [self.game.get_state()]
+        self.last_frontier = set()
 
     def process(self):
         max_depth = self.init_max_depth
@@ -17,13 +18,15 @@ class IDDFS:
             if ans is not None:
                 return ans
             max_depth += 10
+            self.frontier = list(self.last_frontier)
+            self.last_frontier = set()
             print('Trying with', max_depth)
 
     def _process_with_depth(self, max_depth):
         if self.game.has_won():
             return self.game.get_state()
-        while len(self.frontier) > 0 and any([x.moves < max_depth for x in self.frontier]):
-            state = self.last_state_with_max_depth(max_depth)
+        while len(self.frontier) > 0:
+            state = self.frontier.pop()
 
             for direction in Direction:
                 self.game.set_state(state)
@@ -34,12 +37,10 @@ class IDDFS:
                 new_state = self.game.get_state()
                 if (new_state not in self.visited_nodes) or (self.visited_nodes[new_state] > new_state.moves):
                     self.visited_nodes[new_state] = new_state.moves
-                    self.frontier.append(new_state)
-
-    def last_state_with_max_depth(self, max_depth):
-        for i, state in enumerate(reversed(self.frontier)):
-            if state.moves < max_depth:
-                return self.frontier.pop(len(self.frontier) - 1 - i)
+                    if new_state.moves == max_depth:
+                        self.last_frontier.add(new_state)
+                    else:
+                        self.frontier.append(new_state)
 
 
 class DFS:

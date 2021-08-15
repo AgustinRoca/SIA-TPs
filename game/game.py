@@ -1,6 +1,5 @@
 from enum import Enum
-import pickle
-
+import _pickle as pickle
 
 class Point:
     def __init__(self, x, y):
@@ -37,7 +36,7 @@ class GameState:
 
     def copy(self):
         new_state = GameState()
-        new_state.static_board = pickle.loads(pickle.dumps(self.static_board))
+        new_state.static_board = self.static_board
         new_state.boxes = pickle.loads(pickle.dumps(self.boxes))
         new_state.goals = self.goals
         new_state.player = pickle.loads(pickle.dumps(self.player))
