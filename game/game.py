@@ -33,7 +33,7 @@ class GameState:
         return self.boxes == other.boxes and self.player == other.player
 
     def __hash__(self):
-        return hash((str(self.boxes), self.player))
+        return hash((tuple(self.boxes), self.player))
 
     def copy(self):
         new_state = GameState()
@@ -69,6 +69,12 @@ class Direction(Enum):
     @property
     def direction(self):
         return self._direction
+
+    @staticmethod
+    def from_string(s):
+        for direction in Direction:
+            if direction.string == s:
+                return direction
 
 
 class BoardCell(Enum):
