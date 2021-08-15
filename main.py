@@ -1,6 +1,7 @@
-from not_informed_searches import BFS, DFS
+from not_informed_searches import BFS, DFS, IDDFS
 from time import time
 from output_tester import OutputTester
+from game.game import Game, Direction
 
 
 def run():
@@ -28,16 +29,28 @@ def run():
     # t1 = time()
     # print(t1 - t0)
     # print(final_state.moves)
+    # ot = OutputTester('lrrluulldlddruuuudddlllluurururrrlddrruuudddrrdrddluuuudddrrrruulululllrddlluu')
+    # ot.test()
 
-    dfs = DFS()
+    # dfs = DFS()
+    # t0 = time()
+    # final_state = dfs.process()
+    # t1 = time()
+    # print(t1 - t0)
+    # print(final_state)
+    # ot = OutputTester('lluuuulldldlddrrruruuurrddddrluuuulldddlddruuuuddddlullluurururrddddrruuuullddddrruuuurrdddrddluuuuddddrurrruululullddddlluuuulldddddlullluurururldldlddrrrururruurlddddlluldllluurururrddddrruuuullddddrruuuurrddddlluuuulldddddlullluurururldldlddrrrururruurrdddddrurrruulululllrddddlluuuuudddddlluldllluurururrrlddddrruuuu')
+    # ot.test()
+
+    iddfs = IDDFS(320)
     t0 = time()
-    final_state = dfs.process()
+    final_state = iddfs.process()
     t1 = time()
     print(t1 - t0)
     print(final_state.moves)
     print(final_state)
-    ot = OutputTester('lluuuulldldlddrrruruuurrddddrluuuulldddlddruuuuddddlullluurururrddddrruuuullddddrruuuurrdddrddluuuuddddrurrruululullddddlluuuulldddddlullluurururldldlddrrrururruurlddddlluldllluurururrddddrruuuullddddrruuuurrddddlluuuulldddddlullluurururldldlddrrrururruurrdddddrurrruulululllrddddlluuuuudddddlluldllluurururrrlddddrruuuu')
-    ot.test()
+    # ot = OutputTester('lluuuulldldlddrrruruuurrddddrluuuulldddlddruuuuddddlullluurururrddddrruuuullddddrruuuurrdddrddluuuudddrrrruulululllrddlluuudddddlllllluurururrrlddrruu')
+    # ot.test()
+
 
 
 if __name__ == '__main__':
