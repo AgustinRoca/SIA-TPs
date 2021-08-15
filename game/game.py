@@ -1,16 +1,6 @@
 from enum import Enum
 import _pickle as pickle
-
-class Point:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-    def __str__(self):
-        return '(' + str(self.x) + ', ' + str(self.y) + ')'
-
-    def __eq__(self, other):
-        return self.x == other.x and self.y == other.y
+from utils.direction import Direction
 
 
 class GameState:
@@ -45,37 +35,6 @@ class GameState:
         return new_state
 
 
-class Direction(Enum):
-    UP = 0, Point(0, -1), 'u'
-    DOWN = 1, Point(0, 1), 'd'
-    LEFT = 2, Point(-1, 0), 'l'
-    RIGHT = 3, Point(1, 0), 'r'
-
-    def __new__(cls, *args, **kwds):
-        obj = object.__new__(cls)
-        obj._value_ = args[0]
-        return obj
-
-    # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, direction: Point, s: str):
-        self._direction = direction
-        self.string = s
-
-    def __str__(self):
-        return self.string
-
-    # this makes sure that the description is read-only
-    @property
-    def direction(self):
-        return self._direction
-
-    @staticmethod
-    def from_string(s):
-        for direction in Direction:
-            if direction.string == s:
-                return direction
-
-
 class BoardCell(Enum):
     FREE_SPACE = ' '
     WALL = '#'
@@ -106,8 +65,8 @@ class Game:
     def __init__(self):
         self.state = GameState()
 
-    def parse_board(self):
-        b = open('board.txt', 'r')
+    def parse_board(self, filename='board.txt'):
+        b = open(filename, 'r')
         x = 0
         y = 0
         longest_line = 0

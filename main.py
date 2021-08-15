@@ -1,7 +1,7 @@
-from not_informed_searches import BFS, DFS, IDDFS
+from game.not_informed.BFS import BFS
+from game.not_informed.DFS import DFS
+from game.not_informed.IDDFS import IDDFS
 from time import time
-from output_tester import OutputTester
-from game.game import Game, Direction
 
 
 def run():
@@ -41,7 +41,7 @@ def run():
     t1 = time()
     print("{:.2f}s".format(t1 - t0))
     print(final_state)
-    # ot = OutputTester('lluuuulldldlddrrruruuurrddddrluuuulldddlddruuuuddddlullluurururrddddrruuuullddddrruuuurrdddrddluuuuddddrurrruululullddddlluuuulldddddlullluurururldldlddrrrururruurlddddlluldllluurururrddddrruuuullddddrruuuurrddddlluuuulldddddlullluurururldldlddrrrururruurrdddddrurrruulululllrddddlluuuuudddddlluldllluurururrrlddddrruuuu')
+    # ot = OutputTester('rrrrlllllrrruulllldldrrrrllllllluurururrrrrrrrdrdrddlruulululllllllldldlddrrrrrruurrdrdrlllruulllldldllluurururrrrrrrrdrdrddlruulululllllllldldlddrrrrrrrllllllluurururrrrrrdddrddlurrlllllllllluurururrrrrrrrdrdrddllrruulululllllllldldlddrrrrrrrrudrrlllllllllluurururrrrrrrrdrdrddlllrrruululullddlllldldllluurururrrrrrrrdrdrddlllllrurdrrruulululllllllldldlddrrrrrrlllllluurururrrrrrrrdrdrddlllululllldldllluurururrrrrrrrdrdrddlllllrrrrruulululllllllldldlddrrrrrrrrrrlllllllllluurururrrrrrrrdrdrddlllrrruulululllllllldldlddrrrruurrrrudlllldldllluurururrrrrrlllllldldlddrrrrrruurrdrdrrruulululrdrdrddllllrrrruululullrrdrdrddlllllrrrrruulululllrrrdrdrddllllllrrrrrruululullllrrrrdrdrddlllllllrrrrrrruulululllllrrrrrdrdrddlllllluulldldrrrrrrrlllllllllluurururrrrlllldldlddrrrrrrrruuuurrdrdrddlruulululllrrrdrdrddllrruululullllrrrrdrdrddlllrrruulululllllrrrrrdrdrddllllrrrruululullllllrrrrrrdrdrddlllllrrrrruulululllllldddldllluurururrrrrrlllllldldlddrrrrrrrllllllluurururrrrrrdddrddlurrrruulululrdrdrddllllurdrrruululullrrdrdrddlllllllllllluurururrrrrrlllllldldlddrrrrrrrruullllddrrrrrrrruulululllrrrdrdrddlllllllllllluurururrddrrrrudllllddrrrrrrrruululullrrdrdrddlllllllllllluurururrddrruurrlllllldldlddrrrrrrrrrrrruulululllllrudrrrrdrdrddlllllllllllluurururrrrrrlllllldldlddrrrrrrrrrrrruulululllrrrdrdrddlllllllluurruu')
     # ot.test()
     print()
 
@@ -53,7 +53,7 @@ def run():
     print("{:.2f}s".format(t1 - t0))
     print(final_state.moves)
     print(final_state)
-    # ot = OutputTester('lluuuulldldlddrrruruuurrddddrluuuulldddlddruuuuddddlullluurururrddddrruuuullddddrruuuurrdddrddluuuudddrrrruulululllrddlluuudddddlllllluurururrrlddrruu')
+    # ot = OutputTester('rllruurrdrddluuuuddrdrrruulululllrddlluuudlldddlddruuuuddldllluurururrrlddrruu')
     # ot.test()
     print()
 
