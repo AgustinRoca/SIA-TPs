@@ -23,6 +23,15 @@ class GameState:
     def __hash__(self):
         return hash((tuple(self.boxes), self.player))
 
+    def get_boxes_left(self):
+        boxes_left = len(self.boxes)
+        for goal in self.goals:
+            for box in self.boxes:
+                if goal == box:
+                    boxes_left -= 1
+
+        return boxes_left
+
     def copy(self):
         new_state = GameState()
         new_state.static_board = self.static_board
@@ -148,13 +157,7 @@ class Game:
             self.state.last_moves.append(direction)
 
     def get_boxes_left(self):
-        boxes_left = len(self.state.boxes)
-        for goal in self.state.goals:
-            for box in self.state.boxes:
-                if goal == box:
-                    boxes_left -= 1
-
-        return boxes_left
+        return self.state.get_boxes_left()
 
     def has_won(self):
         return self.get_boxes_left() == 0
