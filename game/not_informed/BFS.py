@@ -1,3 +1,5 @@
+from collections import deque
+
 from game.game import Game
 from utils.direction import Direction
 
@@ -7,13 +9,15 @@ class BFS:
         self.game = Game()
         self.game.parse_board()
         self.visited_nodes = set()
-        self.frontier = [self.game.get_state()]
+        self.frontier = deque()
 
     def process(self):
         if self.game.has_won():
             return self.game.get_state()
+
+        self.frontier.append(self.game.get_state())
         while len(self.frontier) > 0:
-            state = self.frontier.pop(0)
+            state = self.frontier.popleft()
 
             for direction in Direction:
                 self.game.set_state(state)

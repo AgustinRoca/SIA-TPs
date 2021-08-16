@@ -1,3 +1,5 @@
+from collections import deque
+
 from game.game import Game
 from utils.direction import Direction
 
@@ -7,9 +9,11 @@ class DFS:
         self.game = Game()
         self.game.parse_board()
         self.visited_nodes = {self.game.get_state()}
-        self.ancestors_stack = [self.game.get_state()]
+        self.ancestors_stack = deque()
 
     def process(self):
+        self.ancestors_stack.append(self.game.get_state())
+
         while len(self.ancestors_stack) > 0:
             state = self.ancestors_stack[-1]  # Peek last element (LIFO)
             self.game.set_state(state)

@@ -5,8 +5,8 @@ from utils.direction import Direction
 class GameState:
     def __init__(self, moves=0):
         self.static_board = []
-        self.goals = []
-        self.boxes = []
+        self.goals = set()
+        self.boxes = set()
         self.player = None
         self.moves = moves
         self.last_moves = []
@@ -26,7 +26,7 @@ class GameState:
     def copy(self):
         new_state = GameState()
         new_state.static_board = self.static_board
-        new_state.boxes = [*self.boxes]
+        new_state.boxes = set(self.boxes)
         new_state.goals = self.goals
         new_state.player = self.player  # Tuples are immutable
         new_state.moves = self.moves
@@ -78,14 +78,14 @@ class Game:
                 elif c == BoardCell.WALL:
                     self.state.static_board[y].append(BoardCell.WALL)
                 elif c == BoardCell.GOAL:
-                    self.state.goals.append((x, y))
+                    self.state.goals.add((x, y))
                     self.state.static_board[y].append(BoardCell.FREE_SPACE)
                 elif c == BoardCell.BOX:
-                    self.state.boxes.append((x, y))
+                    self.state.boxes.add((x, y))
                     self.state.static_board[y].append(BoardCell.FREE_SPACE)
                 elif c == BoardCell.BOX_OVER_GOAL:
-                    self.state.boxes.append((x, y))
-                    self.state.goals.append((x, y))
+                    self.state.boxes.add((x, y))
+                    self.state.goals.add((x, y))
                     self.state.static_board[y].append(BoardCell.FREE_SPACE)
                 elif c == BoardCell.PLAYER:
                     self.state.player = (x, y)
@@ -139,7 +139,7 @@ class Game:
 
         elif (player_move_position in self.state.boxes) and self.valid_position(push_box_position) and self.is_free_place(push_box_position):
             self.state.boxes.remove(player_move_position)
-            self.state.boxes.append(push_box_position)
+            self.state.boxes.add(push_box_position)
             can_move = True
         # move player
         if can_move:
