@@ -62,7 +62,8 @@ class IDDFS:
             if new_state.moves == max_depth:
                 self.last_frontier.append(new_state)
                 return False  # No podemos seguir expandiendo este nodo
-            elif not_visited or different_state:
+            # elif not_visited or different_state:  # FIXME: Agrega 10 segundos mas pero en teoria tendria que tener esto, sino nos quedan estados mas cortos pero que no terminamos de visitar, como udlll y lll
+            elif not_visited:
                 # Si no fue visitado, lo pongo como ancestro y vuelvo al loop
                 self.ancestors_stack.append(new_state)
                 return True
