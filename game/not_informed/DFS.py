@@ -9,50 +9,6 @@ class DFS:
         self.visited_nodes = {self.game.get_state()}
         self.ancestors_stack = [self.game.get_state()]
 
-    # def process(self):
-    #     while len(self.ancestors_stack) > 0:
-    #         state = self.ancestors_stack[-1]  # Peek last element (LIFO)
-    #         self.game.set_state(state)
-    #         if self.game.has_won():
-    #             return state
-    #
-    #         self.game.move(Direction.DOWN)  # Lo muevo en una direccion
-    #         new_state = self.game.get_state()
-    #         if new_state not in self.visited_nodes:
-    #             # Si no fue visitado, lo pongo como ancestro y vuelvo al loop
-    #             self.ancestors_stack.append(new_state)
-    #             self.visited_nodes.add(new_state)
-    #             continue
-    #
-    #         self.game.set_state(state)
-    #         self.game.move(Direction.LEFT)  # Lo muevo en una direccion
-    #         new_state = self.game.get_state()
-    #         if new_state not in self.visited_nodes:
-    #             # Si no fue visitado, lo pongo como ancestro y vuelvo al loop
-    #             self.ancestors_stack.append(new_state)
-    #             self.visited_nodes.add(new_state)
-    #             continue
-    #
-    #         self.game.set_state(state)
-    #         self.game.move(Direction.UP)  # Lo muevo en una direccion
-    #         new_state = self.game.get_state()
-    #         if new_state not in self.visited_nodes:
-    #             # Si no fue visitado, lo pongo como ancestro y vuelvo al loop
-    #             self.ancestors_stack.append(new_state)
-    #             self.visited_nodes.add(new_state)
-    #             continue
-    #
-    #         self.game.set_state(state)
-    #         self.game.move(Direction.RIGHT)  # Lo muevo en una direccion
-    #         new_state = self.game.get_state()
-    #         if new_state not in self.visited_nodes:
-    #             # Si no fue visitado, lo pongo como ancestro y vuelvo al loop
-    #             self.ancestors_stack.append(new_state)
-    #             self.visited_nodes.add(new_state)
-    #             continue
-    #
-    #         self.ancestors_stack.pop()  # Si todas las direcciones dan estados ya visitados, no tengo nada mas para hacer
-
     def process(self):
         while len(self.ancestors_stack) > 0:
             state = self.ancestors_stack[-1]  # Peek last element (LIFO)
