@@ -1,3 +1,4 @@
+from game.informed.AStar import AStar
 from game.informed.GGS import GGS
 from game.informed.heuristics import heuristic_completed_boxes
 from game.not_informed.BFS import BFS
@@ -59,10 +60,22 @@ def run():
     # # ot.test()
     # print()
 
-    print('GGS')
-    ggs = GGS(heuristic=heuristic_completed_boxes)
+    # print('GGS')
+    # ggs = GGS(heuristic=heuristic_completed_boxes)
+    # t0 = time()
+    # final_state = ggs.process()
+    # t1 = time()
+    # print("{:.2f}s".format(t1 - t0))
+    # print(final_state.moves)
+    # print(final_state)
+    # # ot = OutputTester('rllruurrdrddluuuuddrdrrruulululllrddlluuudlldddlddruuuuddldllluurururrrlddrruu')
+    # # ot.test()
+    # print()
+
+    print('A*')
+    a_star = AStar(heuristic=heuristic_completed_boxes)
     t0 = time()
-    final_state = ggs.process()
+    final_state = a_star.process()
     t1 = time()
     print("{:.2f}s".format(t1 - t0))
     print(final_state.moves)
