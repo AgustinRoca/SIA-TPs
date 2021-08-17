@@ -20,6 +20,7 @@ class IDAStar:
         self.frontier = [self.game.get_state()]
         self.last_frontier = {}
         self.heuristic = heuristic
+        self.changed = 0
 
     def process(self):
         max_f = self.init_max_f
@@ -45,6 +46,8 @@ class IDAStar:
                 self.game.move(direction)
                 new_state = self.game.get_state()
                 if (new_state not in self.visited_nodes.keys()) or (self.visited_nodes[new_state] > new_state.moves):
+                    if new_state in self.visited_nodes.keys():
+                        self.changed += 1
                     self.visited_nodes[new_state] = new_state.moves
                     new_f = fn(new_state, self.heuristic)[0]
 
@@ -59,7 +62,10 @@ class IDAStar:
         return None, min_f
 
     def expanded_nodes(self):
-        return len(self.visited_nodes)
+        return len(self.visited_nodes) + self.changed
 
     def frontier_size(self):
-        return len(self.frontier)
+        last_frontier_length = 0
+        for key in self.last_frontier:
+            last_frontier_length += len(self.last_frontier[key])
+        return len(self.frontier) + last_frontier_length

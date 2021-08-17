@@ -14,6 +14,7 @@ class IDDFS:
         self.last_frontier = {0: {self.game.get_state()}, init_max_depth: set()}
         self.max_depth_not_found = 0
         self.min_depth_found = None
+        self.expanded = 0
 
     def process(self, verbose=False):
         max_depth = self.init_max_depth
@@ -51,6 +52,7 @@ class IDDFS:
         while len(self.frontier) > 0:
             state = self.frontier.pop()
             self.game.set_state(state)
+            self.expanded += 1
             if self.game.has_won():
                 return self.game.get_state()
 
@@ -70,3 +72,9 @@ class IDDFS:
             if self.game.has_won():
                 return state
         self.starting_visited_nodes[max_depth] = visited_nodes
+
+    def expanded_nodes(self):
+        return self.expanded
+
+    def frontier_size(self, depth):
+        return len(self.last_frontier[depth])
