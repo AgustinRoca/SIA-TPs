@@ -12,7 +12,7 @@ class GameState:
         self.last_moves = []
 
     def __str__(self):
-        s = str(self.moves) + ': '
+        s = ''
         for move in self.last_moves:
             s += str(move)
         return s

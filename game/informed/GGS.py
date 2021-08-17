@@ -31,3 +31,9 @@ class GGS:
                 if next_state not in self.visited_nodes:
                     self.frontier.add(next_state)
                     self.visited_nodes.add(next_state)
+
+    def expanded_nodes(self):
+        return len(self.visited_nodes)
+
+    def frontier_size(self):
+        return len(self.frontier)
