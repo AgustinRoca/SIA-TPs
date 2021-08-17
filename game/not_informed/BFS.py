@@ -19,7 +19,6 @@ class BFS:
             if self.game.has_won():
                 return self.game.get_state()
 
-            is_leave = True
             for direction in Direction:
                 self.game.set_state(state)
                 self.game.move(direction)
@@ -28,14 +27,11 @@ class BFS:
 
                 next_state = self.game.get_state()
                 if next_state not in self.visited_nodes:
-                    is_leave = False
                     self.frontier.append(next_state)
                     self.visited_nodes.add(next_state)
-            if is_leave:
-                self.leaves += 1
 
     def expanded_nodes(self):
         return len(self.visited_nodes)
 
     def frontier_size(self):
-        return len(self.frontier) + self.leaves
+        return len(self.frontier)

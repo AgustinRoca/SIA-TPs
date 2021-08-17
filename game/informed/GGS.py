@@ -22,7 +22,6 @@ class GGS:
         while len(self.frontier) > 0:
             state = self.frontier.pop(0)
 
-            is_leave = True
             for direction in Direction:
                 self.game.set_state(state)
                 self.game.move(direction)
@@ -31,15 +30,11 @@ class GGS:
 
                 next_state = self.game.get_state()
                 if next_state not in self.visited_nodes:
-                    is_leave = False
                     self.frontier.add(next_state)
                     self.visited_nodes.add(next_state)
-
-            if is_leave:
-                self.leaves += 1
 
     def expanded_nodes(self):
         return len(self.visited_nodes)
 
     def frontier_size(self):
-        return len(self.frontier) + self.leaves
+        return len(self.frontier)

@@ -11,72 +11,55 @@ def fn(state: GameState, heuristic: Callable[[GameState], int]) -> (int, int):
 
 
 class IDAStar:
-    def __init__(self, heuristic: Callable[[GameState], int], init_max_depth):
+    def __init__(self, heuristic: Callable[[GameState], int]):
         self.game = Game()
         self.game.parse_board()
-        self.init_max_depth = init_max_depth
-        self.starting_visited_nodes = {0: {}, init_max_depth: {}}
-        self.frontier = SortedList(key=lambda state: fn(state, heuristic))
-        self.frontier.add(self.game.get_state())
-        self.last_frontier = {0: SortedList(key=lambda state: fn(state, heuristic)),
-                              init_max_depth: SortedList(key=lambda state: fn(state, heuristic))}
+        f = fn(self.game.get_state(), heuristic)[0]
+        self.init_max_f = f
+        self.visited_nodes = {self.game.get_state(): 0}
+        self.frontier = [self.game.get_state()]
+        self.last_frontier = {}
         self.heuristic = heuristic
-        self.last_frontier[0].add(self.game.get_state())
-        self.max_depth_not_found = 0
-        self.min_depth_found = None
 
-    def process(self, verbose=False):
-        max_depth = self.init_max_depth
-        partial_ans = None
+    def process(self):
+        max_f = self.init_max_f
         while True:
-            ans = self._process_with_depth(max_depth)
+            ans, min_f_in_frontier = self._process_with_f(max_f)
             if ans is not None:
-                partial_ans = ans
-                if verbose:
-                    print('Found with', max_depth)
-                self.min_depth_found = max_depth
-                if self.min_depth_found - 1 == self.max_depth_not_found:
-                    return ans
-                else:
-                    max_depth = (self.max_depth_not_found + self.min_depth_found) // 2
+                return ans
             else:
-                if verbose:
-                    print('Not found with', max_depth)
-                self.max_depth_not_found = max_depth
-                if self.min_depth_found is not None and (self.min_depth_found - 1 == self.max_depth_not_found):
-                    return partial_ans
-                if self.min_depth_found is None:
-                    max_depth *= 2
-                else:
-                    max_depth = (self.max_depth_not_found + self.min_depth_found) // 2
+                max_f = min_f_in_frontier
+                self.frontier = copy.copy(self.last_frontier[max_f])
+                self.last_frontier[max_f] = []
 
-            self.frontier = copy.deepcopy(self.last_frontier[self.max_depth_not_found])
-            if verbose:
-                print('Trying with', max_depth, '. Starting from:', self.max_depth_not_found)
-            self.last_frontier[max_depth] = SortedList(key=lambda state: fn(state, self.heuristic))
-
-    def _process_with_depth(self, max_depth):
-        visited_nodes = copy.copy(self.starting_visited_nodes[self.max_depth_not_found])
-
+    def _process_with_f(self, f):
+        min_f = None
         while len(self.frontier) > 0:
-            state = self.frontier.pop(0)
+            state = self.frontier.pop()
             self.game.set_state(state)
             if self.game.has_won():
-                return self.game.get_state()
+                return self.game.get_state(), min_f
 
             for direction in Direction:
                 self.game.set_state(state)
                 self.game.move(direction)
                 new_state = self.game.get_state()
-                if (new_state not in visited_nodes) or (visited_nodes[new_state] > new_state.moves):
-                    visited_nodes[new_state] = new_state.moves
-                    if new_state.moves == max_depth:
-                        self.last_frontier[max_depth].add(new_state)
-                    else:
-                        self.frontier.add(new_state)
+                if (new_state not in self.visited_nodes.keys()) or (self.visited_nodes[new_state] > new_state.moves):
+                    self.visited_nodes[new_state] = new_state.moves
+                    new_f = fn(new_state, self.heuristic)[0]
 
-        for state in self.last_frontier[max_depth]:
-            self.game.set_state(state)
-            if self.game.has_won():
-                return state
-        self.starting_visited_nodes[max_depth] = visited_nodes
+                    if new_f > f:
+                        if min_f is None or new_f < min_f:
+                            min_f = new_f
+                        if new_f not in self.last_frontier.keys():
+                            self.last_frontier[new_f] = []
+                        self.last_frontier[new_f].append(new_state)
+                    else:
+                        self.frontier.append(new_state)
+        return None, min_f
+
+    def expanded_nodes(self):
+        return len(self.visited_nodes)
+
+    def frontier_size(self):
+        return len(self.frontier)
