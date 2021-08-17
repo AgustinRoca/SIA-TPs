@@ -33,6 +33,8 @@ class IDDFS:
             else:
                 if verbose:
                     print('Not found with', max_depth)
+                if len(self.starting_visited_nodes[max_depth]) == len(self.starting_visited_nodes[self.max_depth_not_found]) :
+                    return None
                 self.max_depth_not_found = max_depth
                 if self.min_depth_found is not None and (self.min_depth_found - 1 == self.max_depth_not_found):
                     return partial_ans

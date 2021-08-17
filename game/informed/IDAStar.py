@@ -29,6 +29,8 @@ class IDAStar:
             if ans is not None:
                 return ans
             else:
+                if min_f_in_frontier is None:
+                    return None
                 max_f = min_f_in_frontier
                 self.frontier = copy.copy(self.last_frontier[max_f])
                 self.last_frontier[max_f] = []
