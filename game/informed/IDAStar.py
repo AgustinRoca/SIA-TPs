@@ -2,7 +2,6 @@ import copy
 from typing import Callable
 from game.game import Game, GameState
 from utils.direction import Direction
-from sortedcontainers import SortedList
 
 
 def fn(state: GameState, heuristic: Callable[[GameState], int]) -> (int, int):
