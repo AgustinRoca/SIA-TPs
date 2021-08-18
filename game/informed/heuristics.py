@@ -12,8 +12,6 @@ def _player_min_distance_from_a_box(state: GameState) -> int:
     min_distance = None
     for box in list(state.boxes):
         distance = _distance(box, state.player)
-        if (box[0] - state.player[0] != 0) and (box[1] - state.player[1] != 0):
-            distance += 2
         if min_distance is None or distance < min_distance:
             min_distance = distance
     return min_distance - 1
@@ -61,3 +59,7 @@ def deadlock(state: GameState) -> int:
         if y_block and x_block:
             return sys.maxsize
     return 0
+
+
+def heuristic_distance_to_closest_goals_and_player_to_closest_box(state: GameState) -> int:
+    return heuristic_distance_to_closest_goals(state) + _player_min_distance_from_a_box(state)
