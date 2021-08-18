@@ -1,5 +1,5 @@
 from enum import Enum
-from utils.direction import Direction
+from TP1.utils.direction import Direction
 
 
 class GameState:
@@ -74,7 +74,7 @@ class Game:
     def __init__(self):
         self.state = GameState()
 
-    def parse_board(self, filename='board.txt'):
+    def parse_board(self, filename='TP1/board.txt'):
         b = open(filename, 'r')
         x = 0
         y = 0

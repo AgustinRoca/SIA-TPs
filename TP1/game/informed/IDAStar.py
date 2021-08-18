@@ -1,10 +1,9 @@
-import copy
 from typing import Callable
 
 from sortedcontainers import SortedDict
 
-from game.game import Game, GameState
-from utils.direction import Direction
+from TP1.game.game import Game, GameState
+from TP1.utils.direction import Direction
 
 
 def fn(state: GameState, heuristic: Callable[[GameState], int]) -> (int, int):

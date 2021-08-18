@@ -1,7 +1,7 @@
 from collections import deque
 
-from game.game import Game
-from utils.direction import Direction
+from TP1.game.game import Game
+from TP1.utils.direction import Direction
 
 
 class DFS:

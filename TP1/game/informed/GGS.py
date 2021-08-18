@@ -1,23 +1,26 @@
-from collections import deque
+from typing import Callable
 
-from game.game import Game
-from utils.direction import Direction
+from TP1.game.game import Game, GameState
+from TP1.utils.direction import Direction
+from sortedcontainers import SortedList
 
 
-class BFS:
-    def __init__(self):
+# Global Greedy Search
+class GGS:
+    def __init__(self, heuristic: Callable[[GameState], int]):
         self.game = Game()
         self.game.parse_board()
-        self.visited_nodes = {self.game.get_state()}
-        self.frontier = deque({self.game.get_state()})
+        self.visited_nodes = set()
+        self.frontier = SortedList(key=heuristic)
         self.leaves = 0
 
     def process(self):
+        if self.game.has_won():
+            return self.game.get_state()
+
+        self.frontier.add(self.game.get_state())
         while len(self.frontier) > 0:
-            state = self.frontier.popleft()
-            self.game.set_state(state)
-            if self.game.has_won():
-                return self.game.get_state()
+            state = self.frontier.pop(0)
 
             for direction in Direction:
                 self.game.set_state(state)
@@ -27,7 +30,7 @@ class BFS:
 
                 next_state = self.game.get_state()
                 if next_state not in self.visited_nodes:
-                    self.frontier.append(next_state)
+                    self.frontier.add(next_state)
                     self.visited_nodes.add(next_state)
 
     def expanded_nodes(self):

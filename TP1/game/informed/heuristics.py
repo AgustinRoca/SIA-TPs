@@ -1,6 +1,6 @@
 import sys
 
-from game.game import GameState, BoardCell
+from TP1.game.game import GameState, BoardCell
 from itertools import permutations
 
 
