@@ -1,5 +1,8 @@
 import copy
 from typing import Callable
+
+from sortedcontainers import SortedDict
+
 from game.game import Game, GameState
 from utils.direction import Direction
 
@@ -17,7 +20,7 @@ class IDAStar:
         self.init_max_f = f
         self.visited_nodes = {self.game.get_state(): 0}
         self.frontier = [self.game.get_state()]
-        self.last_frontier = {}
+        self.last_frontier = SortedDict()
         self.heuristic = heuristic
         self.changed = 0
 
@@ -28,11 +31,10 @@ class IDAStar:
             if ans is not None:
                 return ans
             else:
-                if min_f_in_frontier is None:
+                if len(self.last_frontier) > 0 is None:
                     return None
                 max_f = min_f_in_frontier
-                self.frontier = copy.copy(self.last_frontier[max_f])
-                self.last_frontier[max_f] = []
+                self.frontier = self.last_frontier.popitem(0)[1]
 
     def _process_with_f(self, f):
         min_f = None
@@ -46,8 +48,8 @@ class IDAStar:
                 self.game.set_state(state)
                 self.game.move(direction)
                 new_state = self.game.get_state()
-                if (new_state not in self.visited_nodes.keys()) or (self.visited_nodes[new_state] > new_state.moves):
-                    if new_state in self.visited_nodes.keys():
+                if (new_state not in self.visited_nodes) or (self.visited_nodes[new_state] > new_state.moves):
+                    if new_state in self.visited_nodes:
                         self.changed += 1
                     self.visited_nodes[new_state] = new_state.moves
                     new_f = fn(new_state, self.heuristic)[0]
@@ -55,7 +57,7 @@ class IDAStar:
                     if new_f > f:
                         if min_f is None or new_f < min_f:
                             min_f = new_f
-                        if new_f not in self.last_frontier.keys():
+                        if new_f not in self.last_frontier:
                             self.last_frontier[new_f] = []
                         self.last_frontier[new_f].append(new_state)
                     else:
@@ -66,7 +68,4 @@ class IDAStar:
         return len(self.visited_nodes) + self.changed
 
     def frontier_size(self):
-        last_frontier_length = 0
-        for key in self.last_frontier:
-            last_frontier_length += len(self.last_frontier[key])
-        return len(self.frontier) + last_frontier_length
+        return len(self.frontier) + len(self.last_frontier)

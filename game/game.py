@@ -69,6 +69,7 @@ class BoardCell(Enum):
 
 class Game:
     GOALS_AND_BOXES_DONT_MATCH = -1
+    NO_GOALS_AND_BOXES = -2
 
     def __init__(self):
         self.state = GameState()
@@ -105,6 +106,9 @@ class Game:
 
         if len(self.state.goals) != len(self.state.boxes):
             return self.GOALS_AND_BOXES_DONT_MATCH
+
+        if len(self.state.goals) == 0:
+            return self.NO_GOALS_AND_BOXES
 
         for line in self.state.static_board:
             if len(line) > longest_line:
