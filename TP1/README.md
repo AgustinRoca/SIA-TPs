@@ -64,9 +64,10 @@ Ejemplo de board.txt:
 
 ## Instrucciones para la ejecución
 1. Clonar el repositorio
-2. Editar el archivo config.txt con los parámetros deseados        
-3. Editar el archivo board.txt para usar el mapa deseado
-4. Posicionarse en la carpeta SIA-Group5 (NO en la carpeta TP1) y ejecutar el siguiente comando:
+2. Instalar las dependencias ejecutando ``` pip install -r requirements.txt ```
+3. Editar el archivo config.txt con los parámetros deseados        
+4. Editar el archivo board.txt para usar el mapa deseado
+5. Posicionarse en la carpeta SIA-Group5 (NO en la carpeta TP1) y ejecutar el siguiente comando:
 ```
 python3 ./TP1/main.py
 ```
