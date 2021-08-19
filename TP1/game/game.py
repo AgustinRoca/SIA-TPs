@@ -1,5 +1,5 @@
 from enum import Enum
-from TP1.utils.direction import Direction
+from utils.direction import Direction
 
 
 class GameState:
