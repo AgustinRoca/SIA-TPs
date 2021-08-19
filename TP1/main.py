@@ -58,7 +58,9 @@ def parse_config():
     arguments = {}
     for line in f.readlines():
         arg = line.strip().split('=')
-        if arg[0] == 'consider_deadlock':
+        if arg[0] == 'file':
+            arguments[arg[0]] = arg[1]
+        elif arg[0] == 'consider_deadlock':
             if arg[1] == 'True':
                 arguments[arg[0]] = True
             elif arg[1] == 'False':
