@@ -64,9 +64,9 @@ Ejemplo de board.txt:
 
 ## Instrucciones para la ejecución
 1. Clonar el repositorio
-2. Editar el archivo config.txt con los parametros deseados        
+2. Editar el archivo config.txt con los parámetros deseados        
 3. Editar el archivo board.txt para usar el mapa deseado
-4. Posicionarse en la carpeta y ejecutar el siguiente comando:
+4. Posicionarse en la carpeta SIA-Group5 (NO en la carpeta TP1) y ejecutar el siguiente comando:
 ```
-python3 ./main.py
+python3 ./TP1/main.py
 ```
