@@ -5,13 +5,12 @@ from TP1.utils.direction import Direction
 
 
 class DFS:
-    def __init__(self):
-        self.game = Game()
-        self.game.parse_board()
+    def __init__(self, game, check_deadlock):
+        self.game = game
         self.visited_nodes = {self.game.get_state()}
         self.frontier = deque()
         self.frontier.append(self.game.get_state())
-        self.leaves = 0
+        self.check_deadlock = check_deadlock
 
     def process(self):
         while len(self.frontier) > 0:
@@ -24,6 +23,8 @@ class DFS:
                 self.game.set_state(state)
                 self.game.move(direction)
                 next_state = self.game.get_state()
+                if self.check_deadlock and self.game.deadlock():
+                    continue
                 if next_state not in self.visited_nodes:
                     self.frontier.append(next_state)
                     self.visited_nodes.add(next_state)

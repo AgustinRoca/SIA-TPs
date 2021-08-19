@@ -74,7 +74,7 @@ class Game:
     def __init__(self):
         self.state = GameState()
 
-    def parse_board(self, filename='TP1/board.txt'):
+    def parse_board(self, filename='TP1/boards/board.txt'):
         b = open(filename, 'r')
         x = 0
         y = 0
@@ -179,3 +179,17 @@ class Game:
 
     def get_state(self):
         return self.state
+
+    def deadlock(self):
+        for box in self.state.boxes:
+            if box in self.state.goals:
+                continue
+            y_block = False
+            x_block = False
+            if (self.state.static_board[box[1] - 1][box[0]] == BoardCell.WALL) or (self.state.static_board[box[1] + 1][box[0]] == BoardCell.WALL):
+                y_block = True
+            if (self.state.static_board[box[1]][box[0] - 1] == BoardCell.WALL) or (self.state.static_board[box[1]][box[0] + 1] == BoardCell.WALL):
+                x_block = True
+            if y_block and x_block:
+                return True
+        return False

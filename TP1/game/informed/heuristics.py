@@ -48,18 +48,5 @@ def heuristic_distance_to_closest_goals(state: GameState) -> int:
     return dist
 
 
-def deadlock(state: GameState) -> int:
-    for box in state.boxes:
-        y_block = False
-        x_block = False
-        if (state.static_board[box[1] - 1][box[0]] == BoardCell.WALL) or (state.static_board[box[1] + 1][box[0]] == BoardCell.WALL):
-            y_block = True
-        if (state.static_board[box[1]][box[0] - 1] == BoardCell.WALL) or (state.static_board[box[1]][box[0] + 1] == BoardCell.WALL):
-            x_block = True
-        if y_block and x_block:
-            return sys.maxsize
-    return 0
-
-
 def heuristic_distance_to_closest_goals_and_player_to_closest_box(state: GameState) -> int:
     return heuristic_distance_to_closest_goals(state) + _player_min_distance_from_a_box(state)

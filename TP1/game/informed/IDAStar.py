@@ -12,9 +12,8 @@ def fn(state: GameState, heuristic: Callable[[GameState], int]) -> (int, int):
 
 
 class IDAStar:
-    def __init__(self, heuristic: Callable[[GameState], int]):
-        self.game = Game()
-        self.game.parse_board()
+    def __init__(self, game, check_deadlock, heuristic: Callable[[GameState], int]):
+        self.game = game
         f = fn(self.game.get_state(), heuristic)[0]
         self.init_max_f = f
         self.visited_nodes = {self.game.get_state(): 0}
@@ -22,31 +21,34 @@ class IDAStar:
         self.last_frontier = SortedDict()
         self.heuristic = heuristic
         self.changed = 0
+        self.check_deadlock = check_deadlock
 
     def process(self):
         max_f = self.init_max_f
         while True:
-            ans, min_f_in_frontier = self._process_with_f(max_f)
+            ans = self._process_with_f(max_f)
             if ans is not None:
                 return ans
             else:
-                if len(self.last_frontier) > 0 is None:
+                if len(self.last_frontier) == 0:
                     return None
-                max_f = min_f_in_frontier
-                self.frontier = self.last_frontier.popitem(0)[1]
+                entry = self.last_frontier.popitem(0)
+                max_f = entry[0]
+                self.frontier = entry[1]
 
     def _process_with_f(self, f):
-        min_f = None
         while len(self.frontier) > 0:
             state = self.frontier.pop()
             self.game.set_state(state)
             if self.game.has_won():
-                return self.game.get_state(), min_f
+                return self.game.get_state()
 
             for direction in Direction:
                 self.game.set_state(state)
                 self.game.move(direction)
                 new_state = self.game.get_state()
+                if self.check_deadlock and self.game.deadlock():
+                    continue
                 if (new_state not in self.visited_nodes) or (self.visited_nodes[new_state] > new_state.moves):
                     if new_state in self.visited_nodes:
                         self.changed += 1
@@ -54,14 +56,12 @@ class IDAStar:
                     new_f = fn(new_state, self.heuristic)[0]
 
                     if new_f > f:
-                        if min_f is None or new_f < min_f:
-                            min_f = new_f
                         if new_f not in self.last_frontier:
                             self.last_frontier[new_f] = []
                         self.last_frontier[new_f].append(new_state)
                     else:
                         self.frontier.append(new_state)
-        return None, min_f
+        return None
 
     def expanded_nodes(self):
         return len(self.visited_nodes) + self.changed

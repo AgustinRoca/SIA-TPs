@@ -5,9 +5,8 @@ from TP1.utils.direction import Direction
 
 
 class IDDFS:
-    def __init__(self, init_max_depth):
-        self.game = Game()
-        self.game.parse_board()
+    def __init__(self, game, check_deadlock, init_max_depth):
+        self.game = game
         self.init_max_depth = init_max_depth
         self.starting_visited_nodes = {0: {}, init_max_depth: {}}
         self.frontier = [self.game.get_state()]
@@ -15,6 +14,7 @@ class IDDFS:
         self.max_depth_not_found = 0
         self.min_depth_found = None
         self.expanded = 0
+        self.check_deadlock = check_deadlock
 
     def process(self, verbose=False):
         max_depth = self.init_max_depth
@@ -62,6 +62,8 @@ class IDDFS:
                 self.game.set_state(state)
                 self.game.move(direction)
                 new_state = self.game.get_state()
+                if self.check_deadlock and self.game.deadlock():
+                    continue
                 if (new_state not in visited_nodes) or (visited_nodes[new_state] > new_state.moves):
                     visited_nodes[new_state] = new_state.moves
                     if new_state.moves == max_depth:

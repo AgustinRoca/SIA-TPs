@@ -12,29 +12,27 @@
 Se debe editar el archivo config.txt de la siguiente forma:
 
     1. consider_deadlock=True/False: decide si se expanden los hijos de los estados desde los cuales es imposible ganar
-    2. verbose=True/False: decide si se muestra información adicional por consola
-    3. algorithm=1/2/3/4/5/6: decide el algoritmo a utilizar, siendo:
+    2. algorithm=1/2/3/4/5/6: decide el algoritmo a utilizar, siendo:
         1. BFS
         2. DFS
         3. IDDFS
         4. GGS
         5. A*
         6. IDA*
-    4. heuristic=1/2/3: decide la heurística a utilizar en caso de que se use un algoritmo informado, siendo:
+    3. heuristic=1/2/3: decide la heurística a utilizar en caso de que se use un algoritmo informado, siendo:
         1. Menor suma de las distancias de cada caja a un objetivo distinto no ocupado
         2. Suma de las distancias de cada caja a su objetivo más cercano no ocupado
         3. Suma de las distancias de cada caja a su objetivo más cercano no ocupado y la distancia del jugador a la caja más cercana
-    5. limit=XX: límite inicial para el IDDFS
-    6. increment=XX: incremento para el IDDFS
+    4. limit=XX: límite inicial para el IDDFS
+    5. file=filename: nombre del archivo que contiene el tablero
 
 Ejemplo de config.txt:
 
     consider_deadlock=True
-    verbose=False
     algorithm=1
     heuristic=1
     limit=50
-    increment=20
+    file=TP1/boards/board.txt
 
 ## Configuración del tablero
 Se debe editar el archivo board.txt de la siguiente forma:
@@ -58,6 +56,11 @@ Ejemplo de board.txt:
     #     $@$     #
     ####  ###  ####
        #### ####
+
+## Juegos ejemplo:
+- [board.txt](http://www.game-sokoban.com/index.php?mode=level&lid=200)
+- [board2.txt](http://www.game-sokoban.com/index.php?mode=level&lid=45427)
+- [board3.txt](http://www.game-sokoban.com/index.php?mode=level&lid=45426)
 
 ## Instrucciones para la ejecución
 1. Clonar el repositorio

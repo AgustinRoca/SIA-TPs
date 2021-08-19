@@ -7,12 +7,11 @@ from sortedcontainers import SortedList
 
 # Global Greedy Search
 class GGS:
-    def __init__(self, heuristic: Callable[[GameState], int]):
-        self.game = Game()
-        self.game.parse_board()
+    def __init__(self, game, check_deadlock, heuristic: Callable[[GameState], int]):
+        self.game = game
         self.visited_nodes = set()
         self.frontier = SortedList(key=heuristic)
-        self.leaves = 0
+        self.check_deadlock = check_deadlock
 
     def process(self):
         if self.game.has_won():
@@ -29,6 +28,8 @@ class GGS:
                     return self.game.get_state()
 
                 next_state = self.game.get_state()
+                if self.check_deadlock and self.game.deadlock():
+                    continue
                 if next_state not in self.visited_nodes:
                     self.frontier.add(next_state)
                     self.visited_nodes.add(next_state)

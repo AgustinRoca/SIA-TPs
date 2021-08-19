@@ -1,0 +1,5 @@
+consider_deadlock=True
+algorithm=1
+heuristic=1
+limit=50
+file=TP1/boards/board.txt
