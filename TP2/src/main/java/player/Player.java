@@ -2,11 +2,11 @@ package player;
 
 import equipment.Equipment;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class Player {
-    private final Set<Equipment> equipments = new HashSet<>();
+    private final Map<Class<? extends Equipment>, Equipment> equipments = new HashMap<>();
     private double height;
 
     private boolean attackPointsCalculated = false;
@@ -32,11 +32,15 @@ public abstract class Player {
     }
 
     public void addEquipment(Equipment equipment) {
-        this.equipments.add(equipment);
+        this.equipments.put(equipment.getClass(), equipment);
     }
 
     public void removeEquipment(Equipment equipment) {
-        this.equipments.remove(equipment);
+        this.equipments.remove(equipment.getClass());
+    }
+
+    public void removeEquipment(Class<? extends Equipment> equipmentClass) {
+        this.equipments.remove(equipmentClass);
     }
 
     public double attackPoints() {
@@ -48,7 +52,7 @@ public abstract class Player {
     public double defensePoints() {
         if (!this.defensePointsCalculated)
             this.calculateDefensePoints();
-        return this.attackPoints;
+        return this.defensePoints;
     }
 
     public abstract double fitness();
@@ -58,7 +62,7 @@ public abstract class Player {
         double agility = 0;
         double intelligence = 0;
 
-        for (Equipment equipment : this.equipments) {
+        for (Equipment equipment : this.equipments.values()) {
             force += equipment.getForce();
             agility += equipment.getAgility();
             intelligence += equipment.getIntelligence();
@@ -77,7 +81,7 @@ public abstract class Player {
         double health = 0;
         double intelligence = 0;
 
-        for (Equipment equipment : this.equipments) {
+        for (Equipment equipment : this.equipments.values()) {
             endurance += equipment.getEndurance();
             health += equipment.getHealth();
             intelligence += equipment.getIntelligence();
