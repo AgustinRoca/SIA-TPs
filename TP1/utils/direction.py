@@ -1,5 +1,5 @@
 from enum import Enum
-from TP1.utils.point import Point
+from utils.point import Point
 
 
 class Direction(Enum):

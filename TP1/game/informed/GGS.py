@@ -1,7 +1,7 @@
 from typing import Callable
 
-from TP1.game.game import Game, GameState
-from TP1.utils.direction import Direction
+from game.game import GameState
+from utils.direction import Direction
 from sortedcontainers import SortedList
 
 

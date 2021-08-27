@@ -1,4 +1,5 @@
-from TP1.game.game import Game, Direction
+from game.game import Game
+from utils.direction import Direction
 
 
 class OutputTester:

@@ -1,7 +1,6 @@
 import copy
 
-from TP1.game.game import Game
-from TP1.utils.direction import Direction
+from utils.direction import Direction
 
 
 class IDDFS:
