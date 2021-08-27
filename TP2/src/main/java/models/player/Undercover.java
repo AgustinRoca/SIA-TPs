@@ -1,4 +1,4 @@
-package player;
+package models.player;
 
 public class Undercover extends Player {
     public Undercover(double height) {

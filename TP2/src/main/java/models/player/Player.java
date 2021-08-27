@@ -1,6 +1,6 @@
-package player;
+package models.player;
 
-import equipment.Equipment;
+import models.equipment.Equipment;
 
 import java.util.HashMap;
 import java.util.Map;

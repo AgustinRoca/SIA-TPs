@@ -1,4 +1,4 @@
-package player;
+package models.player;
 
 public class Warrior extends Player {
     public Warrior(double height) {
