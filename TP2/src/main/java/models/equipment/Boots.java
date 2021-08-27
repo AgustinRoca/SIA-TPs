@@ -1,4 +1,4 @@
-package equipment;
+package models.equipment;
 
 public class Boots extends Equipment {
     public Boots(int id, double force, double agility, double endurance, double expertise, double health) {

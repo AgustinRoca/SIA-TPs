@@ -1,4 +1,4 @@
-package equipment;
+package models.equipment;
 
 public abstract class Equipment {
     private final int id;
