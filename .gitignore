@@ -131,4 +131,4 @@ dmypy.json
 # PyCharm
 .idea/
 
-TP2/src/main/java/resources/*.tsv
+/TP2/**/*.tsv
