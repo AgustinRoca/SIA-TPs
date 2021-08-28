@@ -21,6 +21,10 @@ public abstract class Player {
         this.height = height;
     }
 
+    public Player() {
+        this.height = 0;
+    }
+
     public double getHeight() {
         return this.height;
     }
@@ -53,6 +57,10 @@ public abstract class Player {
         if (!this.defensePointsCalculated)
             this.calculateDefensePoints();
         return this.defensePoints;
+    }
+
+    public Map<Class<? extends Equipment>, Equipment> getEquipments() {
+        return this.equipments;
     }
 
     public abstract double fitness();
