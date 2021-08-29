@@ -1,12 +1,11 @@
 package models.player;
 
-import models.equipment.*;
+import models.equipment.Equipment;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Player implements Comparable<Player>, Cloneable{
+public abstract class Player {
     private final Map<Class<? extends Equipment>, Equipment> equipments = new HashMap<>();
     private double height;
 
@@ -18,23 +17,8 @@ public abstract class Player implements Comparable<Player>, Cloneable{
     private double defensePoints;
     private double defenseModifier;
 
-    public static final double MIN_HEIGHT = 1.3;
-    public static final double MAX_HEIGHT = 2.0;
-
-    public Player(double height, Boots boots, Gloves gloves, Helmet helmet, Vest vest, Weapon weapon) {
+    public Player(double height) {
         this.height = height;
-        this.equipments.put(Boots.class, boots);
-        this.equipments.put(Gloves.class, gloves);
-        this.equipments.put(Helmet.class, helmet);
-        this.equipments.put(Vest.class, vest);
-        this.equipments.put(Weapon.class, weapon);
-    }
-
-    public Player(double height, Map<Class<? extends Equipment>, Equipment> equipments) {
-        this.height = height;
-        for (Class<? extends Equipment> clazz : equipments.keySet()){
-            this.equipments.put(clazz, equipments.get(clazz));
-        }
     }
 
     public double getHeight() {
@@ -45,40 +29,19 @@ public abstract class Player implements Comparable<Player>, Cloneable{
         this.height = height;
         this.calculateAttackModifier();
         this.calculateDefenseModifier();
-        this.attackPointsCalculated = false;
-        this.defensePointsCalculated = false;
     }
 
-    public void replaceEquipment(Equipment newEquipment) {
-        this.equipments.put(newEquipment.getClass(), newEquipment);
-        this.attackPointsCalculated = false;
-        this.defensePointsCalculated = false;
+    public void addEquipment(Equipment equipment) {
+        this.equipments.put(equipment.getClass(), equipment);
     }
 
-    public Boots getBoots(){
-        return (Boots) equipments.get(Boots.class);
+    public void removeEquipment(Equipment equipment) {
+        this.equipments.remove(equipment.getClass());
     }
 
-    public Gloves getGloves(){
-        return (Gloves) equipments.get(Gloves.class);
+    public void removeEquipment(Class<? extends Equipment> equipmentClass) {
+        this.equipments.remove(equipmentClass);
     }
-
-    public Helmet getHelmet(){
-        return (Helmet) equipments.get(Helmet.class);
-    }
-
-    public Vest getVest(){
-        return (Vest) equipments.get(Vest.class);
-    }
-
-    public Weapon getWeapon(){
-        return (Weapon) equipments.get(Weapon.class);
-    }
-
-
-    public abstract Class<? extends Player> getPlayerType();
-
-    public abstract double fitness();
 
     public double attackPoints() {
         if (!this.attackPointsCalculated)
@@ -96,25 +59,7 @@ public abstract class Player implements Comparable<Player>, Cloneable{
         return this.equipments;
     }
 
-    @Override
-    public int compareTo(Player o) {
-        return Double.compare(fitness(), o.fitness());
-    }
-
-    public Player clone() {
-        try {
-            return getPlayerType()
-                    .getConstructor(double.class, Boots.class, Gloves.class, Helmet.class, Vest.class, Weapon.class)
-                    .newInstance(height, getBoots(), getGloves(), getHelmet(), getVest(), getWeapon());
-        } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-            try {
-                super.clone();
-            } catch (CloneNotSupportedException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return null;
-    }
+    public abstract double fitness();
 
     private void calculateAttackPoints() {
         double force = 0;
