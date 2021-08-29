@@ -16,9 +16,9 @@ public class Roulette implements SelectionMethod {
 
         List<Player> selectedPlayers = new LinkedList<>();
         for (int selectionNumber = 0; selectionNumber < k; selectionNumber++) {
-            double randomSelection = Math.random();
+            double randomSelector = Math.random();
             Player selectedPlayer = playerList.get(0);
-            for (int sliceNumber = 1; sliceNumber < slices.size() && randomSelection < slices.get(sliceNumber); sliceNumber++) {
+            for (int sliceNumber = 1; sliceNumber < slices.size() && randomSelector < slices.get(sliceNumber); sliceNumber++) {
                 selectedPlayer = playerList.get(sliceNumber);
             }
             selectedPlayers.add(selectedPlayer);

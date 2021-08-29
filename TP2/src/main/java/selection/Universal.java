@@ -22,9 +22,9 @@ public class Universal implements SelectionMethod {
         List<Player> selectedPlayers = new LinkedList<>();
         double randomNumber = Math.random();
         for (int selectionNumber = 0; selectionNumber < k; selectionNumber++) {
-            double randomSelection = (randomNumber + selectionNumber)/k;
+            double randomSelector = (randomNumber + selectionNumber)/k;
             Player selectedPlayer = playerList.get(0);
-            for (int sliceNumber = 1; sliceNumber < sliceProportions.size() && randomSelection < sliceProportions.get(sliceNumber); sliceNumber++) {
+            for (int sliceNumber = 1; sliceNumber < sliceProportions.size() && randomSelector < sliceProportions.get(sliceNumber); sliceNumber++) {
                 selectedPlayer = playerList.get(sliceNumber);
             }
             selectedPlayers.add(selectedPlayer);
