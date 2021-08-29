@@ -5,8 +5,8 @@ import models.equipment.*;
 import java.util.Map;
 
 public class Undercover extends Player {
-    public Undercover(double height, Boots boots, Gloves gloves, Helmet helmet, Vest vest, Weapon weapon) {
-        super(height, boots, gloves, helmet, vest, weapon);
+    public Undercover(double height) {
+        super(height);
     }
 
     public Undercover(double height, Map<Class<? extends Equipment>, Equipment> equipments) {

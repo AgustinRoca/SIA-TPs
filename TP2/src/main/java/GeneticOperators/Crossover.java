@@ -37,14 +37,10 @@ public class Crossover extends GeneticOperator {
         }
 
         if(gene > 1) {
-            p1.removeEquipment(eq1Aux);
-            p1.addEquipment(eq2Aux);
+            p1.replaceEquipment(eq2Aux);
 
-            p2.removeEquipment(eq2Aux);
-            p2.addEquipment(eq1Aux);
+            p2.replaceEquipment(eq1Aux);
         }
-
-
     }
 
     public Crossover(double uniformCrossoverProbability) {

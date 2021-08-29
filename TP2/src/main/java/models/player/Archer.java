@@ -5,8 +5,8 @@ import models.equipment.*;
 import java.util.Map;
 
 public class Archer extends Player {
-    public Archer(double height, Boots boots, Gloves gloves, Helmet helmet, Vest vest, Weapon weapon) {
-        super(height, boots, gloves, helmet, vest, weapon);
+    public Archer(double height) {
+        super(height);
     }
 
     public Archer(double height, Map<Class<? extends Equipment>, Equipment> equipments) {
