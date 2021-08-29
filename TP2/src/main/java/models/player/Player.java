@@ -21,10 +21,6 @@ public abstract class Player {
         this.height = height;
     }
 
-    public Player() {
-        this.height = 0;
-    }
-
     public double getHeight() {
         return this.height;
     }
