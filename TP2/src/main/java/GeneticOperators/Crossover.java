@@ -66,7 +66,7 @@ public class Crossover extends GeneticOperator {
             start = point1;
         }
 
-        return performSwap(start, end, p1, p2);
+        return performSwap(start, end + 1, p1, p2);
     }
 
     public Player [] annularCrossover(Player p1, Player p2) {
