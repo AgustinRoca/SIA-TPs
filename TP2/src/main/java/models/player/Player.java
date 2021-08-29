@@ -5,7 +5,7 @@ import models.equipment.Equipment;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Player {
+public abstract class Player implements Comparable<Player>{
     private final Map<Class<? extends Equipment>, Equipment> equipments = new HashMap<>();
     private double height;
 
@@ -113,5 +113,10 @@ public abstract class Player {
         double aux = Math.pow(2.5 * this.height - 4.16, 2);
 
         this.defenseModifier = 1.9 + Math.pow(aux, 2) - aux - (3 * this.height) / 10;
+    }
+
+    @Override
+    public int compareTo(Player o) {
+        return Double.compare(fitness(), o.fitness());
     }
 }
