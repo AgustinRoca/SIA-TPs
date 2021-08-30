@@ -1,4 +1,4 @@
-package GeneticOperators;
+package geneticOperators;
 
 import models.equipment.*;
 import models.player.Player;

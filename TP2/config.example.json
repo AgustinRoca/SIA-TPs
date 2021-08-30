@@ -1,0 +1,52 @@
+{
+    "player": {
+        "type": "WARRIOR",
+        "count": 100,
+        "selection": 10,
+        "height": {
+            "random": true,
+            "interval": {
+                "min": 0.03,
+                "max": 0.13
+            },
+            "direction": 0.5
+        }
+    },
+
+    "equipment": {
+        "inMemory": true,
+        "boots": "./boots.tsv",
+        "gloves": "./gloves.tsv",
+        "helmet": "./helmet.tsv",
+        "vest": "./vest.tsv",
+        "weapon": "./weapon.tsv"
+    },
+
+    "mutation": {
+        "type": "COMPLETE",
+        "probability": 0.1
+    },
+
+    "crossover": {
+        "type": "TWO_POINTS"
+    },
+
+    "fillMethod": "FILL_ALL",
+
+    "stopCriteria": {
+        "criteria": "GENERATIONS",
+        "parameter": "(Number) N > 0 Cantidad de generaciones"
+    },
+
+    "selection": {
+        "methodA": "ELITE",
+        "methodB": "UNIVERSAL",
+        "factor": 0.3
+    },
+
+    "replacement": {
+        "methodA": "RANKING)",
+        "methodB": "UNIVERSAL",
+        "factor": 0.6
+    }
+}
