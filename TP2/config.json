@@ -6,7 +6,7 @@
         "count": 100,
         "selection": 10,
         "height": {
-            "random": true,
+            "random": false,
             "interval": {
                 "min": 0.03,
                 "max": 0.13
