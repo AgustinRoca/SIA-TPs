@@ -47,7 +47,7 @@
     },
 
     "replacement": {
-        "methodA": "RANKING)",
+        "methodA": "RANKING",
         "methodB": "UNIVERSAL",
         "factor": 0.6
     }
