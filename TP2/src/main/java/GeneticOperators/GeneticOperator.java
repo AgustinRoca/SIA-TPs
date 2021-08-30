@@ -28,31 +28,10 @@ public abstract class GeneticOperator {
 
         Map<Class<? extends Equipment>, Equipment> equipments = player.getEquipments();
 
-        for(Class<? extends Equipment> k : equipments.keySet()) {
-            newPlayer.addEquipment(equipments.get(k));
+        for(Equipment e : equipments.values()) {
+            newPlayer.replaceEquipment(e);
         }
 
         return newPlayer;
     }
-
-//    public Player newPlayerCopyingClass(Player player) {
-//        Player newPlayer = null;
-//
-//        switch (player.getClass().toString()) {
-//            case "class models.player.Archer":
-//                newPlayer = new Archer(0);
-//                break;
-//            case "class models.player.Defender":
-//                newPlayer = new Defender(0);
-//                break;
-//            case "class models.player.Undercover":
-//                newPlayer = new Undercover(0);
-//                break;
-//            case "class models.player.Warrior":
-//                newPlayer = new Warrior(0);
-//                break;
-//        }
-//
-//        return newPlayer;
-//    }
 }

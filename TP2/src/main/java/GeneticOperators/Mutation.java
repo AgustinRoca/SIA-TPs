@@ -1,12 +1,9 @@
 package GeneticOperators;
 
-import models.equipment.Equipment;
 import models.player.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 
 public class Mutation extends GeneticOperator {
     private final double mutationProbability;
