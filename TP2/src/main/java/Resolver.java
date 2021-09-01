@@ -28,6 +28,7 @@ public class Resolver {
         Engine engine = new Engine(generationSerializer);
 
         Player best = engine.run(generation);
+        generationSerializer.close();
 
         System.out.println(best);
     }

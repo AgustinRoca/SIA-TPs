@@ -39,6 +39,14 @@ public class CSVGenerationSerializer implements GenerationSerializer {
         this.write(String.valueOf(stats.getDiversity().getHeights()), true);
     }
 
+    public void close() {
+        try {
+            this.fileWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void writeHeader() {
         this.write("generation");
         this.write("min");
