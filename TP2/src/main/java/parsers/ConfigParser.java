@@ -24,8 +24,12 @@ public abstract class ConfigParser {
 
             config.setPlayerConfig(ConfigParser.getPlayerConfig(json.getJSONObject("player")));
             config.setEquipmentConfig(ConfigParser.getEquipmentConfig(json.getJSONObject("equipment")));
-            config.setMutationConfig(ConfigParser.getMutationConfig(json.getJSONObject("mutation")));
-            config.setCrossoverConfig(ConfigParser.getCrossoverConfig(json.getJSONObject("crossover")));
+            config.setOperationConfig(ConfigParser.getOperationConfig(json.getJSONObject("geneticOperator")));
+            if(ConfigParser.isMutation()) {
+                config.setMutationConfig(ConfigParser.getMutationConfig(json.getJSONObject("geneticOperator")));
+            } else {
+                config.setCrossoverConfig(ConfigParser.getCrossoverConfig(json.getJSONObject("geneticOperator")));
+            }
             config.setStopCriteriaConfig(ConfigParser.getStopCriteriaConfig(json.getJSONObject("stopCriteria")));
             config.setSelectionConfig(ConfigParser.getSelectionReplacementConfig(json.getJSONObject("selection")));
             config.setReplacementConfig(ConfigParser.getSelectionReplacementConfig(json.getJSONObject("replacement")));
@@ -42,6 +46,10 @@ public abstract class ConfigParser {
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
+    }
+
+    private static OperationConfig getOperationConfig(JSONObject json) {
+        return new OperationConfig(OperationConfig.OperationType.valueOf(json.getString("operation")));
     }
 
     private static PlayerConfig getPlayerConfig(JSONObject json) {
@@ -189,4 +197,10 @@ public abstract class ConfigParser {
                 || config.getReplacementConfig().getMethodA() == SelectionReplacementMethod.BOLTZMANN
                 || config.getReplacementConfig().getMethodB() == SelectionReplacementMethod.BOLTZMANN;
     }
+
+    private static boolean isMutation() {
+        Config config = Config.getInstance();
+        return config.getOperationConfig().getType() == OperationConfig.OperationType.MUTATION;
+    }
+
 }

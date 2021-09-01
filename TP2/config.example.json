@@ -1,37 +1,36 @@
 {
+    "outputPath": "./out",
+
     "player": {
         "type": "WARRIOR",
         "count": 100,
         "selection": 10,
         "height": {
-            "random": true,
+            "random": false,
             "increment": 0.5
         }
     },
 
     "equipment": {
         "inMemory": true,
-        "boots": "./boots.tsv",
-        "gloves": "./gloves.tsv",
-        "helmet": "./helmet.tsv",
-        "vest": "./vest.tsv",
-        "weapon": "./weapon.tsv"
+        "boots": "./allitems/botas.tsv",
+        "gloves": "./allitems/guantes.tsv",
+        "helmet": "./allitems/cascos.tsv",
+        "vest": "./allitems/pecheras.tsv",
+        "weapon": "./allitems/armas.tsv"
     },
 
-    "mutation": {
+    "geneticOperator": {
+        "operation": "MUTATION",
         "type": "COMPLETE",
         "probability": 0.1
     },
 
-    "crossover": {
-        "type": "TWO_POINTS"
-    },
-
-    "fillMethod": "FILL_ALL",
+    "fillMethod": "ALL",
 
     "stopCriteria": {
         "criteria": "GENERATIONS",
-        "parameter": "(Number) N > 0 Cantidad de generaciones"
+        "parameter": "500"
     },
 
     "selection": {
@@ -41,7 +40,7 @@
     },
 
     "replacement": {
-        "methodA": "RANKING)",
+        "methodA": "RANKING",
         "methodB": "UNIVERSAL",
         "factor": 0.6
     }

@@ -13,13 +13,17 @@ public class Warrior extends Player {
         super(height, equipments);
     }
 
+    public Warrior(double height, Boots boots, Gloves gloves, Helmet helmet, Vest vest, Weapon weapon) {
+        super(height, boots, gloves, helmet, vest, weapon);
+    }
+
     @Override
     public double fitness() {
         return 0.6 * (this.attackPoints() + this.defensePoints());
     }
 
     @Override
-    public Class<Undercover> getPlayerType() {
-        return Undercover.class;
+    public Class<Warrior> getPlayerType() {
+        return Warrior.class;
     }
 }

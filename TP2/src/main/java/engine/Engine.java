@@ -4,9 +4,8 @@ import criteria.*;
 import fill.FillAll;
 import fill.FillMethod;
 import fill.FillParent;
-import models.config.Config;
-import models.config.SelectionReplacementConfig;
-import models.config.StopCriteriaConfig;
+import geneticOperators.mutation.*;
+import models.config.*;
 import models.player.Player;
 import selection.*;
 import selection.roulette.Boltzmann;
@@ -14,25 +13,51 @@ import selection.roulette.Ranking;
 import selection.roulette.Roulette;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
 public class Engine {
     public static Player start(List<Player> population, Config config) {
-        List<Player> children, parents;
         Selector selectionSelector = getSelector(config.getSelectionConfig(), config, config.getPlayerConfig().getSelection());
         FillMethod filler = getFiller(config);
 
         StopCriteria criteria = getStopCriteria(config.getStopCriteriaConfig());
         StopCriteriaData data = new StopCriteriaData(config.getStopCriteriaConfig().getPercentage(), config.getPlayerConfig().getCount());
+        data.addGeneration(population);
         while (!criteria.shouldStop(data)){
-            // TODO: select parents
-            // TODO: cross or mutate last generation
-            // TODO: fill new generation
-            // TODO: update StopCriteriaData
+            Collection<Player> parents = selectionSelector.select(data.getLastGeneration(), data.getGenerations().size());
+            List<Player> children = new ArrayList<>();
+
+            if(config.getOperationConfig().getType() == OperationConfig.OperationType.MUTATION){
+                Mutation mutation = getMutation(config.getMutationConfig());
+                for(Player parent : parents){
+                    children.add(mutation.mutate(parent));
+                }
+            } else {
+                // TODO: Juntar parents de dos en dos y cruzar
+            }
+            Collection<Player> newGeneration = filler.getGeneration(data.getLastGeneration(),
+                    children, data.getGenerationsQuantity() + 1);
+            data.addGeneration(newGeneration);
             // TODO: graphs
+            System.out.println("Best of generation " + data.getGenerations().size() + ": " + data.getLastGeneration().get(0));
         }
-        return data.getGenerations().get(0).get(0);
+        return data.getLastGeneration().get(0);
+    }
+
+    private static Mutation getMutation(MutationConfig config) {
+        switch (config.getType()){
+            case GEN:
+                return new GeneMutation(config.getProbability(), true, 0);
+            case COMPLETE:
+                return new CompleteMutation(config.getProbability(), true, 0);
+            case MULTIGEN_LIMITED:
+                return new LimitedMutation(config.getProbability(), true, 0);
+            case MULTIGEN_UNIFORM:
+                return new UniformMutation(config.getProbability(), true, 0);
+        }
+        throw new RuntimeException(config.getType() + " is not a valid mutation type");
     }
 
     private static StopCriteria getStopCriteria(StopCriteriaConfig config) {

@@ -13,6 +13,10 @@ public class Undercover extends Player {
         super(height, equipments);
     }
 
+    public Undercover(double height, Boots boots, Gloves gloves, Helmet helmet, Vest vest, Weapon weapon) {
+        super(height, boots, gloves, helmet, vest, weapon);
+    }
+
     @Override
     public double fitness() {
         return 0.8 * this.attackPoints() + 0.3 * this.defensePoints();

@@ -15,15 +15,13 @@ public class Selector {
     public Selector(SelectionMethod method1, SelectionMethod method2, double a, int k) {
         this.method1 = method1;
         this.method2 = method2;
-        this.k1 = (int) a*k;
+        this.k1 = (int) (a*k);
         this.k2 = k - k1;
     }
 
     public Collection<Player> select(Collection<Player> players, int generation){
         Collection<Player> selection1 = method1.select(players, k1, generation);
-        players.removeAll(selection1);
         Collection<Player> selection2 = method2.select(players, k2, generation);
-        players.removeAll(selection2);
         List<Player> totalSelection = new ArrayList<>();
         totalSelection.addAll(selection1);
         totalSelection.addAll(selection2);

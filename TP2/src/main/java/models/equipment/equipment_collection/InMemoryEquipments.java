@@ -19,7 +19,7 @@ class InMemoryEquipments implements EquipmentCollection {
     }
 
     @Override
-    public Equipment getEquipment(Class<? super Equipment> equipmentClass) {
+    public Equipment getEquipment(Class<? extends Equipment> equipmentClass) {
         List<Equipment> list = this.equipmentMap.get(equipmentClass);
         return list.get(this.random.nextInt(list.size()));
     }

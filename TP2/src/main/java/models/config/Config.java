@@ -8,6 +8,7 @@ public final class Config {
     }
 
     private String outputPath;
+    private OperationConfig operationConfig;
     private PlayerConfig playerConfig;
     private EquipmentConfig equipmentConfig;
     private MutationConfig mutationConfig;
@@ -115,5 +116,13 @@ public final class Config {
 
     public void setBoltzmannConfig(BoltzmannConfig boltzmannConfig) {
         this.boltzmannConfig = boltzmannConfig;
+    }
+
+    public void setOperationConfig(OperationConfig operationConfig) {
+        this.operationConfig = operationConfig;
+    }
+
+    public OperationConfig getOperationConfig() {
+        return operationConfig;
     }
 }

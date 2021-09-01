@@ -13,6 +13,10 @@ public class Defender extends Player {
         super(height, equipments);
     }
 
+    public Defender(double height, Boots boots, Gloves gloves, Helmet helmet, Vest vest, Weapon weapon) {
+        super(height, boots, gloves, helmet, vest, weapon);
+    }
+
     @Override
     public double fitness() {
         return 0.3 * this.attackPoints() + 0.8 * this.defensePoints();

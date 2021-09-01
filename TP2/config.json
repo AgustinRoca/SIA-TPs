@@ -20,13 +20,10 @@
         "weapon": "./allitems/armas.tsv"
     },
 
-    "mutation": {
+    "geneticOperator": {
+        "operation": "MUTATION",
         "type": "COMPLETE",
         "probability": 0.1
-    },
-
-    "crossover": {
-        "type": "TWO_POINTS"
     },
 
     "fillMethod": "ALL",

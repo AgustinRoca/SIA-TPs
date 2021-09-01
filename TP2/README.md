@@ -20,7 +20,7 @@ La aplicacion recibe un unico parametro por linea de comandos, que es la ubicaci
                 "min": "(Double) en [0.01, 0.09]",
                 "max": "(Double) en [0.1, 0.19]"
             },
-            "increment": "(Double) > 0. La altura del jugador varíara en un rango (-increment, increment)"
+            "increment": "(Double) > 0. La altura del jugador variara en un rango (-increment, increment)"
         }
     },
     
@@ -32,19 +32,21 @@ La aplicacion recibe un unico parametro por linea de comandos, que es la ubicaci
         "vest": "(String) Path to tsv",
         "weapon": "(String) Path to tsv"
     },
-    
-    "mutation": {
+
+    "geneticOperator": {
+        "operation": "MUTATION",
         "type": "(\"COMPLETE\", \"GEN\"",
         "probability": "(Double) en [0, 1]. Probabilidad de mutacion"
     } | {
+        "operation": "MUTATION",
         "type": "(\"MULTIGEN_LIMITED\", \"MULTIGEN_UNIFORM\")",
         "probability": "(Double) en [0, 1]. Probabilidad de mutacion",
         "multigenLimitedM": "(Integer) M > 0. Representa el indice hasta el cual se puede mutar"
-    },
-    
-    "crossover": {
+    } | {
+        "operation" : "CROSSOVER"
         "type": "(\"SINGLE_POINT\" | \"TWO_POINTS\" | \"ANNULAR\")"
     } | {
+        "operation" : "CROSSOVER"
         "type": "UNIFORM",
         "probability": "(Double) en [0, 1]. Probabilidad de cruzar dos genes",
         "threshold": "(Double) en [0, 1]. Cruce uniforme"

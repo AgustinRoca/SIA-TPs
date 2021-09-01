@@ -11,9 +11,11 @@ public abstract class Player implements Comparable<Player>, Cloneable{
     private double height;
 
     private boolean attackPointsCalculated = false;
+    private boolean attackModifierCalculated = false;
     private double attackPoints;
     private double attackModifier;
 
+    private boolean defenseModifierCalculated = false;
     private boolean defensePointsCalculated = false;
     private double defensePoints;
     private double defenseModifier;
@@ -26,6 +28,15 @@ public abstract class Player implements Comparable<Player>, Cloneable{
         for (Class<? extends Equipment> clazz : equipments.keySet()){
             this.equipments.put(clazz, equipments.get(clazz));
         }
+    }
+
+    public Player(double height, Boots boots, Gloves gloves, Helmet helmet, Vest vest, Weapon weapon) {
+        this.height = height;
+        this.equipments.put(Boots.class, boots);
+        this.equipments.put(Gloves.class, gloves);
+        this.equipments.put(Helmet.class, helmet);
+        this.equipments.put(Vest.class, vest);
+        this.equipments.put(Weapon.class, weapon);
     }
 
     public Player(double height) {
@@ -46,6 +57,8 @@ public abstract class Player implements Comparable<Player>, Cloneable{
         this.calculateDefenseModifier();
         this.attackPointsCalculated = false;
         this.defensePointsCalculated = false;
+        this.defenseModifierCalculated = false;
+        this.attackModifierCalculated = false;
     }
 
     public void replaceEquipment(Equipment newEquipment) {
@@ -115,10 +128,10 @@ public abstract class Player implements Comparable<Player>, Cloneable{
             try {
                 super.clone();
             } catch (CloneNotSupportedException ex) {
-                ex.printStackTrace();
+                throw new RuntimeException(ex);
             }
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     private void calculateAttackPoints() {
@@ -136,7 +149,7 @@ public abstract class Player implements Comparable<Player>, Cloneable{
         agility = Math.tanh(0.01 * agility);
         intelligence = 0.6 * Math.tanh(0.01 * intelligence);
 
-        this.attackPoints = (agility + intelligence) * force * this.attackModifier;
+        this.attackPoints = (agility + intelligence) * force * getAttackModifier();
         this.attackPointsCalculated = true;
     }
 
@@ -155,7 +168,7 @@ public abstract class Player implements Comparable<Player>, Cloneable{
         endurance = Math.tanh(0.01 * endurance);
         intelligence = 0.6 * Math.tanh(0.01 * intelligence);
 
-        this.defensePoints = (endurance + intelligence) * health * this.defenseModifier;
+        this.defensePoints = (endurance + intelligence) * health * getDefenseModifier();
         this.defensePointsCalculated = true;
     }
 
@@ -163,11 +176,38 @@ public abstract class Player implements Comparable<Player>, Cloneable{
         double aux = Math.pow(3 * this.height - 5, 2);
 
         this.attackModifier = 0.7 - Math.pow(aux, 2) + aux + this.height / 4;
+        attackModifierCalculated = true;
+    }
+
+    public double getAttackModifier() {
+        if(!attackModifierCalculated)
+            calculateAttackModifier();
+        return attackModifier;
+    }
+
+    public double getDefenseModifier() {
+        if(!defenseModifierCalculated)
+            calculateDefenseModifier();
+        return defenseModifier;
     }
 
     private void calculateDefenseModifier() {
         double aux = Math.pow(2.5 * this.height - 4.16, 2);
 
         this.defenseModifier = 1.9 + Math.pow(aux, 2) - aux - (3 * this.height) / 10;
+        defenseModifierCalculated = true;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "height=" + height +
+                ", boots=" + equipments.get(Boots.class).getId() +
+                ", gloves=" + equipments.get(Gloves.class).getId() +
+                ", helmet=" + equipments.get(Helmet.class).getId() +
+                ", vest=" + equipments.get(Vest.class).getId() +
+                ", weapon=" + equipments.get(Weapon.class).getId() +
+                ", fitness=" + fitness() +
+                '}';
     }
 }

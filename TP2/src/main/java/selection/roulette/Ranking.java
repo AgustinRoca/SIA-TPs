@@ -3,6 +3,7 @@ package selection.roulette;
 import models.player.Player;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Ranking extends Roulette{
@@ -21,6 +22,7 @@ public class Ranking extends Roulette{
     }
 
     private List<Double> aptitudes(List<Player> players){
+        players.sort(Comparator.reverseOrder());
         List<Double> aptitudes = new ArrayList<>();
         for (int i = 0; i<players.size(); i++){
             aptitudes.add(1 - (double) i/players.size());

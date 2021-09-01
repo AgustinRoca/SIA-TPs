@@ -2,9 +2,7 @@ package criteria;
 
 import models.player.Player;
 
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class StopCriteriaData {
     List<List<Player>> generations = new LinkedList<>();
@@ -21,6 +19,10 @@ public class StopCriteriaData {
         return generations;
     }
 
+    public List<Player> getLastGeneration() {
+        return generations.get(generations.size()-1);
+    }
+
     public int getGenerationsQuantity() {
         return generations.size();
     }
@@ -29,12 +31,13 @@ public class StopCriteriaData {
         return startTime;
     }
 
-    public void addGeneration(List<Player> generation) {
-        generation.sort(Comparator.reverseOrder()); // Mayor fitness primero
+    public void addGeneration(Collection<Player> generation) {
+        List<Player> generationList = new ArrayList<>(generation);
+        generationList.sort(Comparator.reverseOrder()); // Mayor fitness primero
 
         if(!generations.isEmpty()) {
             List<Player> previousGeneration = generations.get(generations.size() - 1);
-            if (generation.get(0).fitness() == previousGeneration.get(0).fitness()) {
+            if (generationList.get(0).fitness() == previousGeneration.get(0).fitness()) {
                 stableGenerations++;
             } else {
                 stableGenerations = 0;
@@ -42,7 +45,7 @@ public class StopCriteriaData {
 
             boolean stable = true;
             for (int i = 0; i < quantityStable && stable; i++) {
-                stable = previousGeneration.get(i) == generation.get(i);
+                stable = previousGeneration.get(i) == generationList.get(i);
             }
             if(stable){
                 stablePercentageGenerations++;
@@ -51,7 +54,7 @@ public class StopCriteriaData {
             }
         }
 
-        generations.add(generation);
+        generations.add(generationList);
     }
 
     public double getCurrentMaxFitness() {
