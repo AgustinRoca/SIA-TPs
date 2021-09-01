@@ -73,6 +73,8 @@ public class Engine {
             System.out.println("Best of generation " + data.getGenerationsQuantity() + ": " + data.getLastGeneration().get(0));
         }
 
+        this.generationSerializer.serialize(data.getGenerationsQuantity(), data.getLastGeneration());
+
         System.out.println("Avg of generation took: " + totalElapsed / data.getGenerationsQuantity() + "ms");
         return data.getLastGeneration().get(0);
     }
