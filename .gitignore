@@ -133,3 +133,4 @@ dmypy.json
 
 /TP2/**/*.tsv
 *.iml
+.DS_Store

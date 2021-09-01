@@ -7,21 +7,17 @@
         "selection": 10,
         "height": {
             "random": false,
-            "interval": {
-                "min": 0.03,
-                "max": 0.13
-            },
-            "direction": 0.5
+            "increment": 0.5
         }
     },
 
     "equipment": {
         "inMemory": true,
-        "boots": "./boots.tsv",
-        "gloves": "./gloves.tsv",
-        "helmet": "./helmet.tsv",
-        "vest": "./vest.tsv",
-        "weapon": "./weapon.tsv"
+        "boots": "./allitems/botas.tsv",
+        "gloves": "./allitems/guantes.tsv",
+        "helmet": "./allitems/cascos.tsv",
+        "vest": "./allitems/pecheras.tsv",
+        "weapon": "./allitems/armas.tsv"
     },
 
     "mutation": {
@@ -33,11 +29,11 @@
         "type": "TWO_POINTS"
     },
 
-    "fillMethod": "FILL_ALL",
+    "fillMethod": "ALL",
 
     "stopCriteria": {
         "criteria": "GENERATIONS",
-        "parameter": "(Number) N > 0 Cantidad de generaciones"
+        "parameter": "500"
     },
 
     "selection": {

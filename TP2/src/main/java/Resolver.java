@@ -1,7 +1,9 @@
+import engine.Engine;
 import models.config.Config;
 import models.config.EquipmentConfig;
 import models.equipment.*;
 import models.equipment.equipment_collection.Equipments;
+import models.player.Player;
 import parsers.ConfigParser;
 import parsers.EquipmentParser;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -17,7 +19,10 @@ public class Resolver {
             throw new IllegalArgumentException("Not enough args passed");
 
         Resolver.initialize(args);
-
+        System.out.println("Finsh parsing items");
+        Config config = Config.getInstance();
+        // TODO: create initial generation
+//         Player best = Engine.start(generation, config)
         // TODO: Aplicar todos los algo
     }
 

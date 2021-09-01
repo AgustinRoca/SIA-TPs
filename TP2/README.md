@@ -20,7 +20,7 @@ La aplicacion recibe un unico parametro por linea de comandos, que es la ubicaci
                 "min": "(Double) en [0.01, 0.09]",
                 "max": "(Double) en [0.1, 0.19]"
             },
-            "direction": "(Double) en [0, 1]. Probabilidad de disminuir o aumentar la altura (si <0.5, hay mas probabilidad de disminuir)"
+            "increment": "(Double) > 0. La altura del jugador varíara en un rango (-increment, increment)"
         }
     },
     
@@ -82,9 +82,11 @@ La aplicacion recibe un unico parametro por linea de comandos, que es la ubicaci
     
     "tournamentProbabilistic": {
         "probability": "(Double) en [0, 1] Probabilidad de seleccion para metodo Torneo Probabilistico",
-        "window": "(Integer) W > 0 natural que representa la ventana para metodo Torneo Probabilistico"
     },
     
+    "tournamentDeterministic":{
+        "window": "(Integer) W > 0 natural que representa la ventana para metodo Torneo Probabilistico"
+    },
     "boltzmann": {
         "t0": "(Double) Temperatura inicial para metodo de Boltzmann",
         "tk": "(Double) Temperatura base para metodo de Boltzmann",

@@ -16,7 +16,9 @@ public final class Config {
     private StopCriteriaConfig stopCriteriaConfig;
     private SelectionReplacementConfig selectionConfig;
     private SelectionReplacementConfig replacementConfig;
-    private ProbabilisticTournamentConfig tournamentConfig;
+    private ProbabilisticTournamentConfig probabilisticTournamentConfig;
+    private DeterministicTournamentConfig deterministicTournamentConfig;
+
     private BoltzmannConfig boltzmannConfig;
 
     public String getOutputPath() {
@@ -91,12 +93,20 @@ public final class Config {
         this.replacementConfig = replacementConfig;
     }
 
-    public ProbabilisticTournamentConfig getTournamentConfig() {
-        return this.tournamentConfig;
+    public ProbabilisticTournamentConfig getProbabilisticTournamentConfig() {
+        return this.probabilisticTournamentConfig;
     }
 
-    public void setTournamentConfig(ProbabilisticTournamentConfig tournamentConfig) {
-        this.tournamentConfig = tournamentConfig;
+    public void setProbabilisticTournamentConfig(ProbabilisticTournamentConfig tournamentConfig) {
+        this.probabilisticTournamentConfig = tournamentConfig;
+    }
+
+    public DeterministicTournamentConfig getDeterministicTournamentConfig() {
+        return this.deterministicTournamentConfig;
+    }
+
+    public void setDeterministicTournamentConfig(DeterministicTournamentConfig tournamentConfig) {
+        this.deterministicTournamentConfig = tournamentConfig;
     }
 
     public BoltzmannConfig getBoltzmannConfig() {

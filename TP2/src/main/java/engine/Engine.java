@@ -1,77 +1,98 @@
 package engine;
 
+import criteria.*;
+import fill.FillAll;
+import fill.FillMethod;
+import fill.FillParent;
+import models.config.Config;
+import models.config.SelectionReplacementConfig;
+import models.config.StopCriteriaConfig;
 import models.player.Player;
-import selection.SelectionMethod;
+import selection.*;
+import selection.roulette.Boltzmann;
+import selection.roulette.Ranking;
+import selection.roulette.Roulette;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class Engine {
-    public static Player start(List<Player> population, Data data) {
+    public static Player start(List<Player> population, Config config) {
         List<Player> children, parents;
-        SelectionMethod selectionMethodA = data.getSelectionMethodA();
-        SelectionMethod selectionMethodB = data.getSelectionMethodB();
-        Double selectionProb = data.getSelectionMethodProb();
+        Selector selectionSelector = getSelector(config.getSelectionConfig(), config, config.getPlayerConfig().getSelection());
+        FillMethod filler = getFiller(config);
 
-        SelectionMethod replacementMethodA = data.getReplacementMethodA();
-        SelectionMethod replacementMethodB = data.getReplacementMethodB();
-        Double replacementProb = data.getReplacementMethodProb();
-        CriteriaHandler criteriaHandler = new CriteriaHandler();
-
-        StopCriteria criteria = data.getCriteria();
-        criteriaHandler.setStartTime(System.currentTimeMillis());
-
-        List<Double> fitness = new ArrayList<>();
-        List<Long> generations = new ArrayList<>();
-
-
-        XYChart chart = QuickChart.getChart("Genetic Algorithm", "Generations", "Fitness", data.getPlayerClass().name(), fitness, generations);
-        final SwingWrapper<XYChart> sw = new SwingWrapper<>(chart);
-        sw.displayChart();
-        while(!criteria.evaluate(criteriaHandler)) {
-            parents = selectionMethodA.select(population, data, (long) (data.getPopulation() * selectionProb));
-            parents.addAll(selectionMethodB.select(population, data, (long) (data.getPopulation() * (1-selectionProb))));
-            criteriaHandler.setPrevGeneration(parents);
-            children = new ArrayList<>();
-            int i = 0;
-            while(children.size() < data.getSelectionLimit() && i < parents.size() - 1) {
-                Player parentOne = parents.get(i++);
-                Player parentTwo = parents.get(i);
-
-                Player[] results = data.getCrossoverMethod().cross(parentOne, parentTwo);
-                data.getMutationMethod().mutate(results[0], data);
-                data.getMutationMethod().mutate(results[1], data);
-                children.add(results[0]);
-                children.add(results[1]);
-            }
-
-            ImplementationMethod implementation = ImplementationType.getMethodInstance(data.getImplementationType());
-            implementation.setMethod(replacementMethodA);
-            population = implementation.implement(children, parents, data, replacementProb);
-            implementation.setMethod(replacementMethodB);
-            population.addAll(implementation.implement(children, parents, data, 1 - replacementProb));
-            criteriaHandler.setCurrentGeneration(population);
-            criteriaHandler.increaseGenCounter();
-            data.increaseGenCounter();
-            population.sort((Comparator.comparingDouble(Player::getPerformance)));
-
-            if(criteriaHandler.getBestFitness() != population.get(0).getPerformance()) {
-                criteriaHandler.setBestFitness(population.get(0).getPerformance());
-                criteriaHandler.setCriteriaCounter(0);
-            } else {
-                int fitnessCounter = criteriaHandler.getCriteriaCounter();
-                criteriaHandler.setCriteriaCounter(fitnessCounter + 1);
-            }
-
-            fitness.add(population.get(0).getPerformance());
-            generations.add(criteriaHandler.getGenNumber());
-
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                chart.updateXYSeries(data.getPlayerClass().name(), fitness, generations, null);
-                sw.repaintChart();
-            });
+        StopCriteria criteria = getStopCriteria(config.getStopCriteriaConfig());
+        StopCriteriaData data = new StopCriteriaData(config.getStopCriteriaConfig().getPercentage(), config.getPlayerConfig().getCount());
+        while (!criteria.shouldStop(data)){
+            // TODO: select parents
+            // TODO: cross or mutate last generation
+            // TODO: fill new generation
+            // TODO: update StopCriteriaData
+            // TODO: graphs
         }
-        return population.get(0);
+        return data.getGenerations().get(0).get(0);
     }
+
+    private static StopCriteria getStopCriteria(StopCriteriaConfig config) {
+        switch (config.getType()){
+            case GENERATIONS:
+                return new GenerationStopCriteria(config.getParameter().intValue());
+            case TIMEOUT:
+                return new TimeStopCriteria(config.getParameter().longValue());
+            case ACCEPTABLE_SOLUTION:
+                return new FitnessStopCriteria(config.getParameter().doubleValue());
+            case CONTENT:
+                return new StableStopCriteria(config.getParameter().intValue());
+            case STRUCTURE:
+                return new PercentageStableStopCriteria(config.getParameter().intValue());
+        }
+        throw new IllegalArgumentException(config.getType() + " is not a valid Stop criteria");
+    }
+
+    private static FillMethod getFiller(Config config) {
+        models.config.FillMethod fillMethod = config.getFillMethod();
+        switch (fillMethod){
+            case ALL:
+                return new FillAll(getSelector(config.getReplacementConfig(), config, config.getPlayerConfig().getCount()));
+            case PARENTS:
+                SelectionMethod selectionMethod1 = getSelectionMethod(config.getReplacementConfig().getMethodA(), config);
+                SelectionMethod selectionMethod2 = getSelectionMethod(config.getReplacementConfig().getMethodA(), config);
+                double a = config.getSelectionConfig().getFactor();
+                int n = config.getPlayerConfig().getCount();
+                int k = config.getPlayerConfig().getSelection();
+                return new FillParent(selectionMethod1, selectionMethod2, a, k, n);
+        }
+        throw new IllegalArgumentException(fillMethod + " is not a valid Fill method");
+    }
+
+    private static Selector getSelector(SelectionReplacementConfig selectionConfig, Config config, int k) {
+        SelectionMethod selectionMethodA = getSelectionMethod(selectionConfig.getMethodA(), config);
+        SelectionMethod selectionMethodB = getSelectionMethod(selectionConfig.getMethodB(), config);
+        double selectionProb = selectionConfig.getFactor();
+        return new Selector(selectionMethodA, selectionMethodB, selectionProb, k);
+    }
+
+    private static SelectionMethod getSelectionMethod(SelectionReplacementConfig.SelectionReplacementMethod selectionMethod, Config config) {
+        switch (selectionMethod){
+            case ELITE:
+                return new Elite();
+            case ROULETTE:
+                return new Roulette();
+            case UNIVERSAL:
+                return new Universal();
+            case BOLTZMANN:
+                return new Boltzmann();
+            case TOURNAMENT_DETERMINISTIC:
+                return new DeterministicTournament(config.getDeterministicTournamentConfig().getPlayersInMatch());
+            case TOURNAMENT_PROBABILISTIC:
+                return new ProbabilisticTournament(config.getProbabilisticTournamentConfig().getProbability());
+            case RANKING:
+                return new Ranking();
+        }
+        throw new RuntimeException(selectionMethod + " is not a valid selection method");
+    }
+
+
 }

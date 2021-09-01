@@ -29,24 +29,17 @@ public abstract class EquipmentParser {
     private static Map<String, Integer> headerMap(BufferedReader reader) throws IOException {
         Map<String, Integer> headerMap = new HashMap<>();
         String[] header = reader.readLine().split("\t");
-
         for (int i = 0; i < header.length; i++) {
+            header[i] = header[i].toLowerCase();
+            headerMap.put(header[i], i);
+
             switch (header[i]) {
                 case ID_HEADER:
-                    headerMap.put(header[i], i);
                     break;
                 case FORCE_HEADER:
-                    headerMap.put(header[i], i);
-                    break;
                 case AGILITY_HEADER:
-                    headerMap.put(header[i], i);
-                    break;
                 case INTELLIGENCE_HEADER:
-                    headerMap.put(header[i], i);
-                    break;
                 case ENDURANCE_HEADER:
-                    headerMap.put(header[i], i);
-                    break;
                 case HEALTH_HEADER:
                     headerMap.put(header[i], i);
                     break;
@@ -70,6 +63,7 @@ public abstract class EquipmentParser {
                             Double.parseDouble(lineItems[headerMap.get(HEALTH_HEADER)])
                     );
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

@@ -1,44 +1,19 @@
 package models.config;
 
-import models.player.Player;
-
 public class HeightConfig {
     private final boolean random;
-    private final double min;
-    private final double max;
-    private final double direction;
+    private final double increment;
 
-    /**
-     * Random = true
-     */
-    public HeightConfig() {
-        this(true, 0, 0, 0);
-    }
-
-    public HeightConfig(double min, double max, double direction) {
-        this(false, min, max, direction);
-    }
-
-    private HeightConfig(boolean random, double min, double max, double direction) {
+    public HeightConfig(boolean random, double increment) {
         this.random = random;
-        this.min = min;
-        this.max = max;
-        this.direction = direction;
+        this.increment = increment;
     }
 
     public boolean isRandom() {
         return this.random;
     }
 
-    public double getMin() {
-        return this.min;
-    }
-
-    public double getMax() {
-        return this.max;
-    }
-
-    public double getDirection() {
-        return this.direction;
+    public double getIncrement() {
+        return this.increment;
     }
 }

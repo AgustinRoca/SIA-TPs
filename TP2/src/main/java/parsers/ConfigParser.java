@@ -8,12 +8,11 @@ import models.config.StopCriteriaConfig.StopCriteriaType;
 import models.player.*;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import selection.DeterministicTournament;
 
 import java.io.InputStream;
 
 public abstract class ConfigParser {
-    private static final String STOP_CRITERIA_PARAMETER_NAME = "parameter";
-
     public static void parse(InputStream stream) throws IllegalArgumentException {
         JSONObject json = new JSONObject(new JSONTokener(stream));
 
@@ -32,7 +31,10 @@ public abstract class ConfigParser {
             config.setReplacementConfig(ConfigParser.getSelectionReplacementConfig(json.getJSONObject("replacement")));
 
             if (ConfigParser.hasToParseTournamentProbabilisticConfig()) {
-                config.setTournamentConfig(ConfigParser.getTournamentProbabilisticConfig(json.getJSONObject("tournamentProbabilistic")));
+                config.setProbabilisticTournamentConfig(ConfigParser.getTournamentProbabilisticConfig(json.getJSONObject("tournamentProbabilistic")));
+            }
+            if (ConfigParser.hasToParseTournamentDeterministicConfig()) {
+                config.setDeterministicTournamentConfig(ConfigParser.getTournamentDeterministicConfig(json.getJSONObject("tournamentDeterministic")));
             }
             if (ConfigParser.hasToParseBoltzmannConfig()) {
                 config.setBoltzmannConfig(ConfigParser.getBoltzmannConfig(json.getJSONObject("boltzmann")));
@@ -52,7 +54,7 @@ public abstract class ConfigParser {
     }
 
     private static Class<? extends Player> getPlayerClass(String player) {
-        switch (player) {
+        switch (player.toUpperCase()) {
             case "WARRIOR": return Warrior.class;
             case "ARCHER": return Archer.class;
             case "UNDERCOVER": return Undercover.class;
@@ -62,17 +64,7 @@ public abstract class ConfigParser {
     }
 
     private static HeightConfig getHeightConfig(JSONObject json) {
-        if (json.getBoolean("random")) {
-            return new HeightConfig();
-        } else {
-            JSONObject interval = json.getJSONObject("interval");
-
-            return new HeightConfig(
-                    interval.getDouble("min"),
-                    interval.getDouble("max"),
-                    json.getDouble("direction")
-            );
-        }
+        return new HeightConfig(json.getBoolean("random"), json.getDouble("increment"));
     }
 
     private static EquipmentConfig getEquipmentConfig(JSONObject json) {
@@ -88,7 +80,7 @@ public abstract class ConfigParser {
 
     private static MutationConfig getMutationConfig(JSONObject json) {
         double probability = json.getDouble("probability");
-        MutationType type = json.getEnum(MutationType.class, json.getString("type"));
+        MutationType type = MutationType.valueOf(json.getString("type"));
 
         if (type == MutationType.MULTIGEN_LIMITED || type == MutationType.MULTIGEN_UNIFORM) {
             return new MultigenMutationConfig(
@@ -105,7 +97,7 @@ public abstract class ConfigParser {
     }
 
     private static CrossoverConfig getCrossoverConfig(JSONObject json) {
-        CrossoverType type = json.getEnum(CrossoverType.class, json.getString("type"));
+        CrossoverType type = CrossoverType.valueOf(json.getString("type"));
 
         if (type == CrossoverType.UNIFORM) {
             return new UniformCrossoverConfig(
@@ -120,44 +112,48 @@ public abstract class ConfigParser {
     }
 
     private static StopCriteriaConfig getStopCriteriaConfig(JSONObject json) {
-        StopCriteriaType type = json.getEnum(StopCriteriaType.class, json.getString("type"));
-
+        StopCriteriaType type = StopCriteriaType.valueOf(json.getString("criteria"));
+        String stopCriteriaParameterName = "parameter";
         if (type == StopCriteriaType.STRUCTURE) {
-            return new StructureStopCriteriaConfig(
-                    json.getInt(STOP_CRITERIA_PARAMETER_NAME),
+            return new StopCriteriaConfig(type,
+                    json.getInt(stopCriteriaParameterName),
                     json.getDouble("percentage")
             );
         } else if (type == StopCriteriaType.TIMEOUT) {
             return new StopCriteriaConfig(
                     type,
-                    json.getLong(STOP_CRITERIA_PARAMETER_NAME)
+                    json.getLong(stopCriteriaParameterName),
+                    0
             );
         } else if (type == StopCriteriaType.ACCEPTABLE_SOLUTION) {
             return new StopCriteriaConfig(
                     type,
-                    json.getDouble(STOP_CRITERIA_PARAMETER_NAME)
+                    json.getDouble(stopCriteriaParameterName),
+                    0
             );
         } else {
             return new StopCriteriaConfig(
                     type,
-                    json.getInt(STOP_CRITERIA_PARAMETER_NAME)
+                    json.getInt(stopCriteriaParameterName),
+                    0
             );
         }
     }
 
     private static SelectionReplacementConfig getSelectionReplacementConfig(JSONObject json) {
         return new SelectionReplacementConfig(
-                json.getEnum(SelectionReplacementMethod.class, "methodA"),
-                json.getEnum(SelectionReplacementMethod.class, "methodB"),
+                SelectionReplacementMethod.valueOf(json.getString("methodA")),
+                SelectionReplacementMethod.valueOf(json.getString("methodB")),
                 json.getDouble("factor")
         );
     }
 
     private static ProbabilisticTournamentConfig getTournamentProbabilisticConfig(JSONObject json) {
-        return new ProbabilisticTournamentConfig(
-                json.getDouble("probability"),
-                json.getInt("window")
-        );
+        return new ProbabilisticTournamentConfig(json.getDouble("probability"));
+    }
+
+    private static DeterministicTournamentConfig getTournamentDeterministicConfig(JSONObject json) {
+        return new DeterministicTournamentConfig(json.getInt("window"));
     }
 
     private static BoltzmannConfig getBoltzmannConfig(JSONObject json) {
@@ -174,6 +170,15 @@ public abstract class ConfigParser {
                 || config.getSelectionConfig().getMethodB() == SelectionReplacementMethod.TOURNAMENT_PROBABILISTIC
                 || config.getReplacementConfig().getMethodA() == SelectionReplacementMethod.TOURNAMENT_PROBABILISTIC
                 || config.getReplacementConfig().getMethodB() == SelectionReplacementMethod.TOURNAMENT_PROBABILISTIC;
+    }
+
+    private static boolean hasToParseTournamentDeterministicConfig() {
+        Config config = Config.getInstance();
+
+        return  config.getSelectionConfig().getMethodA() == SelectionReplacementMethod.TOURNAMENT_DETERMINISTIC
+                || config.getSelectionConfig().getMethodB() == SelectionReplacementMethod.TOURNAMENT_DETERMINISTIC
+                || config.getReplacementConfig().getMethodA() == SelectionReplacementMethod.TOURNAMENT_DETERMINISTIC
+                || config.getReplacementConfig().getMethodB() == SelectionReplacementMethod.TOURNAMENT_DETERMINISTIC;
     }
 
     private static boolean hasToParseBoltzmannConfig() {

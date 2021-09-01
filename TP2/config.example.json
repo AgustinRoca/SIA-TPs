@@ -5,11 +5,7 @@
         "selection": 10,
         "height": {
             "random": true,
-            "interval": {
-                "min": 0.03,
-                "max": 0.13
-            },
-            "direction": 0.5
+            "increment": 0.5
         }
     },
 

@@ -3,10 +3,13 @@ package models.config;
 public class StopCriteriaConfig {
     private final StopCriteriaType type;
     private final Number parameter;
+    private final double percentage;
 
-    public StopCriteriaConfig(StopCriteriaType type, Number parameter) {
+    public StopCriteriaConfig(StopCriteriaType type, Number parameter, double percentage) {
         this.type = type;
         this.parameter = parameter;
+        this.percentage = percentage;
+
     }
 
     public StopCriteriaType getType() {
@@ -15,6 +18,10 @@ public class StopCriteriaConfig {
 
     public Number getParameter() {
         return this.parameter;
+    }
+
+    public double getPercentage() {
+        return percentage;
     }
 
     public enum StopCriteriaType {
