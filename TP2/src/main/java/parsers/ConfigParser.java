@@ -8,7 +8,6 @@ import models.config.StopCriteriaConfig.StopCriteriaType;
 import models.player.*;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import selection.DeterministicTournament;
 
 import java.io.InputStream;
 

@@ -1,15 +1,16 @@
-package selection;
+package selection.tournament;
 
 import models.player.Player;
+import selection.SelectionMethod;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class DeterministicTournament implements SelectionMethod{
+public abstract class Tournament implements SelectionMethod {
     private final int playersInMatch;
 
-    public DeterministicTournament(int playersInMatch) {
+    protected Tournament(int playersInMatch) {
         this.playersInMatch = playersInMatch;
     }
 
@@ -23,23 +24,12 @@ public class DeterministicTournament implements SelectionMethod{
         return selected;
     }
 
-    private Player getWinner(Collection<Player> players){
-        Player winner = null;
-        for (Player player : players){
-            if (winner == null || winner.fitness() < player.fitness()) {
-                winner = player;
-            }
-        }
-        return winner;
-    }
+    abstract Player getWinner(Collection<Player> players);
 
     private Collection<Player> getRandomPlayers(List<Player> players, int quantity){
-        List<Player> copyList = new ArrayList<>(players);
         List<Player> randomPlayers = new ArrayList<>();
         for (int i = 0; i < quantity; i++) {
-            Player randomPlayer = copyList.get((int) Math.floor(Math.random() * copyList.size()));
-            randomPlayers.add(randomPlayer);
-            copyList.remove(randomPlayer);
+            randomPlayers.add(players.get((int) Math.floor(Math.random() * players.size())));
         }
         return randomPlayers;
     }

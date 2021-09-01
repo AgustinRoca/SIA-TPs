@@ -12,6 +12,9 @@ import selection.*;
 import selection.roulette.Boltzmann;
 import selection.roulette.Ranking;
 import selection.roulette.Roulette;
+import selection.roulette.Universal;
+import selection.tournament.DeterministicTournament;
+import selection.tournament.ProbabilisticTournament;
 
 import java.util.*;
 

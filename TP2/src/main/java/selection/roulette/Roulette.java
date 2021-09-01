@@ -3,39 +3,53 @@ package selection.roulette;
 import models.player.Player;
 import selection.SelectionMethod;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.function.Function;
 
 public class Roulette implements SelectionMethod {
+
     @Override
     public Collection<Player> select(Collection<Player> players, int k, int generation) {
         List<Player> playerList = new ArrayList<>(players);
-        List<Double> slices = slices(playerList, generation);
+        Map<Double, Player> slices = slices(playerList, generation);
 
         List<Player> selectedPlayers = new LinkedList<>();
+        double sliceSelected = 0;
         for (int selectionNumber = 0; selectionNumber < k; selectionNumber++) {
-            double randomSelector = Math.random();
-            Player selectedPlayer = playerList.get(0);
-            for (int sliceNumber = 1; sliceNumber < slices.size() && randomSelector < slices.get(sliceNumber); sliceNumber++) {
-                selectedPlayer = playerList.get(sliceNumber);
+            double randomSelector = randomGenerator(selectionNumber, k);
+            for(Double slice : slices.keySet()){
+                if(randomSelector > slice && slice > sliceSelected){
+                    sliceSelected = slice;
+                }
             }
-            selectedPlayers.add(selectedPlayer);
+            selectedPlayers.add(slices.get(sliceSelected));
         }
         return selectedPlayers;
     }
 
-    List<Double> slices(List<Player> players, int generation){
-        double fitnessSum = players.stream().map(Player::fitness).reduce(0.0, Double::sum);
+    Map<Double, Player> slices(List<Player> players, int generation){
+        players.sort(Comparator.reverseOrder());
+        double fitnessSum = 0;
+        for (int i = 0; i < players.size(); i++) {
+            fitnessSum += aptitude(i, players, generation);
+        }
 
-        List<Double> sliceProportions = new ArrayList<>();
+        Map<Double, Player> sliceProportions = new HashMap<>();
         List<Player> playerList = new ArrayList<>(players);
         double sliceAccum = 0;
         for (Player player : playerList){
             sliceAccum += player.fitness() / fitnessSum;
-            sliceProportions.add(sliceAccum);
+            sliceProportions.put(sliceAccum, player);
         }
         return sliceProportions;
+    }
+
+    double randomGenerator(int i, int k){
+        return Math.random();
+    }
+
+    double aptitude(int i, List<Player> players, int generation){
+        return players.get(i).fitness();
     }
 }

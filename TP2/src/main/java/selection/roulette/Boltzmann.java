@@ -11,31 +11,13 @@ public class Boltzmann extends Roulette {
     private static final double K = 10;
 
     @Override
-    List<Double> slices(List<Player> players, int generation){
-        List<Double> aptitudes = aptitudes(players, generation);
-        double aptitudesSum = aptitudes(players, generation).stream().reduce(0.0, Double::sum);
-
-        List<Double> sliceProportions = new ArrayList<>();
-        double sliceAccum = 0;
-        for (int i = 0; i<players.size(); i++){
-            sliceAccum += aptitudes.get(i) / aptitudesSum;
-            sliceProportions.add(sliceAccum);
-        }
-        return sliceProportions;
-    }
-
-    private List<Double> aptitudes(List<Player> players, int generation){
-        List<Double> aptitudes = new ArrayList<>();
-        double temperature = getTemperature(generation);
+    double aptitude(int i, List<Player> players, int generation) {
         double accum = 0;
-        for (Player player : players) {
-            accum += Math.exp(player.fitness() / temperature);
+        for (Player player : players){
+            accum += Math.exp(player.fitness()/getTemperature(generation));
         }
         double avg = accum / players.size();
-        for (Player player : players) {
-            aptitudes.add(Math.exp(player.fitness() / temperature) / avg);
-        }
-        return aptitudes;
+        return Math.exp(players.get(i).fitness()/getTemperature(generation))/avg;
     }
 
     private double getTemperature(int generation){
