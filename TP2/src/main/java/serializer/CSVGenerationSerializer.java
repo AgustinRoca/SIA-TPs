@@ -62,6 +62,7 @@ public class CSVGenerationSerializer implements GenerationSerializer {
             this.fileWriter.write(s);
             if (newLine) {
                 this.fileWriter.write(NEW_LINE);
+                this.fileWriter.flush();
             } else {
                 this.fileWriter.write(SEPARATOR);
             }
