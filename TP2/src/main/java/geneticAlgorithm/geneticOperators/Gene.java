@@ -5,6 +5,7 @@ import models.equipment.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public enum Gene {
     HEIGHT(null),
@@ -29,7 +30,7 @@ public enum Gene {
     }
 
     public static Gene getRandomGene(){
-        return values()[(int) (Math.random() * Gene.values().length)];
+        return values()[ThreadLocalRandom.current().nextInt(Gene.values().length)];
     }
 
     public static List<Gene> getGenes(int start, int end){

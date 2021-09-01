@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Player implements Comparable<Player>, Cloneable{
     private final Map<Class<? extends Equipment>, Equipment> equipments = new HashMap<>();
@@ -20,7 +21,7 @@ public abstract class Player implements Comparable<Player>, Cloneable{
     private boolean defensePointsCalculated = false;
     private double defensePoints;
     private double defenseModifier;
-    private static final Random rng = new Random();
+    private static final Random rng = ThreadLocalRandom.current();
 
     public static final double MIN_HEIGHT = 1.3;
     public static final double MAX_HEIGHT = 2.0;

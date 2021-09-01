@@ -3,6 +3,7 @@ package config.equipmentCollection;
 import models.equipment.Equipment;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 class InMemoryEquipments implements EquipmentCollection {
     private final Map<Class<? extends Equipment>, List<Equipment>> equipmentMap;
@@ -11,7 +12,7 @@ class InMemoryEquipments implements EquipmentCollection {
 
     InMemoryEquipments(Map<Class<? extends Equipment>, Collection<Equipment>> equipmentMap) {
         this.equipmentMap = new HashMap<>();
-        this.random = new Random();
+        this.random = ThreadLocalRandom.current();
 
         for (Map.Entry<Class<? extends Equipment>, Collection<Equipment>> entry : equipmentMap.entrySet()) {
             this.equipmentMap.put(entry.getKey(), new ArrayList<>(entry.getValue()));

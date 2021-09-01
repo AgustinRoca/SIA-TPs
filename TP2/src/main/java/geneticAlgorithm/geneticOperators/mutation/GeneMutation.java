@@ -3,6 +3,8 @@ package geneticAlgorithm.geneticOperators.mutation;
 import geneticAlgorithm.geneticOperators.Gene;
 import models.player.Player;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class GeneMutation extends Mutation {
     public GeneMutation(double mutationProbability, boolean randomHeightMutation, double maxIncrement) {
         super(mutationProbability, randomHeightMutation, maxIncrement);
@@ -11,8 +13,8 @@ public class GeneMutation extends Mutation {
     @Override
     public Player mutate(Player player) {
         Player newPlayer = player.clone();
-        int geneToMutate = (int) (Math.random() * Gene.values().length);
-        double probability = Math.random();
+        int geneToMutate = ThreadLocalRandom.current().nextInt(Gene.values().length);
+        double probability = ThreadLocalRandom.current().nextDouble();
 
         if(probability < getMutationProbability())
             mutateGene(Gene.values()[geneToMutate], newPlayer);

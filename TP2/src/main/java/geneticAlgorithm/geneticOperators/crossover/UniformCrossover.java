@@ -5,6 +5,7 @@ import models.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class UniformCrossover extends Crossover{
     private final double uniformCrossoverProbability;
@@ -17,7 +18,7 @@ public class UniformCrossover extends Crossover{
     public Player[] cross(Player p1, Player p2) {
         List<Gene> genesToMutate = new ArrayList<>();
         for (Gene gene : Gene.values()) {
-            if (Math.random() < uniformCrossoverProbability)
+            if (ThreadLocalRandom.current().nextDouble() < uniformCrossoverProbability)
                 genesToMutate.add(gene);
         }
         return performSwap(genesToMutate, p1, p2);

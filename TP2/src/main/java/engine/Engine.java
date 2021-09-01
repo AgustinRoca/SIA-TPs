@@ -13,6 +13,7 @@ import geneticAlgorithm.selection.tournament.*;
 import serializer.GenerationSerializer;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Engine {
     private final GenerationSerializer generationSerializer;
@@ -47,10 +48,11 @@ public class Engine {
                 List<Player> auxParents = new ArrayList<>(parents);
                 List<List<Player>> pairParents = new ArrayList<>();
                 for (int i = 0; i < parents.size() / 2; i++) {
-                    int index1 = (int) (Math.random() * (auxParents.size() - 1));
+                    int index1 = ThreadLocalRandom.current().nextInt(auxParents.size() - 1);
                     pairParents.add(new ArrayList<>());
                     pairParents.get(pairParents.size() - 1).add(auxParents.remove(index1));
-                    int index2 = (int) (Math.random() * (auxParents.size() - 1));
+
+                    int index2 = ThreadLocalRandom.current().nextInt(auxParents.size() - 1);
                     pairParents.get(pairParents.size() - 1).add(auxParents.remove(index2));
                 }
                 Crossover crossover = getCrossover(config.getCrossoverConfig());

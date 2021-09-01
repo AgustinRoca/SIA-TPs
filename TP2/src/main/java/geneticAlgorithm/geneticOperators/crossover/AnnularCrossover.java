@@ -3,11 +3,13 @@ package geneticAlgorithm.geneticOperators.crossover;
 import geneticAlgorithm.geneticOperators.Gene;
 import models.player.Player;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class AnnularCrossover extends Crossover {
     @Override
     public Player[] cross(Player p1, Player p2) {
-        int point1 = (int) (Math.random() * (Gene.values().length - 1));
-        int length = (int) (Math.random() * (Gene.values().length / 2));
+        int point1 = ThreadLocalRandom.current().nextInt(Gene.values().length - 1);
+        int length = ThreadLocalRandom.current().nextInt(Gene.values().length / 2);
         int point2 = (point1 + length) % Gene.values().length;
         int start, end;
         boolean swapPlayers;

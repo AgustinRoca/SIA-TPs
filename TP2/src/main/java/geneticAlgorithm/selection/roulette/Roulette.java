@@ -4,6 +4,7 @@ import models.player.Player;
 import geneticAlgorithm.selection.SelectionMethod;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class Roulette implements SelectionMethod {
@@ -48,7 +49,7 @@ public class Roulette implements SelectionMethod {
     }
 
     double randomGenerator(int i, int k){
-        return Math.random();
+        return ThreadLocalRandom.current().nextDouble();
     }
 
     double aptitude(int i, List<Player> players, int generation){

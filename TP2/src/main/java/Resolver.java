@@ -22,7 +22,11 @@ public class Resolver {
         System.out.println("Finish initialization");
         Config config = Config.getInstance();
 
+        long start = System.currentTimeMillis();
         List<Player> generation = createInitialGeneration(config.getPlayerConfig().getPlayerClass(), config.getPlayerConfig().getCount());
+        long end = System.currentTimeMillis();
+        System.out.println("First generation took: " + (end - start) + "ms");
+
         CSVGenerationSerializer generationSerializer = new CSVGenerationSerializer(config.getOutputPath());
         Engine engine = new Engine(generationSerializer);
 

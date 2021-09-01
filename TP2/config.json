@@ -3,7 +3,7 @@
 
     "player": {
         "type": "UNDERCOVER",
-        "count": 100,
+        "count": 10000,
         "selection": 80,
         "height": {
             "random": true

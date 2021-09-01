@@ -6,6 +6,7 @@ import geneticAlgorithm.selection.SelectionMethod;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Tournament implements SelectionMethod {
     private final int playersInMatch;
@@ -29,7 +30,7 @@ public abstract class Tournament implements SelectionMethod {
     private Collection<Player> getRandomPlayers(List<Player> players, int quantity){
         List<Player> randomPlayers = new ArrayList<>();
         for (int i = 0; i < quantity; i++) {
-            randomPlayers.add(players.get((int) Math.floor(Math.random() * players.size())));
+            randomPlayers.add(players.get(ThreadLocalRandom.current().nextInt(players.size())));
         }
         return randomPlayers;
     }

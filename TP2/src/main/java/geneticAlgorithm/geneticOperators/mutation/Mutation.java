@@ -6,6 +6,8 @@ import config.equipmentCollection.EquipmentCollection;
 import config.equipmentCollection.Equipments;
 import models.player.*;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public abstract class Mutation {
     private final double mutationProbability;
     private final boolean randomHeightMutation;
@@ -19,7 +21,7 @@ public abstract class Mutation {
                 if(randomHeightMutation)
                     player.setHeight(Player.normalRandomHeight(player.getHeight()));
                 else {
-                    double increment = Math.random() * 2*maxIncrement - maxIncrement;  // (-maxIncrement, maxIncrement)
+                    double increment = ThreadLocalRandom.current().nextDouble(-maxIncrement, maxIncrement);  // (-maxIncrement, maxIncrement)
                     player.setHeight(player.getHeight() + increment);
                 }
                 break;
