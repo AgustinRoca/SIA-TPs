@@ -17,8 +17,9 @@ public class Resolver {
         if (args.length != 1)
             throw new IllegalArgumentException("Not enough args passed");
 
+        System.out.println("Initializing engine");
         Resolver.initialize(args);
-        System.out.println("Finish parsing items");
+        System.out.println("Finish initialization");
         Config config = Config.getInstance();
 
         List<Player> generation = createInitialGeneration(config.getPlayerConfig().getPlayerClass(), config.getPlayerConfig().getCount());
