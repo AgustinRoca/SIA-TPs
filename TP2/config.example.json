@@ -1,5 +1,5 @@
 {
-    "outputPath": "./out",
+    "outputPath": "./out.csv",
 
     "player": {
         "type": "WARRIOR",
