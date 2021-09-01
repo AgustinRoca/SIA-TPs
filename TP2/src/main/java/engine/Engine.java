@@ -33,7 +33,7 @@ public class Engine {
         StopCriteriaData data = new StopCriteriaData(config.getStopCriteriaConfig().getPercentage(), n);
         data.addGeneration(population);
         while (!criteria.shouldStop(data)){
-            this.generationSerializer.serialize(data.getGenerationsQuantity() - 1, data.getLastGeneration());
+            this.generationSerializer.serialize(data.getGenerationsQuantity(), data.getLastGeneration());
 
             Collection<Player> parents = selectionSelector.select(data.getLastGeneration(), data.getGenerationsQuantity());
             List<Player> children = new ArrayList<>();
