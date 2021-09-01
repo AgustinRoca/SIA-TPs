@@ -5,6 +5,7 @@ import config.equipmentCollection.Equipments;
 import models.player.Player;
 import config.parsers.ConfigParser;
 import config.parsers.EquipmentParser;
+import serializer.CSVGenerationSerializer;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.*;
@@ -19,8 +20,13 @@ public class Resolver {
         Resolver.initialize(args);
         System.out.println("Finish parsing items");
         Config config = Config.getInstance();
+
         List<Player> generation = createInitialGeneration(config.getPlayerConfig().getPlayerClass(), config.getPlayerConfig().getCount());
-        Player best = Engine.start(generation, config);
+        CSVGenerationSerializer generationSerializer = new CSVGenerationSerializer(config.getOutputPath());
+        Engine engine = new Engine(generationSerializer);
+
+        Player best = engine.run(generation);
+
         System.out.println(best);
     }
 
