@@ -4,10 +4,10 @@
     "player": {
         "type": "WARRIOR",
         "count": 100,
-        "selection": 10,
+        "selection": 50,
         "height": {
             "random": false,
-            "increment": 0.5
+            "increment": 0.1
         }
     },
 
@@ -21,22 +21,25 @@
     },
 
     "geneticOperator": {
-        "operation": "MUTATION",
-        "type": "COMPLETE",
-        "probability": 0.1
+        "operation": "CROSSOVER",
+        "type": "UNIFORM",
+        "probability": 0.5
     },
 
     "fillMethod": "ALL",
 
     "stopCriteria": {
         "criteria": "GENERATIONS",
-        "parameter": "500"
+        "parameter": 1000
     },
 
     "selection": {
         "methodA": "ELITE",
-        "methodB": "UNIVERSAL",
-        "factor": 0.3
+        "methodB": "TOURNAMENT_DETERMINISTIC",
+        "factor": 0.8
+    },
+    "tournamentDeterministic": {
+        "window": 5
     },
 
     "replacement": {

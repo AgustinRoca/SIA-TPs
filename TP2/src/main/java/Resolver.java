@@ -21,9 +21,8 @@ public class Resolver {
         System.out.println("Finish parsing items");
         Config config = Config.getInstance();
         List<Player> generation = createInitialGeneration(config.getPlayerConfig().getPlayerClass(), config.getPlayerConfig().getCount());
-         Player best = Engine.start(generation, config);
-         System.out.println(best);
-        // TODO: Aplicar todos los algo
+        Player best = Engine.start(generation, config);
+        System.out.println(best);
     }
 
     private static List<Player> createInitialGeneration(Class<? extends Player> type, int count) {

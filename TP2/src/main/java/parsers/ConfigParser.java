@@ -109,8 +109,7 @@ public abstract class ConfigParser {
 
         if (type == CrossoverType.UNIFORM) {
             return new UniformCrossoverConfig(
-                    json.getDouble("probability"),
-                    json.getDouble("threshold")
+                    json.getDouble("probability")
             );
         } else {
             return new CrossoverConfig(

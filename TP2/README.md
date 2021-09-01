@@ -49,7 +49,6 @@ La aplicacion recibe un unico parametro por linea de comandos, que es la ubicaci
         "operation" : "CROSSOVER"
         "type": "UNIFORM",
         "probability": "(Double) en [0, 1]. Probabilidad de cruzar dos genes",
-        "threshold": "(Double) en [0, 1]. Cruce uniforme"
     },
 
     "stopCriteria": {

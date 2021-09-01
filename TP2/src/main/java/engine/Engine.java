@@ -4,6 +4,7 @@ import criteria.*;
 import fill.FillAll;
 import fill.FillMethod;
 import fill.FillParent;
+import geneticOperators.crossover.*;
 import geneticOperators.mutation.*;
 import models.config.*;
 import models.player.Player;
@@ -12,10 +13,7 @@ import selection.roulette.Boltzmann;
 import selection.roulette.Ranking;
 import selection.roulette.Roulette;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class Engine {
     public static Player start(List<Player> population, Config config) {
@@ -35,7 +33,19 @@ public class Engine {
                     children.add(mutation.mutate(parent));
                 }
             } else {
-                // TODO: Juntar parents de dos en dos y cruzar
+                List<Player> auxParents = new ArrayList<>(parents);
+                List<List<Player>> pairParents = new ArrayList<>();
+                for (int i = 0; i < parents.size() / 2; i++) {
+                    int index1 = (int) (Math.random() * (auxParents.size() - 1));
+                    pairParents.add(new ArrayList<>());
+                    pairParents.get(pairParents.size() - 1).add(auxParents.remove(index1));
+                    int index2 = (int) (Math.random() * (auxParents.size() - 1));
+                    pairParents.get(pairParents.size() - 1).add(auxParents.remove(index2));
+                }
+                Crossover crossover = getCrossover(config.getCrossoverConfig());
+                for (List<Player> pairParent : pairParents){
+                    children.addAll(Arrays.asList(crossover.cross(pairParent.get(0), pairParent.get(1))));
+                }
             }
             Collection<Player> newGeneration = filler.getGeneration(data.getLastGeneration(),
                     children, data.getGenerationsQuantity() + 1);
@@ -44,6 +54,21 @@ public class Engine {
             System.out.println("Best of generation " + data.getGenerations().size() + ": " + data.getLastGeneration().get(0));
         }
         return data.getLastGeneration().get(0);
+    }
+
+    private static Crossover getCrossover(CrossoverConfig config) {
+        switch (config.getType()){
+            case SINGLE_POINT:
+                return new OnePointCrossover();
+            case TWO_POINTS:
+                return new TwoPointCrossover();
+            case UNIFORM:
+                UniformCrossoverConfig uniformCrossoverConfig = (UniformCrossoverConfig) config;
+                return new UniformCrossover(uniformCrossoverConfig.getProbability());
+            case ANNULAR:
+                return new AnnularCrossover();
+        }
+        throw new RuntimeException(config.getType() + " is not a valid crossover type");
     }
 
     private static Mutation getMutation(MutationConfig config) {

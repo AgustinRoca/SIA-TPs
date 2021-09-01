@@ -5,6 +5,7 @@ import models.equipment.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public abstract class Player implements Comparable<Player>, Cloneable{
     private final Map<Class<? extends Equipment>, Equipment> equipments = new HashMap<>();
@@ -19,19 +20,27 @@ public abstract class Player implements Comparable<Player>, Cloneable{
     private boolean defensePointsCalculated = false;
     private double defensePoints;
     private double defenseModifier;
+    private static final Random rng = new Random();
 
     public static final double MIN_HEIGHT = 1.3;
     public static final double MAX_HEIGHT = 2.0;
 
     public Player(double height, Map<Class<? extends Equipment>, Equipment> equipments) {
         this.height = height;
+        if (equipments.keySet().size() != 5){
+            throw new RuntimeException();
+        }
         for (Class<? extends Equipment> clazz : equipments.keySet()){
+            if (equipments.get(clazz) == null)
+                throw new RuntimeException();
             this.equipments.put(clazz, equipments.get(clazz));
         }
     }
 
     public Player(double height, Boots boots, Gloves gloves, Helmet helmet, Vest vest, Weapon weapon) {
         this.height = height;
+        if(boots == null || gloves == null || helmet == null || vest == null || weapon == null)
+            throw new RuntimeException();
         this.equipments.put(Boots.class, boots);
         this.equipments.put(Gloves.class, gloves);
         this.equipments.put(Helmet.class, helmet);
@@ -39,26 +48,35 @@ public abstract class Player implements Comparable<Player>, Cloneable{
         this.equipments.put(Weapon.class, weapon);
     }
 
-    public Player(double height) {
-        this.height = height;
+    public static double normalRandomHeight(double mean) {
+        double height;
+        do {
+            height =  0.2/3 * rng.nextGaussian() + mean;
+        } while (height < MIN_HEIGHT || height > MAX_HEIGHT);
+        return height;
     }
 
     public static double randomHeight() {
-        return Math.random() * (MAX_HEIGHT - MIN_HEIGHT) + MIN_HEIGHT;
+        return rng.nextDouble() * (MAX_HEIGHT - MIN_HEIGHT) + MIN_HEIGHT;
     }
+
+
 
     public double getHeight() {
         return this.height;
     }
 
     public void setHeight(double height) {
+        if(height > MAX_HEIGHT){
+            height = MAX_HEIGHT;
+        } else if (height < MIN_HEIGHT){
+            height = MIN_HEIGHT;
+        }
         this.height = height;
         this.calculateAttackModifier();
         this.calculateDefenseModifier();
         this.attackPointsCalculated = false;
         this.defensePointsCalculated = false;
-        this.defenseModifierCalculated = false;
-        this.attackModifierCalculated = false;
     }
 
     public void replaceEquipment(Equipment newEquipment) {
@@ -125,11 +143,6 @@ public abstract class Player implements Comparable<Player>, Cloneable{
                     .getConstructor(double.class, Boots.class, Gloves.class, Helmet.class, Vest.class, Weapon.class)
                     .newInstance(height, getBoots(), getGloves(), getHelmet(), getVest(), getWeapon());
         } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-            try {
-                super.clone();
-            } catch (CloneNotSupportedException ex) {
-                throw new RuntimeException(ex);
-            }
             throw new RuntimeException(e);
         }
     }
@@ -139,7 +152,8 @@ public abstract class Player implements Comparable<Player>, Cloneable{
         double agility = 0;
         double intelligence = 0;
 
-        for (Equipment equipment : this.equipments.values()) {
+        for (Class<? extends Equipment> equipmentClass : this.equipments.keySet()) {
+            Equipment equipment = equipments.get(equipmentClass);
             force += equipment.getForce();
             agility += equipment.getAgility();
             intelligence += equipment.getIntelligence();

@@ -5,10 +5,6 @@ import models.equipment.*;
 import java.util.Map;
 
 public class Warrior extends Player {
-    public Warrior(double height) {
-        super(height);
-    }
-
     public Warrior(double height, Map<Class<? extends Equipment>, Equipment> equipments) {
         super(height, equipments);
     }
