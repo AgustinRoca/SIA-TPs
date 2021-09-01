@@ -24,7 +24,7 @@ public class Engine {
         StopCriteriaData data = new StopCriteriaData(config.getStopCriteriaConfig().getPercentage(), n);
         data.addGeneration(population);
         while (!criteria.shouldStop(data)){
-            Collection<Player> parents = selectionSelector.select(data.getLastGeneration(), data.getGenerations().size());
+            Collection<Player> parents = selectionSelector.select(data.getLastGeneration(), data.getGenerationsQuantity());
             List<Player> children = new ArrayList<>();
 
             if(config.getOperationConfig().getType() == OperationConfig.OperationType.MUTATION){
@@ -51,7 +51,7 @@ public class Engine {
                     children, data.getGenerationsQuantity() + 1);
             data.addGeneration(newGeneration);
             // TODO: graphs
-            System.out.println("Best of generation " + data.getGenerations().size() + ": " + data.getLastGeneration().get(0));
+            System.out.println("Best of generation " + data.getGenerationsQuantity() + ": " + data.getLastGeneration().get(0));
         }
         return data.getLastGeneration().get(0);
     }

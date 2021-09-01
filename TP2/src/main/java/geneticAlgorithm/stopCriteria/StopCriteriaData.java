@@ -24,7 +24,7 @@ public class StopCriteriaData {
     }
 
     public int getGenerationsQuantity() {
-        return generations.size();
+        return generations.size() - 1;
     }
 
     public long getStartTime() {

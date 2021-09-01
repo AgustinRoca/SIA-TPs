@@ -8,6 +8,6 @@ public class Ranking extends Roulette{
 
     @Override
     double aptitude(int i, List<Player> players, int generation) {
-        return (double) (players.size() - i)/players.size();
+        return (double) (players.size() - (i + 1))/players.size();
     }
 }

@@ -3,8 +3,8 @@
 
     "player": {
         "type": "UNDERCOVER",
-        "count": 1000,
-        "selection": 800,
+        "count": 100,
+        "selection": 80,
         "height": {
             "random": true
         }
@@ -20,8 +20,8 @@
     },
 
     "geneticOperator": {
-        "operation": "CROSSOVER",
-        "type": "UNIFORM",
+        "operation": "MUTATION",
+        "type": "GEN",
         "probability": 0.5
     },
 
