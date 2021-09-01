@@ -33,6 +33,8 @@ public class Engine {
         StopCriteria criteria = getStopCriteria(config.getStopCriteriaConfig());
         StopCriteriaData data = new StopCriteriaData(config.getStopCriteriaConfig().getPercentage(), n);
         data.addGeneration(population);
+
+        long totalElapsed = 0;
         while (!criteria.shouldStop(data)){
             this.generationSerializer.serialize(data.getGenerationsQuantity(), data.getLastGeneration());
 
@@ -60,12 +62,18 @@ public class Engine {
                     children.addAll(Arrays.asList(crossover.cross(pairParent.get(0), pairParent.get(1))));
                 }
             }
+
+            long start = System.currentTimeMillis();
             Collection<Player> newGeneration = filler.getGeneration(data.getLastGeneration(),
                     children, data.getGenerationsQuantity() + 1);
+            totalElapsed += System.currentTimeMillis() - start;
+
             data.addGeneration(newGeneration);
 
             System.out.println("Best of generation " + data.getGenerationsQuantity() + ": " + data.getLastGeneration().get(0));
         }
+
+        System.out.println("Avg of generation took: " + totalElapsed / data.getGenerationsQuantity() + "ms");
         return data.getLastGeneration().get(0);
     }
 
