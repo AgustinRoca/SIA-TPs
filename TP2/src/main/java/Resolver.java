@@ -57,11 +57,11 @@ public class Resolver {
         if (Config.getInstance().getEquipmentConfig().isInMemory()) {
             Map<Class<? extends Equipment>, Collection<Equipment>> equipmentMap = new HashMap<>();
 
-            Resolver.parseEquipment(Boots.class, equipmentMap);
-            Resolver.parseEquipment(Gloves.class, equipmentMap);
-            Resolver.parseEquipment(Helmet.class, equipmentMap);
-            Resolver.parseEquipment(Vest.class, equipmentMap);
-            Resolver.parseEquipment(Weapon.class, equipmentMap);
+            Resolver.parseEquipment(Boots.class, equipmentMap, Config.getInstance().getEquipmentConfig().getBoots());
+            Resolver.parseEquipment(Gloves.class, equipmentMap, Config.getInstance().getEquipmentConfig().getGloves());
+            Resolver.parseEquipment(Helmet.class, equipmentMap, Config.getInstance().getEquipmentConfig().getHelmet());
+            Resolver.parseEquipment(Vest.class, equipmentMap, Config.getInstance().getEquipmentConfig().getVest());
+            Resolver.parseEquipment(Weapon.class, equipmentMap, Config.getInstance().getEquipmentConfig().getWeapon());
 
             Equipments.createInMemoryInstance(equipmentMap);
         } else {
@@ -71,12 +71,12 @@ public class Resolver {
         }
     }
 
-    private static void parseEquipment(Class<? extends Equipment> equipmentClass, Map<Class<? extends Equipment>, Collection<Equipment>> equipmentMap) throws IOException {
+    private static void parseEquipment(Class<? extends Equipment> equipmentClass, Map<Class<? extends Equipment>, Collection<Equipment>> equipmentMap, String filename) throws IOException {
         equipmentMap.put(
                 equipmentClass,
                 EquipmentParser.parse(
                         equipmentClass,
-                        new BufferedReader(new FileReader(Config.getInstance().getEquipmentConfig().getBoots()))
+                        new BufferedReader(new FileReader(filename))
                 )
         );
     }
