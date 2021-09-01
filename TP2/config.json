@@ -2,12 +2,11 @@
     "outputPath": "./out",
 
     "player": {
-        "type": "WARRIOR",
-        "count": 100,
-        "selection": 50,
+        "type": "UNDERCOVER",
+        "count": 1000,
+        "selection": 800,
         "height": {
-            "random": false,
-            "increment": 0.1
+            "random": true
         }
     },
 
@@ -38,6 +37,7 @@
         "methodB": "TOURNAMENT_DETERMINISTIC",
         "factor": 0.8
     },
+
     "tournamentDeterministic": {
         "window": 5
     },

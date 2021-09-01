@@ -1,11 +1,10 @@
 import engine.Engine;
-import models.config.Config;
-import models.config.EquipmentConfig;
+import config.containers.Config;
 import models.equipment.*;
-import models.equipment.equipment_collection.Equipments;
+import config.equipmentCollection.Equipments;
 import models.player.Player;
-import parsers.ConfigParser;
-import parsers.EquipmentParser;
+import config.parsers.ConfigParser;
+import config.parsers.EquipmentParser;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.*;

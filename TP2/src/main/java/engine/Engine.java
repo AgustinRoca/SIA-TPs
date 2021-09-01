@@ -1,30 +1,27 @@
 package engine;
 
-import criteria.*;
-import fill.FillAll;
-import fill.FillMethod;
-import fill.FillParent;
-import geneticOperators.crossover.*;
-import geneticOperators.mutation.*;
-import models.config.*;
+import geneticAlgorithm.stopCriteria.*;
+import geneticAlgorithm.fill.*;
+import geneticAlgorithm.fill.FillMethod;
+import geneticAlgorithm.geneticOperators.crossover.*;
+import geneticAlgorithm.geneticOperators.mutation.*;
+import config.containers.*;
 import models.player.Player;
-import selection.*;
-import selection.roulette.Boltzmann;
-import selection.roulette.Ranking;
-import selection.roulette.Roulette;
-import selection.roulette.Universal;
-import selection.tournament.DeterministicTournament;
-import selection.tournament.ProbabilisticTournament;
+import geneticAlgorithm.selection.*;
+import geneticAlgorithm.selection.roulette.*;
+import geneticAlgorithm.selection.tournament.*;
 
 import java.util.*;
 
 public class Engine {
     public static Player start(List<Player> population, Config config) {
-        Selector selectionSelector = getSelector(config.getSelectionConfig(), config, config.getPlayerConfig().getSelection());
+        int k = config.getPlayerConfig().getSelection();
+        int n = config.getPlayerConfig().getCount();
+        Selector selectionSelector = getSelector(config.getSelectionConfig(), config, k);
         FillMethod filler = getFiller(config);
 
         StopCriteria criteria = getStopCriteria(config.getStopCriteriaConfig());
-        StopCriteriaData data = new StopCriteriaData(config.getStopCriteriaConfig().getPercentage(), config.getPlayerConfig().getCount());
+        StopCriteriaData data = new StopCriteriaData(config.getStopCriteriaConfig().getPercentage(), n);
         data.addGeneration(population);
         while (!criteria.shouldStop(data)){
             Collection<Player> parents = selectionSelector.select(data.getLastGeneration(), data.getGenerations().size());
@@ -105,7 +102,7 @@ public class Engine {
     }
 
     private static FillMethod getFiller(Config config) {
-        models.config.FillMethod fillMethod = config.getFillMethod();
+        config.containers.FillMethod fillMethod = config.getFillMethod();
         switch (fillMethod){
             case ALL:
                 return new FillAll(getSelector(config.getReplacementConfig(), config, config.getPlayerConfig().getCount()));
