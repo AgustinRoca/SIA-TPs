@@ -10,11 +10,20 @@ import models.player.Player;
 import geneticAlgorithm.selection.*;
 import geneticAlgorithm.selection.roulette.*;
 import geneticAlgorithm.selection.tournament.*;
+import serializer.GenerationSerializer;
 
 import java.util.*;
 
 public class Engine {
-    public static Player start(List<Player> population, Config config) {
+    private final GenerationSerializer generationSerializer;
+
+    public Engine(GenerationSerializer generationSerializer) {
+        this.generationSerializer = generationSerializer;
+    }
+
+    public Player run(List<Player> population) {
+        Config config = Config.getInstance();
+
         int k = config.getPlayerConfig().getSelection();
         int n = config.getPlayerConfig().getCount();
         Selector selectionSelector = getSelector(config.getSelectionConfig(), config, k);
@@ -24,6 +33,8 @@ public class Engine {
         StopCriteriaData data = new StopCriteriaData(config.getStopCriteriaConfig().getPercentage(), n);
         data.addGeneration(population);
         while (!criteria.shouldStop(data)){
+            this.generationSerializer.serialize(data.getGenerationsQuantity() - 1, data.getLastGeneration());
+
             Collection<Player> parents = selectionSelector.select(data.getLastGeneration(), data.getGenerations().size());
             List<Player> children = new ArrayList<>();
 
@@ -50,7 +61,7 @@ public class Engine {
             Collection<Player> newGeneration = filler.getGeneration(data.getLastGeneration(),
                     children, data.getGenerationsQuantity() + 1);
             data.addGeneration(newGeneration);
-            // TODO: graphs
+
             System.out.println("Best of generation " + data.getGenerations().size() + ": " + data.getLastGeneration().get(0));
         }
         return data.getLastGeneration().get(0);
