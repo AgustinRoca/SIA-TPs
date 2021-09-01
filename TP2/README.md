@@ -6,7 +6,7 @@ La aplicacion recibe un unico parametro por linea de comandos, que es la ubicaci
 {
     "outputPath": "(String) Archivo de salida. La carpeta debe existir.",
     
-    "fillMethod": "(\"FILL_ALL\" | \"FILL_PARENTS\")",
+    "fillMethod": "(\"ALL\" | \"PARENTS\")",
     
     "player": {
         "type": "(\"WARRIOR\", \"ARCHER\", \"UNDERCOVER\", \"DEFENDER\")",
@@ -16,10 +16,6 @@ La aplicacion recibe un unico parametro por linea de comandos, que es la ubicaci
             "random": true
         } | {
             "random": false,
-            "interval": {
-                "min": "(Double) en [0.01, 0.09]",
-                "max": "(Double) en [0.1, 0.19]"
-            },
             "increment": "(Double) > 0. La altura del jugador variara en un rango (-increment, increment)"
         }
     },
@@ -84,7 +80,6 @@ La aplicacion recibe un unico parametro por linea de comandos, que es la ubicaci
     "tournamentProbabilistic": {
         "probability": "(Double) en [0, 1] Probabilidad de seleccion para metodo Torneo Probabilistico",
     },
-    
     "tournamentDeterministic":{
         "window": "(Integer) W > 0 natural que representa la ventana para metodo Torneo Probabilistico"
     },
@@ -95,7 +90,7 @@ La aplicacion recibe un unico parametro por linea de comandos, que es la ubicaci
 }
 ```
 
-**Nota**: La configuracion de "tournamentProbabilistic" y "boltzmann" son necesarios solamente si los mismos fueron utilizados como
+**Nota**: La configuracion de "tournamentProbabilistic", "tournamentDeterministic" y "boltzmann" son necesarios solamente si los mismos fueron utilizados como
 metodos de seleccion o replacement.
 
 Archivo de ejemplo en: config.example.json 

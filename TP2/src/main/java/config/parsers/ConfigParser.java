@@ -23,12 +23,15 @@ public abstract class ConfigParser {
 
             config.setPlayerConfig(ConfigParser.getPlayerConfig(json.getJSONObject("player")));
             config.setEquipmentConfig(ConfigParser.getEquipmentConfig(json.getJSONObject("equipment")));
-            config.setOperationConfig(ConfigParser.getOperationConfig(json.getJSONObject("geneticOperator")));
-            if(ConfigParser.isMutation()) {
-                config.setMutationConfig(ConfigParser.getMutationConfig(json.getJSONObject("geneticOperator")));
+
+            JSONObject geneticOperator = json.getJSONObject("geneticOperator");
+            config.setOperationConfig(ConfigParser.getOperationConfig(geneticOperator));
+            if (ConfigParser.isMutation()) {
+                config.setMutationConfig(ConfigParser.getMutationConfig(geneticOperator));
             } else {
-                config.setCrossoverConfig(ConfigParser.getCrossoverConfig(json.getJSONObject("geneticOperator")));
+                config.setCrossoverConfig(ConfigParser.getCrossoverConfig(geneticOperator));
             }
+
             config.setStopCriteriaConfig(ConfigParser.getStopCriteriaConfig(json.getJSONObject("stopCriteria")));
             config.setSelectionConfig(ConfigParser.getSelectionReplacementConfig(json.getJSONObject("selection")));
             config.setReplacementConfig(ConfigParser.getSelectionReplacementConfig(json.getJSONObject("replacement")));
