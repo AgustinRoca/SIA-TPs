@@ -31,8 +31,8 @@ public abstract class Crossover {
         } else {
             Equipment p1EquipmentAux = p1.getEquipments().get(gene.getEquipmentType());
             Equipment p2EquipmentAux = p2.getEquipments().get(gene.getEquipmentType());
-            p1.replaceEquipment(gene.getEquipmentType(), p1EquipmentAux);
-            p2.replaceEquipment(gene.getEquipmentType(), p2EquipmentAux);
+            p1.replaceEquipment(gene.getEquipmentType(), p2EquipmentAux);
+            p2.replaceEquipment(gene.getEquipmentType(), p1EquipmentAux);
         }
     }
 }
