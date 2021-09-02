@@ -139,24 +139,21 @@ def plt_maximize():
         raise RuntimeError("plt_maximize() is not implemented for current backend:", backend)
 
 
-def plot_two(formatted_line: dict, title: str, key1: str, title1: str, key2: str, title2: str):
-    ax = PLOTS[key1]['subplot']
-    generation_number = get_formatted_line_generation(formatted_line)
+def plot_all(title, formatted_line: dict, titles, keys, ax):
+    for i, key in enumerate(keys):
+        generation_number = get_formatted_line_generation(formatted_line)
 
-    PLOTS[key1]['x'].append(generation_number)
-    PLOTS[key1]['y'].append(float(formatted_line[HEADERS[key1]]))
+        PLOTS[key]['x'].append(generation_number)
+        PLOTS[key]['y'].append(float(formatted_line[HEADERS[key]]))
 
-    PLOTS[key2]['x'].append(generation_number)
-    PLOTS[key2]['y'].append(float(formatted_line[HEADERS[key2]]))
-
-    if not PLOTS[key1]['initialized']:
-        PLOTS[key1]['initialized'] = True
-        ax.set_title(title)
+        if not PLOTS[key]['initialized']:
+            PLOTS[key]['initialized'] = True
+            ax.set_title(title)
 
     ax.cla()
 
-    ax.plot(PLOTS[key1]['x'], PLOTS[key1]['y'], label=title1)
-    ax.plot(PLOTS[key2]['x'], PLOTS[key2]['y'], label=title2)
+    for i, key in enumerate(keys):
+        ax.plot(PLOTS[key]['x'], PLOTS[key]['y'], label=titles[i])
     ax.legend(bbox_to_anchor=(1.325, 1.1))
 
     plt.draw()
@@ -193,11 +190,11 @@ def plot_diversity(formatted_line: dict):
 
 
 def plot_min_max(formatted_line: dict):
-    plot_two(formatted_line, 'Fitness maximo y minimo', 'max', 'Maximo', 'min', 'Minimo')
-
-
-def plot_avg_median(formatted_line: dict):
-    plot_two(formatted_line, 'Fitness promedio y mediano', 'avg', 'Promedio', 'median', 'Mediano')
+    plot_all('Fitness maximo y minimo', formatted_line,
+             ['Maximo', 'Minimo', 'Promedio'],
+             ['max', 'min', 'avg'],
+             PLOTS['max']['subplot']
+             )
 
 
 def run():
@@ -212,12 +209,14 @@ def run():
 
     header = process_header(f.stdout.readline().strip().decode('ascii'))
 
-    fig, axs = plt.subplots(3)
+    fig, axs = plt.subplots(2)
     plt.tight_layout(h_pad=3, w_pad=3, rect=(0, 0, 0.8, 0.95))
 
     PLOTS['max']['subplot'] = axs[0]
-    PLOTS['avg']['subplot'] = axs[1]
-    PLOTS['diversity']['subplot'] = axs[2]
+    PLOTS['min']['subplot'] = axs[0]
+    PLOTS['avg']['subplot'] = axs[0]
+    # PLOTS['median']['subplot'] = axs[1]
+    PLOTS['diversity']['subplot'] = axs[1]
 
     # plt_maximize()
 
@@ -243,7 +242,6 @@ def run():
             formatted_line = format_line(header, line)
 
             plot_min_max(formatted_line)
-            plot_avg_median(formatted_line)
             plot_diversity(formatted_line)
         plt.pause(0.001)
 

@@ -10,8 +10,9 @@ import java.util.Set;
 import static models.player.Player.MIN_HEIGHT;
 
 public class GenerationStats {
-    private static final int HEIGHT_THRESHOLD_CM = 10;
-    private static final int MIN_HEIGHT_CM = (int) Math.floor(MIN_HEIGHT);
+    private static final int HEIGHT_THRESHOLD_MM = 1;
+    private static final int DECIMALS = 5;
+    private static final int MIN_HEIGHT_MM = (int) Math.floor(MIN_HEIGHT*Math.pow(10, DECIMALS));
 
     private final double min;
     private final double max;
@@ -96,8 +97,8 @@ public class GenerationStats {
     }
 
     private static double height(double height) {
-        int heightCm = (int) Math.floor(height * 100);
-        int rest = (heightCm - MIN_HEIGHT_CM) % HEIGHT_THRESHOLD_CM;
-        return (heightCm - rest) / 100.0;
+        int heightMm = (int) Math.floor(height * Math.pow(10, DECIMALS));
+        int rest = (heightMm - MIN_HEIGHT_MM) % HEIGHT_THRESHOLD_MM;
+        return (heightMm - rest) / Math.pow(10, DECIMALS);
     }
 }
