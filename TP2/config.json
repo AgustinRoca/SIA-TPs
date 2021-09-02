@@ -4,7 +4,7 @@
     "player": {
         "type": "UNDERCOVER",
         "count": 10000,
-        "selection": 80,
+        "selection": 1000,
         "height": {
             "random": true
         }
@@ -20,8 +20,8 @@
     },
 
     "geneticOperator": {
-        "operation": "MUTATION",
-        "type": "GEN",
+        "operation": "CROSSOVER",
+        "type": "UNIFORM",
         "probability": 0.5
     },
 
@@ -33,9 +33,9 @@
     },
 
     "selection": {
-        "methodA": "ELITE",
-        "methodB": "TOURNAMENT_DETERMINISTIC",
-        "factor": 0.8
+        "methodA": "UNIVERSAL",
+        "methodB": "ROULETTE",
+        "factor": 0.3
     },
 
     "tournamentDeterministic": {
@@ -43,7 +43,7 @@
     },
 
     "replacement": {
-        "methodA": "RANKING",
+        "methodA": "UNIVERSAL",
         "methodB": "UNIVERSAL",
         "factor": 0.6
     }

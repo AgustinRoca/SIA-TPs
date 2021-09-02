@@ -18,13 +18,16 @@ public class Resolver {
             throw new IllegalArgumentException("Not enough args passed");
 
         System.out.println("Initializing engine");
-        Resolver.initialize(args);
-        System.out.println("Finish initialization");
+
+        ConfigParser.parse(new FileInputStream(args[0]));
         Config config = Config.getInstance();
+        CSVGenerationSerializer generationSerializer = new CSVGenerationSerializer(config.getOutputPath());
+        Resolver.initialize();
+
+        System.out.println("Finish initialization");
 
         List<Player> generation = createInitialGeneration(config.getPlayerConfig().getPlayerClass(), config.getPlayerConfig().getCount());
 
-        CSVGenerationSerializer generationSerializer = new CSVGenerationSerializer(config.getOutputPath());
         Engine engine = new Engine(generationSerializer);
 
         Player best = engine.run(generation);
@@ -60,9 +63,7 @@ public class Resolver {
         return equipmentMap;
     }
 
-    private static void initialize(String[] args) throws IOException {
-        ConfigParser.parse(new FileInputStream(args[0]));
-
+    private static void initialize() throws IOException {
         if (Config.getInstance().getEquipmentConfig().isInMemory()) {
             Map<Class<? extends Equipment>, Collection<Equipment>> equipmentMap = new HashMap<>();
 

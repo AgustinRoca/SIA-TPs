@@ -21,6 +21,10 @@ public abstract class Player implements Comparable<Player>, Cloneable{
     private boolean defensePointsCalculated = false;
     private double defensePoints;
     private double defenseModifier;
+
+    private boolean fitnessCalculated = false;
+    private double fitness;
+
     private static final Random rng = ThreadLocalRandom.current();
 
     public static final double MIN_HEIGHT = 1.3;
@@ -78,18 +82,21 @@ public abstract class Player implements Comparable<Player>, Cloneable{
         this.calculateDefenseModifier();
         this.attackPointsCalculated = false;
         this.defensePointsCalculated = false;
+        this.fitnessCalculated = false;
     }
 
     public void replaceEquipment(Equipment newEquipment) {
         this.equipments.put(newEquipment.getClass(), newEquipment);
         this.attackPointsCalculated = false;
         this.defensePointsCalculated = false;
+        this.fitnessCalculated = false;
     }
 
     public void replaceEquipment(Class<? extends Equipment> equipmentType, Equipment newEquipment) {
         this.equipments.put(equipmentType, newEquipment);
         this.attackPointsCalculated = false;
         this.defensePointsCalculated = false;
+        this.fitnessCalculated = false;
     }
 
     public Boots getBoots(){
@@ -115,7 +122,11 @@ public abstract class Player implements Comparable<Player>, Cloneable{
 
     public abstract Class<? extends Player> getPlayerType();
 
-    public abstract double fitness();
+    public double fitness() {
+        if (!this.fitnessCalculated)
+            this.internalCalculateFitness();
+        return this.fitness;
+    }
 
     public double attackPoints() {
         if (!this.attackPointsCalculated)
@@ -146,6 +157,13 @@ public abstract class Player implements Comparable<Player>, Cloneable{
         } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected abstract double calculateFitness();
+
+    private void internalCalculateFitness() {
+        this.fitness = this.calculateFitness();
+        this.fitnessCalculated = true;
     }
 
     private void calculateAttackPoints() {

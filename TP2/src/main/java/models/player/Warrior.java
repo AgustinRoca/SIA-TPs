@@ -14,7 +14,7 @@ public class Warrior extends Player {
     }
 
     @Override
-    public double fitness() {
+    protected double calculateFitness() {
         return 0.6 * (this.attackPoints() + this.defensePoints());
     }
 

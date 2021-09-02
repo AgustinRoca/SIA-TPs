@@ -14,7 +14,7 @@ public class Archer extends Player {
     }
 
     @Override
-    public double fitness() {
+    protected double calculateFitness() {
         return 0.9 * this.attackPoints() + 0.1 * this.defensePoints();
     }
 
