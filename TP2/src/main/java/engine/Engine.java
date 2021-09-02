@@ -1,5 +1,6 @@
 package engine;
 
+import config.containers.OperationConfig.OperationType;
 import geneticAlgorithm.stopCriteria.*;
 import geneticAlgorithm.fill.*;
 import geneticAlgorithm.fill.FillMethod;
@@ -34,6 +35,16 @@ public class Engine {
         StopCriteriaData data = new StopCriteriaData(config.getStopCriteriaConfig().getPercentage(), n);
         data.addGeneration(population);
 
+        Mutation mutation;
+        Crossover crossover;
+        if (config.getOperationConfig().getType() == OperationType.MUTATION) {
+            mutation = getMutation(config.getMutationConfig());
+            crossover = null;
+        } else {
+            crossover = getCrossover(config.getCrossoverConfig());
+            mutation = null;
+        }
+
         long totalElapsed = 0;
         while (!criteria.shouldStop(data)){
             this.generationSerializer.serialize(data.getGenerationsQuantity(), data.getLastGeneration());
@@ -41,8 +52,7 @@ public class Engine {
             Collection<Player> parents = selectionSelector.select(data.getLastGeneration(), data.getGenerationsQuantity());
             List<Player> children = new ArrayList<>(data.getLastGeneration().size());
 
-            if (config.getOperationConfig().getType() == OperationConfig.OperationType.MUTATION) {
-                Mutation mutation = getMutation(config.getMutationConfig());
+            if (mutation != null) {
                 for (Player parent : parents) {
                     children.add(mutation.mutate(parent));
                 }
@@ -60,7 +70,6 @@ public class Engine {
                     aux.add(auxParents.remove(0));
                 }
 
-                Crossover crossover = getCrossover(config.getCrossoverConfig());
                 for (List<Player> pairParent : pairParents){
                     children.addAll(Arrays.asList(crossover.cross(pairParent.get(0), pairParent.get(1))));
                 }

@@ -5,67 +5,64 @@ import models.player.Player;
 import java.util.*;
 
 public class StopCriteriaData {
-    List<List<Player>> generations = new LinkedList<>();
+    ArrayList<Player> lastGeneration;
     private final long startTime = System.currentTimeMillis();
     private int stableGenerations = 0;
     private int stablePercentageGenerations = 0;
     private final int quantityStable;
+    private int generationsQuantity;
 
     public StopCriteriaData(double percentageStable, int generationSize) {
         this.quantityStable = (int) (percentageStable * generationSize);
     }
 
-    public List<List<Player>> getGenerations() {
-        return generations;
-    }
-
-    public List<Player> getLastGeneration() {
-        return generations.get(generations.size()-1);
+    public ArrayList<Player> getLastGeneration() {
+        return this.lastGeneration;
     }
 
     public int getGenerationsQuantity() {
-        return generations.size() - 1;
+        return this.generationsQuantity;
     }
 
     public long getStartTime() {
-        return startTime;
+        return this.startTime;
     }
 
     public void addGeneration(Collection<Player> generation) {
-        List<Player> generationList = new ArrayList<>(generation);
+        ArrayList<Player> generationList = new ArrayList<>(generation);
         generationList.sort(Comparator.reverseOrder()); // Mayor fitness primero
 
-        if(!generations.isEmpty()) {
-            List<Player> previousGeneration = generations.get(generations.size() - 1);
-            if (generationList.get(0).fitness() == previousGeneration.get(0).fitness()) {
-                stableGenerations++;
+        if (this.lastGeneration != null) {
+            if (generationList.get(0).fitness() == this.lastGeneration.get(0).fitness()) {
+                this.stableGenerations++;
             } else {
-                stableGenerations = 0;
+                this.stableGenerations = 0;
             }
 
             boolean stable = true;
-            for (int i = 0; i < quantityStable && stable; i++) {
-                stable = previousGeneration.get(i) == generationList.get(i);
+            for (int i = 0; i < this.quantityStable && stable; i++) {
+                stable = this.lastGeneration.get(i) == generationList.get(i);
             }
             if(stable){
-                stablePercentageGenerations++;
+                this.stablePercentageGenerations++;
             } else {
-                stablePercentageGenerations = 0;
+                this.stablePercentageGenerations = 0;
             }
         }
 
-        generations.add(generationList);
+        this.lastGeneration = generationList;
+        this.generationsQuantity++;
     }
 
     public double getCurrentMaxFitness() {
-        return generations.get(generations.size() - 1).get(0).fitness();
+        return this.lastGeneration.get(0).fitness();
     }
 
     public int getStableGenerations() {
-        return stableGenerations;
+        return this.stableGenerations;
     }
 
     public int getStablePercentageGenerations() {
-        return stablePercentageGenerations;
+        return this.stablePercentageGenerations;
     }
 }

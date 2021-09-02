@@ -29,10 +29,6 @@ public enum Gene {
         return clazz;
     }
 
-    public static Gene getRandomGene(){
-        return values()[ThreadLocalRandom.current().nextInt(Gene.values().length)];
-    }
-
     public static List<Gene> getGenes(int start, int end){
         return new ArrayList<>(Arrays.asList(values()).subList(start, end));
     }

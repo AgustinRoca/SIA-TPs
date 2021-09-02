@@ -29,7 +29,7 @@
 
     "stopCriteria": {
         "criteria": "GENERATIONS",
-        "parameter": 1000
+        "parameter": 50
     },
 
     "selection": {

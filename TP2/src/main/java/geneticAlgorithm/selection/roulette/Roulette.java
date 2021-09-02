@@ -8,18 +8,18 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class Roulette implements SelectionMethod {
-
     @Override
     public Collection<Player> select(Collection<Player> players, int k, int generation) {
-        // TODO: Fix initial capacity
-        List<Player> playerList = new ArrayList<>(players);
-        Map<Double, Player> slices = slices(playerList, generation);
+        ArrayList<Player> playerList = new ArrayList<>(players);
+        playerList.sort(Comparator.reverseOrder());
+
+        TreeMap<Double, Player> slices = slices(playerList, generation);
 
         List<Player> selectedPlayers = new LinkedList<>();
         for (int selectionNumber = 0; selectionNumber < k; selectionNumber++) {
             double sliceSelected = 0;
             double randomSelector = randomGenerator(selectionNumber, k);
-            for(Double slice : slices.keySet().stream().sorted().collect(Collectors.toList())){
+            for(Double slice : slices.navigableKeySet()){
                 if(randomSelector <= slice){
                     sliceSelected = slice;
                     break;
@@ -30,14 +30,13 @@ public class Roulette implements SelectionMethod {
         return selectedPlayers;
     }
 
-    private Map<Double, Player> slices(List<Player> players, int generation){
-        players.sort(Comparator.reverseOrder());
+    private TreeMap<Double, Player> slices(ArrayList<Player> players, int generation){
         double fitnessSum = 0;
         for (int i = 0; i < players.size(); i++) {
             fitnessSum += aptitude(i, players, generation);
         }
 
-        Map<Double, Player> sliceProportions = new HashMap<>();
+        TreeMap<Double, Player> sliceProportions = new TreeMap<>();
         double sliceAccum = 0;
         for (int i = 0; i < players.size(); i++) {
             double aptitude = aptitude(i, players, generation) / fitnessSum;
@@ -53,7 +52,7 @@ public class Roulette implements SelectionMethod {
         return ThreadLocalRandom.current().nextDouble();
     }
 
-    double aptitude(int i, List<Player> players, int generation){
+    double aptitude(int i, ArrayList<Player> players, int generation){
         return players.get(i).fitness();
     }
 }
