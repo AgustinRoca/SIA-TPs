@@ -41,6 +41,9 @@ public class CSVGenerationSerializer implements GenerationSerializer {
 
     public void close() {
         try {
+            // Double new line indicates that we finished
+            this.fileWriter.write('\n');
+            this.fileWriter.write('\n');
             this.fileWriter.close();
         } catch (IOException e) {
             throw new RuntimeException(e);

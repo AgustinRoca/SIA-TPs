@@ -102,3 +102,12 @@ Correr la siguiente linea en una terminal:
 ```bash
 java -jar TP2.jar <path config>
 ```
+
+### Graficos
+
+Correr la siguiente linea en una terminal:
+
+```bash
+python3 ./python/graphs.py <outPath> [step]
+```
+En donde step es un numero entero positivo que indica cada cuantas generaciones se muestran en el grafico. Por default es 1
