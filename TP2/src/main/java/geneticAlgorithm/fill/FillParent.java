@@ -25,7 +25,8 @@ public class FillParent implements FillMethod {
         if (childrenSize >= generationSize){
             return kSelector.select(children, newGenerationNumber);
         } else {
-            List<Player> newGeneration = new ArrayList<>(children);
+            List<Player> newGeneration = new ArrayList<>(this.childrenSize);
+            newGeneration.addAll(children);
             newGeneration.addAll(nMinusKSelector.select(previousGeneration, newGenerationNumber));
             return newGeneration;
         }

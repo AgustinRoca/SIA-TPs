@@ -34,7 +34,7 @@ public class Resolver {
     }
 
     private static List<Player> createInitialGeneration(Class<? extends Player> type, int count) {
-        List<Player> generation = new ArrayList<>();
+        List<Player> generation = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
             generation.add(randomPlayer(type));
         }

@@ -18,7 +18,7 @@ public abstract class Tournament implements SelectionMethod {
     @Override
     public Collection<Player> select(Collection<Player> players, int k, int generation) {
         List<Player> playerList = new ArrayList<>(players);
-        List<Player> selected = new ArrayList<>();
+        List<Player> selected = new ArrayList<>(k);
         for (int i = 0; i < k; i++) {
             selected.add(getWinner(getRandomPlayers(playerList, playersInMatch)));
         }
@@ -28,7 +28,7 @@ public abstract class Tournament implements SelectionMethod {
     abstract Player getWinner(Collection<Player> players);
 
     private Collection<Player> getRandomPlayers(List<Player> players, int quantity){
-        List<Player> randomPlayers = new ArrayList<>();
+        List<Player> randomPlayers = new ArrayList<>(quantity);
         for (int i = 0; i < quantity; i++) {
             randomPlayers.add(players.get(ThreadLocalRandom.current().nextInt(players.size())));
         }

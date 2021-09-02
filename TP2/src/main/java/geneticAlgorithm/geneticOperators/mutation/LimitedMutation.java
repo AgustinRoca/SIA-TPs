@@ -3,9 +3,7 @@ package geneticAlgorithm.geneticOperators.mutation;
 import geneticAlgorithm.geneticOperators.Gene;
 import models.player.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LimitedMutation extends Mutation {
@@ -16,15 +14,14 @@ public class LimitedMutation extends Mutation {
     @Override
     public Player mutate(Player player) {
         Player newPlayer = player.clone();
-        int genesToMutate = ThreadLocalRandom.current().nextInt(Gene.values().length - 1) + 1;
+        Random random = ThreadLocalRandom.current();
 
-        List<Gene> genes = new ArrayList<>(Arrays.asList(Gene.values()));
+        int genesToMutate = random.nextInt(Gene.values().length - 1) + 1;
 
+        List<Gene> genes = new LinkedList<>(Arrays.asList(Gene.values()));
+        Collections.shuffle(genes, random);
         for(int i = 0; i < genesToMutate; i++) {
-            int randomGene = ThreadLocalRandom.current().nextInt(Gene.values().length) - i;
-
-            mutateGene(genes.get(randomGene), newPlayer);
-            genes.remove(randomGene);
+            mutateGene(genes.remove(0), newPlayer);
         }
         return newPlayer;
     }

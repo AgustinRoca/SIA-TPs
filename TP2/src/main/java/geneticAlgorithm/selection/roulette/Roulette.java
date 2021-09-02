@@ -11,6 +11,7 @@ public class Roulette implements SelectionMethod {
 
     @Override
     public Collection<Player> select(Collection<Player> players, int k, int generation) {
+        // TODO: Fix initial capacity
         List<Player> playerList = new ArrayList<>(players);
         Map<Double, Player> slices = slices(playerList, generation);
 

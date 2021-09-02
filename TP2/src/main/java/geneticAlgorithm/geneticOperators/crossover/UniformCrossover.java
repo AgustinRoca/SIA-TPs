@@ -16,7 +16,7 @@ public class UniformCrossover extends Crossover{
 
     @Override
     public Player[] cross(Player p1, Player p2) {
-        List<Gene> genesToMutate = new ArrayList<>();
+        List<Gene> genesToMutate = new ArrayList<>(Gene.values().length);
         for (Gene gene : Gene.values()) {
             if (ThreadLocalRandom.current().nextDouble() < uniformCrossoverProbability)
                 genesToMutate.add(gene);

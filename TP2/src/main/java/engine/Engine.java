@@ -39,24 +39,27 @@ public class Engine {
             this.generationSerializer.serialize(data.getGenerationsQuantity(), data.getLastGeneration());
 
             Collection<Player> parents = selectionSelector.select(data.getLastGeneration(), data.getGenerationsQuantity());
-            List<Player> children = new ArrayList<>();
+            List<Player> children = new ArrayList<>(data.getLastGeneration().size());
 
-            if(config.getOperationConfig().getType() == OperationConfig.OperationType.MUTATION){
+            if (config.getOperationConfig().getType() == OperationConfig.OperationType.MUTATION) {
                 Mutation mutation = getMutation(config.getMutationConfig());
-                for(Player parent : parents){
+                for (Player parent : parents) {
                     children.add(mutation.mutate(parent));
                 }
             } else {
-                List<Player> auxParents = new ArrayList<>(parents);
-                List<List<Player>> pairParents = new ArrayList<>();
-                for (int i = 0; i < parents.size() / 2; i++) {
-                    int index1 = ThreadLocalRandom.current().nextInt(auxParents.size() - 1);
-                    pairParents.add(new ArrayList<>());
-                    pairParents.get(pairParents.size() - 1).add(auxParents.remove(index1));
+                Random random = ThreadLocalRandom.current();
 
-                    int index2 = ThreadLocalRandom.current().nextInt(auxParents.size() - 1);
-                    pairParents.get(pairParents.size() - 1).add(auxParents.remove(index2));
+                List<Player> auxParents = new LinkedList<>(parents);
+                Collections.shuffle(auxParents, random);
+                List<List<Player>> pairParents = new ArrayList<>(parents.size() / 2);
+
+                for (int i = 0; i < parents.size() / 2; i++) {
+                    ArrayList<Player> aux = new ArrayList<>();
+                    pairParents.add(aux);
+                    aux.add(auxParents.remove(0));
+                    aux.add(auxParents.remove(0));
                 }
+
                 Crossover crossover = getCrossover(config.getCrossoverConfig());
                 for (List<Player> pairParent : pairParents){
                     children.addAll(Arrays.asList(crossover.cross(pairParent.get(0), pairParent.get(1))));
@@ -76,6 +79,7 @@ public class Engine {
         this.generationSerializer.serialize(data.getGenerationsQuantity(), data.getLastGeneration());
 
         System.out.println("Avg of generation took: " + totalElapsed / data.getGenerationsQuantity() + "ms");
+
         return data.getLastGeneration().get(0);
     }
 

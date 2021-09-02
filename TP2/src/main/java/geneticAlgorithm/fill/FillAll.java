@@ -15,7 +15,7 @@ public class FillAll implements FillMethod {
     }
 
     public Collection<Player> getGeneration(Collection<Player> previousGeneration, Collection<Player> children, int newGenerationNumber) {
-        List<Player> allIndividuals = new ArrayList<>();
+        List<Player> allIndividuals = new ArrayList<>(previousGeneration.size() + children.size());
         allIndividuals.addAll(previousGeneration);
         allIndividuals.addAll(children);
         return selector.select(allIndividuals, newGenerationNumber);
