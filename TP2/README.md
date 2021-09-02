@@ -62,7 +62,7 @@ La aplicacion recibe un unico parametro por linea de comandos, que es la ubicaci
     } | {
         "criteria": "STRUCTURE",
         "parameter": "(Integer) N > 0 Cantidad de generaciones por la cual un porcentaje de la poblacion no presenta cambios",
-        "percentage": "(Double) Porcentaje de la poblacion que no presenta cambios"
+        "percentage": "(Double) en [0, 1] Porcentaje de la poblacion que no presenta cambios"
     },
 
     "selection": {

@@ -9,7 +9,6 @@ public class StopCriteriaConfig {
         this.type = type;
         this.parameter = parameter;
         this.percentage = percentage;
-
     }
 
     public StopCriteriaType getType() {
