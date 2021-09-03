@@ -233,14 +233,24 @@ public abstract class Player implements Comparable<Player>, Cloneable{
 
     @Override
     public String toString() {
-        return "Player{" +
-                "height=" + height +
-                ", boots=" + equipments.get(Boots.class).getId() +
-                ", gloves=" + equipments.get(Gloves.class).getId() +
-                ", helmet=" + equipments.get(Helmet.class).getId() +
-                ", vest=" + equipments.get(Vest.class).getId() +
-                ", weapon=" + equipments.get(Weapon.class).getId() +
-                ", fitness=" + fitness() +
+        Boots boots = (Boots) equipments.get(Boots.class);
+        Gloves gloves = (Gloves) equipments.get(Gloves.class);
+        Helmet helmet = (Helmet) equipments.get(Helmet.class);
+        Vest vest = (Vest) equipments.get(Vest.class);
+        Weapon weapon = (Weapon) equipments.get(Weapon.class);
+        return getPlayerType().toString() + ":"+ '\n' +
+                "height=" + height + '\n' +
+                "b=" + boots + '\n' +
+                "g=" + gloves + '\n' +
+                "h=" + helmet +'\n' +
+                "v=" + vest +'\n' +
+                "w=" + weapon +'\n' +
+                "fuerza=" + equipments.values().stream().map(Equipment::getForce).reduce(0.0, Double::sum) +'\n' +
+                "agilidad=" + equipments.values().stream().map(Equipment::getAgility).reduce(0.0, Double::sum) +'\n' +
+                "pericia=" + equipments.values().stream().map(Equipment::getIntelligence).reduce(0.0, Double::sum) +'\n' +
+                "resistencia=" + equipments.values().stream().map(Equipment::getEndurance).reduce(0.0, Double::sum) +'\n' +
+                "vida=" + equipments.values().stream().map(Equipment::getHealth).reduce(0.0, Double::sum) +'\n' +
+                "fitness=" + fitness() +'\n' +
                 '}';
     }
 }

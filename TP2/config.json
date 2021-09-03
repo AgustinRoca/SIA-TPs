@@ -4,7 +4,7 @@
     "player": {
         "type": "UNDERCOVER",
         "count": 10000,
-        "selection": 80,
+        "selection": 5000,
         "height": {
             "random": true
         }
@@ -28,8 +28,8 @@
     "fillMethod": "ALL",
 
     "stopCriteria": {
-        "criteria": "GENERATIONS",
-        "parameter": 50
+        "criteria": "CONTENT",
+        "parameter": 10
     },
 
     "selection": {

@@ -53,4 +53,15 @@ public abstract class Equipment {
     public int hashCode() {
         return Integer.hashCode(this.getId());
     }
+
+    @Override
+    public String toString() {
+        return "id=" + id +
+                ", force=" + force +
+                ", agility=" + agility +
+                ", endurance=" + endurance +
+                ", intelligence=" + intelligence +
+                ", health=" + health +
+                '}';
+    }
 }
