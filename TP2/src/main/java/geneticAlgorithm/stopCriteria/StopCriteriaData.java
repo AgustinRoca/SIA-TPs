@@ -5,12 +5,12 @@ import models.player.Player;
 import java.util.*;
 
 public class StopCriteriaData {
-    ArrayList<Player> lastGeneration;
+    private ArrayList<Player> lastGeneration;
     private final long startTime = System.currentTimeMillis();
     private int stableGenerations = 0;
     private int stablePercentageGenerations = 0;
     private final int quantityStable;
-    private int generationsQuantity;
+    private int generationsQuantity = 0;
 
     public StopCriteriaData(double percentageStable, int generationSize) {
         this.quantityStable = (int) (percentageStable * generationSize);

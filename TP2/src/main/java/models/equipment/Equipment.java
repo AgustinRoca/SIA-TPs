@@ -56,7 +56,7 @@ public abstract class Equipment {
 
     @Override
     public String toString() {
-        return "id=" + id +
+        return "{id=" + id +
                 ", force=" + force +
                 ", agility=" + agility +
                 ", endurance=" + endurance +

@@ -2,9 +2,9 @@
     "outputPath": "./out.csv",
 
     "player": {
-        "type": "UNDERCOVER",
-        "count": 10000,
-        "selection": 5000,
+        "type": "WARRIOR",
+        "count": 1000,
+        "selection": 500,
         "height": {
             "random": true
         }
@@ -19,8 +19,11 @@
         "weapon": "./allitems/armas.tsv"
     },
 
-    "geneticOperator": {
-        "operation": "MUTATION",
+    "crossover": {
+        "type": "ANNULAR"
+    },
+
+    "mutation": {
         "type": "GEN",
         "probability": 0.5
     },
@@ -34,17 +37,13 @@
 
     "selection": {
         "methodA": "ELITE",
-        "methodB": "TOURNAMENT_DETERMINISTIC",
+        "methodB": "ROULETTE",
         "factor": 0.8
     },
 
-    "tournamentDeterministic": {
-        "window": 5
-    },
-
     "replacement": {
-        "methodA": "RANKING",
-        "methodB": "UNIVERSAL",
+        "methodA": "ELITE",
+        "methodB": "ROULETTE",
         "factor": 0.6
     }
 }

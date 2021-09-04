@@ -34,16 +34,8 @@ public class Engine {
         StopCriteria criteria = getStopCriteria(config.getStopCriteriaConfig());
         StopCriteriaData data = new StopCriteriaData(config.getStopCriteriaConfig().getPercentage(), n);
         data.addGeneration(population);
-
-        Mutation mutation;
-        Crossover crossover;
-        if (config.getOperationConfig().getType() == OperationType.MUTATION) {
-            mutation = getMutation(config.getMutationConfig());
-            crossover = null;
-        } else {
-            crossover = getCrossover(config.getCrossoverConfig());
-            mutation = null;
-        }
+        Mutation mutation = getMutation(config.getMutationConfig());
+        Crossover crossover = getCrossover(config.getCrossoverConfig());
 
         while (!criteria.shouldStop(data)){
             this.generationSerializer.serialize(data.getGenerationsQuantity(), data.getLastGeneration());
@@ -51,31 +43,30 @@ public class Engine {
             Collection<Player> parents = selectionSelector.select(data.getLastGeneration(), data.getGenerationsQuantity());
             List<Player> children = new ArrayList<>(data.getLastGeneration().size());
 
-            if (mutation != null) {
-                for (Player parent : parents) {
-                    children.add(mutation.mutate(parent));
-                }
-            } else {
-                Random random = ThreadLocalRandom.current();
+            Random random = ThreadLocalRandom.current();
 
-                List<Player> auxParents = new LinkedList<>(parents);
-                Collections.shuffle(auxParents, random);
-                List<List<Player>> pairParents = new ArrayList<>(parents.size() / 2);
+            List<Player> auxParents = new LinkedList<>(parents);
+            Collections.shuffle(auxParents, random);
+            List<List<Player>> pairParents = new ArrayList<>(parents.size() / 2);
 
-                for (int i = 0; i < parents.size() / 2; i++) {
-                    ArrayList<Player> aux = new ArrayList<>();
-                    pairParents.add(aux);
-                    aux.add(auxParents.remove(0));
-                    aux.add(auxParents.remove(0));
-                }
+            for (int i = 0; i < parents.size() / 2; i++) {
+                ArrayList<Player> aux = new ArrayList<>();
+                pairParents.add(aux);
+                aux.add(auxParents.remove(0));
+                aux.add(auxParents.remove(0));
+            }
 
-                for (List<Player> pairParent : pairParents){
-                    children.addAll(Arrays.asList(crossover.cross(pairParent.get(0), pairParent.get(1))));
-                }
+            for (List<Player> pairParent : pairParents){
+                children.addAll(Arrays.asList(crossover.cross(pairParent.get(0), pairParent.get(1))));
+            }
+
+            List<Player> mutatedChildren = new ArrayList<>(data.getLastGeneration().size());
+            for (Player child : children) {
+                mutatedChildren.add(mutation.mutate(child));
             }
 
             Collection<Player> newGeneration = filler.getGeneration(data.getLastGeneration(),
-                    children, data.getGenerationsQuantity() + 1);
+                    mutatedChildren, data.getGenerationsQuantity() + 1);
 
             data.addGeneration(newGeneration);
         }

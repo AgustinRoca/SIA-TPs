@@ -29,20 +29,17 @@ La aplicacion recibe un unico parametro por linea de comandos, que es la ubicaci
         "weapon": "(String) Path to tsv"
     },
 
-    "geneticOperator": {
-        "operation": "MUTATION",
+    "mutation": {
         "type": "(\"COMPLETE\", \"GEN\"",
         "probability": "(Double) en [0, 1]. Probabilidad de mutacion"
     } | {
-        "operation": "MUTATION",
         "type": "(\"MULTIGEN_LIMITED\", \"MULTIGEN_UNIFORM\")",
         "probability": "(Double) en [0, 1]. Probabilidad de mutacion",
         "multigenLimitedM": "(Integer) M > 0. Representa el indice hasta el cual se puede mutar"
-    } | {
-        "operation" : "CROSSOVER"
+    },
+    "crossover" {
         "type": "(\"SINGLE_POINT\" | \"TWO_POINTS\" | \"ANNULAR\")"
     } | {
-        "operation" : "CROSSOVER"
         "type": "UNIFORM",
         "probability": "(Double) en [0, 1]. Probabilidad de cruzar dos genes",
     },

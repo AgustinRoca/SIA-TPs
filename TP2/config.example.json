@@ -3,11 +3,10 @@
 
     "player": {
         "type": "WARRIOR",
-        "count": 100,
-        "selection": 10,
+        "count": 1000,
+        "selection": 500,
         "height": {
-            "random": false,
-            "increment": 0.5
+            "random": true
         }
     },
 
@@ -20,28 +19,31 @@
         "weapon": "./allitems/armas.tsv"
     },
 
-    "geneticOperator": {
-        "operation": "MUTATION",
-        "type": "COMPLETE",
-        "probability": 0.1
+    "crossover": {
+        "type": "ANNULAR"
+    },
+
+    "mutation": {
+        "type": "GEN",
+        "probability": 0.5
     },
 
     "fillMethod": "ALL",
 
     "stopCriteria": {
-        "criteria": "GENERATIONS",
-        "parameter": 500
+        "criteria": "CONTENT",
+        "parameter": 10
     },
 
     "selection": {
         "methodA": "ELITE",
-        "methodB": "UNIVERSAL",
-        "factor": 0.3
+        "methodB": "ROULETTE",
+        "factor": 0.8
     },
 
     "replacement": {
-        "methodA": "RANKING",
-        "methodB": "UNIVERSAL",
+        "methodA": "ELITE",
+        "methodB": "ROULETTE",
         "factor": 0.6
     }
 }
