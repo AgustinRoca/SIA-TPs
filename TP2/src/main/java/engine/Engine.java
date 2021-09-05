@@ -41,7 +41,7 @@ public class Engine {
             this.generationSerializer.serialize(data.getGenerationsQuantity(), data.getLastGeneration());
 
             Collection<Player> parents = selectionSelector.select(data.getLastGeneration(), data.getGenerationsQuantity());
-            List<Player> children = new ArrayList<>(data.getLastGeneration().size());
+            List<Player> children = new ArrayList<>(parents.size());
 
             Random random = ThreadLocalRandom.current();
 
@@ -60,7 +60,7 @@ public class Engine {
                 children.addAll(Arrays.asList(crossover.cross(pairParent.get(0), pairParent.get(1))));
             }
 
-            List<Player> mutatedChildren = new ArrayList<>(data.getLastGeneration().size());
+            List<Player> mutatedChildren = new ArrayList<>(children.size());
             for (Player child : children) {
                 mutatedChildren.add(mutation.mutate(child));
             }

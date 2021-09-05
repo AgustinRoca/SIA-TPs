@@ -3,7 +3,7 @@
 
     "player": {
         "type": "WARRIOR",
-        "count": 1000,
+        "count": 50000,
         "selection": 500,
         "height": {
             "precalculated": true
@@ -19,6 +19,12 @@
             "helmet": "cascos.tsv",
             "vest": "pecheras.tsv",
             "weapon": "armas.tsv"
+        },
+        "items": {
+            "boots": 1,
+            "gloves": 1,
+            "helmet": 1,
+            "vest": 1
         }
     },
 
@@ -34,8 +40,8 @@
     "fillMethod": "ALL",
 
     "stopCriteria": {
-        "criteria": "CONTENT",
-        "parameter": 10
+        "criteria": "GENERATIONS",
+        "parameter": 50
     },
 
     "selection": {
