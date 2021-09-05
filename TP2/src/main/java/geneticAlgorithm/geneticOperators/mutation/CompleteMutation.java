@@ -6,8 +6,8 @@ import models.player.Player;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class CompleteMutation extends Mutation{
-    public CompleteMutation(double mutationProbability, boolean randomHeightMutation, double maxIncrement) {
-        super(mutationProbability, randomHeightMutation, maxIncrement);
+    public CompleteMutation(double mutationProbability, boolean randomHeightMutation, double maxIncrement, boolean usePrecalculated) {
+        super(mutationProbability, randomHeightMutation, maxIncrement, usePrecalculated);
     }
 
     @Override

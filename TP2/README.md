@@ -15,18 +15,27 @@ La aplicacion recibe un unico parametro por linea de comandos, que es la ubicaci
         "height": {
             "random": true
         } | {
-            "random": false,
             "increment": "(Double) > 0. La altura del jugador variara en un rango (-increment, increment)"
+        } | {
+            "precalculated": true
         }
     },
     
     "equipment": {
-        "inMemory": "(Boolean) Si esta seteado almacena la informacion en memoria"
-        "boots": "(String) Path to tsv",
-        "gloves": "(String) Path to tsv",
-        "helmet": "(String) Path to tsv",
-        "vest": "(String) Path to tsv",
-        "weapon": "(String) Path to tsv"
+        "inMemory": "(Boolean) Si esta seteado almacena la informacion en memoria",
+        "files": {
+            "[prefix]": "(String) prefix path",
+            "boots": "(String) Path to tsv",
+            "gloves": "(String) Path to tsv",
+            "helmet": "(String) Path to tsv",
+            "vest": "(String) Path to tsv",
+            "weapon": "(String) Path to tsv"
+        },
+        [
+            "items": {
+                "[item]": "(Integer) Id del item a usar. Tiene que estar en el dataset. [item] puede ser: 'boots', 'gloves', 'helmet', 'vest', 'weapon'"
+            }
+        ]
     },
 
     "mutation": {
@@ -89,6 +98,9 @@ La aplicacion recibe un unico parametro por linea de comandos, que es la ubicaci
 
 **Nota**: La configuracion de "tournamentProbabilistic", "tournamentDeterministic" y "boltzmann" son necesarios solamente si los mismos fueron utilizados como
 metodos de seleccion o replacement.
+
+La configuracion de "items" dentro de "equipment" es opcional y permite acotar la busqueda
+de una combinacion optima seteando un equipment en particular.
 
 Archivo de ejemplo en: config.example.json 
 

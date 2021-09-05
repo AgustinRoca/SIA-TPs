@@ -6,17 +6,20 @@
         "count": 1000,
         "selection": 500,
         "height": {
-            "random": true
+            "precalculated": true
         }
     },
 
     "equipment": {
         "inMemory": true,
-        "boots": "./allitems/botas.tsv",
-        "gloves": "./allitems/guantes.tsv",
-        "helmet": "./allitems/cascos.tsv",
-        "vest": "./allitems/pecheras.tsv",
-        "weapon": "./allitems/armas.tsv"
+        "files": {
+            "prefix": "./allitems",
+            "boots": "botas.tsv",
+            "gloves": "guantes.tsv",
+            "helmet": "cascos.tsv",
+            "vest": "pecheras.tsv",
+            "weapon": "armas.tsv"
+        }
     },
 
     "crossover": {

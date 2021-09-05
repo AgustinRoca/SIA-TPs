@@ -34,7 +34,7 @@ public class Engine {
         StopCriteria criteria = getStopCriteria(config.getStopCriteriaConfig());
         StopCriteriaData data = new StopCriteriaData(config.getStopCriteriaConfig().getPercentage(), n);
         data.addGeneration(population);
-        Mutation mutation = getMutation(config.getMutationConfig());
+        Mutation mutation = getMutation(config.getMutationConfig(), config.getPlayerConfig().getHeightConfig());
         Crossover crossover = getCrossover(config.getCrossoverConfig());
 
         while (!criteria.shouldStop(data)){
@@ -91,16 +91,16 @@ public class Engine {
         throw new RuntimeException(config.getType() + " is not a valid crossover type");
     }
 
-    private static Mutation getMutation(MutationConfig config) {
+    private static Mutation getMutation(MutationConfig config, HeightConfig heightConfig) {
         switch (config.getType()){
             case GEN:
-                return new GeneMutation(config.getProbability(), true, 0);
+                return new GeneMutation(config.getProbability(), heightConfig.isRandom(), heightConfig.getIncrement(), heightConfig.getPrecalculated());
             case COMPLETE:
-                return new CompleteMutation(config.getProbability(), true, 0);
+                return new CompleteMutation(config.getProbability(), heightConfig.isRandom(), heightConfig.getIncrement(), heightConfig.getPrecalculated());
             case MULTIGEN_LIMITED:
-                return new LimitedMutation(config.getProbability(), true, 0);
+                return new LimitedMutation(config.getProbability(), heightConfig.isRandom(), heightConfig.getIncrement(), heightConfig.getPrecalculated());
             case MULTIGEN_UNIFORM:
-                return new UniformMutation(config.getProbability(), true, 0);
+                return new UniformMutation(config.getProbability(), heightConfig.isRandom(), heightConfig.getIncrement(), heightConfig.getPrecalculated());
         }
         throw new RuntimeException(config.getType() + " is not a valid mutation type");
     }

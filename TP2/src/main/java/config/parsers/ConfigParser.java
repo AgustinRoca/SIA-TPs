@@ -5,11 +5,14 @@ import config.containers.CrossoverConfig.CrossoverType;
 import config.containers.MutationConfig.MutationType;
 import config.containers.SelectionReplacementConfig.SelectionReplacementMethod;
 import config.containers.StopCriteriaConfig.StopCriteriaType;
+import models.equipment.*;
 import models.player.*;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class ConfigParser {
     public static void parse(InputStream stream) throws IllegalArgumentException {
@@ -68,22 +71,50 @@ public abstract class ConfigParser {
     }
 
     private static HeightConfig getHeightConfig(JSONObject json) {
-        boolean random = json.getBoolean("random");
-        if (random) {
-            return new HeightConfig(true, 0);
+        if (json.has("random")) {
+            return HeightConfig.random();
+        } else if (json.has("increment")) {
+            return HeightConfig.increment(json.getDouble("increment"));
+        } else if (json.has("precalculated")) {
+            return HeightConfig.precalculated();
         } else {
-            return new HeightConfig(false, json.getDouble("increment"));
+            throw new IllegalArgumentException();
         }
     }
 
     private static EquipmentConfig getEquipmentConfig(JSONObject json) {
+        JSONObject filesJson = json.getJSONObject("files");
+        Map<Class<? extends Equipment>, String> files = new HashMap<>();
+
+        String prefix;
+        if (filesJson.has("prefix")) {
+            prefix = filesJson.getString("prefix");
+            if (!prefix.endsWith("/"))
+                prefix += "/";
+        } else {
+            prefix = "";
+        }
+
+        files.put(Boots.class, prefix + filesJson.getString("boots"));
+        files.put(Gloves.class, prefix + filesJson.getString("gloves"));
+        files.put(Helmet.class, prefix + filesJson.getString("helmet"));
+        files.put(Vest.class, prefix + filesJson.getString("vest"));
+        files.put(Weapon.class, prefix + filesJson.getString("weapon"));
+
+        Map<Class<? extends Equipment>, Integer> equipments = new HashMap<>();
+        if (json.has("items")) {
+            JSONObject items = json.getJSONObject("items");
+            if (items.has("boots")) equipments.put(Boots.class, json.getInt("boots"));
+            if (items.has("gloves")) equipments.put(Gloves.class, json.getInt("gloves"));
+            if (items.has("helmet")) equipments.put(Helmet.class, json.getInt("helmet"));
+            if (items.has("vest")) equipments.put(Vest.class, json.getInt("vest"));
+            if (items.has("weapon")) equipments.put(Weapon.class, json.getInt("weapon"));
+        }
+
         return new EquipmentConfig(
                 json.getBoolean("inMemory"),
-                json.getString("boots"),
-                json.getString("gloves"),
-                json.getString("helmet"),
-                json.getString("vest"),
-                json.getString("weapon")
+                files,
+                equipments
         );
     }
 

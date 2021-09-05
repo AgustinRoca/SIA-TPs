@@ -7,8 +7,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class UniformMutation extends Mutation {
 
-    public UniformMutation(double mutationProbability, boolean randomHeightMutation, double maxIncrement) {
-        super(mutationProbability, randomHeightMutation, maxIncrement);
+    public UniformMutation(double mutationProbability, boolean randomHeightMutation, double maxIncrement, boolean usePrecalculated) {
+        super(mutationProbability, randomHeightMutation, maxIncrement, usePrecalculated);
     }
 
     @Override

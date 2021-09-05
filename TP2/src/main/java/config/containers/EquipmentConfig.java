@@ -1,43 +1,30 @@
 package config.containers;
 
+import models.equipment.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class EquipmentConfig {
     private final boolean inMemory;
-    private final String boots;
-    private final String gloves;
-    private final String helmet;
-    private final String vest;
-    private final String weapon;
+    private final Map<Class<? extends Equipment>, String> files;
+    private final Map<Class<? extends Equipment>, Integer> equipments;
 
-    public EquipmentConfig(boolean inMemory, String boots, String gloves, String helmet, String vest, String weapon) {
+    public EquipmentConfig(boolean inMemory, Map<Class<? extends Equipment>, String> files, Map<Class<? extends Equipment>, Integer> equipments) {
         this.inMemory = inMemory;
-        this.boots = boots;
-        this.gloves = gloves;
-        this.helmet = helmet;
-        this.vest = vest;
-        this.weapon = weapon;
+        this.files = new HashMap<>(files);
+        this.equipments = new HashMap<>(equipments);
     }
 
     public boolean isInMemory() {
         return this.inMemory;
     }
 
-    public String getBoots() {
-        return this.boots;
+    public Map<Class<? extends Equipment>, String> getFiles() {
+        return this.files;
     }
 
-    public String getGloves() {
-        return this.gloves;
-    }
-
-    public String getHelmet() {
-        return this.helmet;
-    }
-
-    public String getVest() {
-        return this.vest;
-    }
-
-    public String getWeapon() {
-        return this.weapon;
+    public Map<Class<? extends Equipment>, Integer> getEquipments() {
+        return this.equipments;
     }
 }

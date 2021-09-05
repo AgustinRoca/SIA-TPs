@@ -7,8 +7,8 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LimitedMutation extends Mutation {
-    public LimitedMutation(double mutationProbability, boolean randomHeightMutation, double maxIncrement) {
-        super(mutationProbability, randomHeightMutation, maxIncrement);
+    public LimitedMutation(double mutationProbability, boolean randomHeightMutation, double maxIncrement, boolean usePrecalculated) {
+        super(mutationProbability, randomHeightMutation, maxIncrement, usePrecalculated);
     }
 
     @Override

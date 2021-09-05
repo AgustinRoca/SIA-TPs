@@ -92,13 +92,6 @@ public abstract class Player implements Comparable<Player>, Cloneable{
         this.fitnessCalculated = false;
     }
 
-    public void replaceEquipment(Class<? extends Equipment> equipmentType, Equipment newEquipment) {
-        this.equipments.put(equipmentType, newEquipment);
-        this.attackPointsCalculated = false;
-        this.defensePointsCalculated = false;
-        this.fitnessCalculated = false;
-    }
-
     public Boots getBoots(){
         return (Boots) equipments.get(Boots.class);
     }
@@ -121,6 +114,8 @@ public abstract class Player implements Comparable<Player>, Cloneable{
 
 
     public abstract Class<? extends Player> getPlayerType();
+
+    public abstract double getOptimalHeight();
 
     public double fitness() {
         if (!this.fitnessCalculated)

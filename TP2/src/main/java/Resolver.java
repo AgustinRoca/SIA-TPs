@@ -1,3 +1,5 @@
+import config.containers.EquipmentConfig;
+import config.containers.HeightConfig;
 import engine.Engine;
 import config.containers.Config;
 import models.equipment.*;
@@ -46,6 +48,9 @@ public class Resolver {
 
     private static Player randomPlayer(Class<? extends Player> type) {
         try {
+            if (Config.getInstance().getPlayerConfig().getHeightConfig().getPrecalculated())
+                return type.getConstructor(Map.class).newInstance(randomEquipments());
+
             return type.getConstructor(double.class, Map.class).newInstance(Player.randomHeight(), randomEquipments());
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException(e);
@@ -54,6 +59,7 @@ public class Resolver {
 
     private static Map<Class<? extends Equipment>, Equipment> randomEquipments() {
         Map<Class<? extends Equipment>, Equipment> equipmentMap = new HashMap<>();
+
         equipmentMap.put(Boots.class, Equipments.getInstance().getEquipment(Boots.class));
         equipmentMap.put(Gloves.class, Equipments.getInstance().getEquipment(Gloves.class));
         equipmentMap.put(Helmet.class, Equipments.getInstance().getEquipment(Helmet.class));
@@ -64,14 +70,14 @@ public class Resolver {
     }
 
     private static void initialize() throws IOException {
-        if (Config.getInstance().getEquipmentConfig().isInMemory()) {
+        EquipmentConfig equipmentConfig = Config.getInstance().getEquipmentConfig();
+
+        if (equipmentConfig.isInMemory()) {
             Map<Class<? extends Equipment>, Collection<Equipment>> equipmentMap = new HashMap<>();
 
-            Resolver.parseEquipment(Boots.class, equipmentMap, Config.getInstance().getEquipmentConfig().getBoots());
-            Resolver.parseEquipment(Gloves.class, equipmentMap, Config.getInstance().getEquipmentConfig().getGloves());
-            Resolver.parseEquipment(Helmet.class, equipmentMap, Config.getInstance().getEquipmentConfig().getHelmet());
-            Resolver.parseEquipment(Vest.class, equipmentMap, Config.getInstance().getEquipmentConfig().getVest());
-            Resolver.parseEquipment(Weapon.class, equipmentMap, Config.getInstance().getEquipmentConfig().getWeapon());
+            for (Map.Entry<Class<? extends Equipment>, String> entry : equipmentConfig.getFiles().entrySet()) {
+                Resolver.parseEquipment(entry.getKey(), equipmentMap, entry.getValue(), equipmentConfig.getEquipments().get(entry.getKey()));
+            }
 
             Equipments.createInMemoryInstance(equipmentMap);
         } else {
@@ -81,12 +87,19 @@ public class Resolver {
         }
     }
 
-    private static void parseEquipment(Class<? extends Equipment> equipmentClass, Map<Class<? extends Equipment>, Collection<Equipment>> equipmentMap, String filename) throws IOException {
+    private static void parseEquipment(
+            Class<? extends Equipment> equipmentClass,
+            Map<Class<? extends Equipment>, Collection<Equipment>> equipmentMap,
+            String filename,
+            Integer chosenId
+    ) throws IOException
+    {
         equipmentMap.put(
                 equipmentClass,
                 EquipmentParser.parse(
                         equipmentClass,
-                        new BufferedReader(new FileReader(filename))
+                        new BufferedReader(new FileReader(filename)),
+                        chosenId
                 )
         );
     }

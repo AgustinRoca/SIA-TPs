@@ -14,13 +14,15 @@ public abstract class EquipmentParser {
     private static final String ENDURANCE_HEADER = "re";
     private static final String HEALTH_HEADER = "vi";
 
-    public static Collection<Equipment> parse(Class<? extends Equipment> equipmentClass, BufferedReader reader) throws IOException {
+    public static Collection<Equipment> parse(Class<? extends Equipment> equipmentClass, BufferedReader reader, Integer chosenId) throws IOException {
         Map<String, Integer> headerMap = EquipmentParser.headerMap(reader);
         String line;
         LinkedList<Equipment> list = new LinkedList<>();
 
         while ((line = reader.readLine()) != null) {
-            list.add(EquipmentParser.parseLine(equipmentClass, headerMap, line.split("\t")));
+            Equipment equipment = EquipmentParser.parseLine(equipmentClass, headerMap, line.split("\t"), chosenId);
+            if (equipment != null)
+                list.add(equipment);
         }
 
         return list;
@@ -50,18 +52,24 @@ public abstract class EquipmentParser {
         return headerMap;
     }
 
-    private static Equipment parseLine(Class<? extends Equipment> equipmentClass, Map<String, Integer> headerMap, String[] lineItems) {
+    private static Equipment parseLine(Class<? extends Equipment> equipmentClass, Map<String, Integer> headerMap, String[] lineItems, Integer chosenId) {
         try {
-            return equipmentClass
-                    .getConstructor(int.class, double.class, double.class, double.class, double.class, double.class)
-                    .newInstance(
-                            Integer.parseInt(lineItems[headerMap.get(ID_HEADER)]),
-                            Double.parseDouble(lineItems[headerMap.get(FORCE_HEADER)]),
-                            Double.parseDouble(lineItems[headerMap.get(AGILITY_HEADER)]),
-                            Double.parseDouble(lineItems[headerMap.get(ENDURANCE_HEADER)]),
-                            Double.parseDouble(lineItems[headerMap.get(INTELLIGENCE_HEADER)]),
-                            Double.parseDouble(lineItems[headerMap.get(HEALTH_HEADER)])
-                    );
+            int id = Integer.parseInt(lineItems[headerMap.get(ID_HEADER)]);
+
+            if (chosenId == null || chosenId == id) {
+                return equipmentClass
+                        .getConstructor(int.class, double.class, double.class, double.class, double.class, double.class)
+                        .newInstance(
+                                id,
+                                Double.parseDouble(lineItems[headerMap.get(FORCE_HEADER)]),
+                                Double.parseDouble(lineItems[headerMap.get(AGILITY_HEADER)]),
+                                Double.parseDouble(lineItems[headerMap.get(ENDURANCE_HEADER)]),
+                                Double.parseDouble(lineItems[headerMap.get(INTELLIGENCE_HEADER)]),
+                                Double.parseDouble(lineItems[headerMap.get(HEALTH_HEADER)])
+                        );
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);

@@ -5,6 +5,12 @@ import models.equipment.*;
 import java.util.Map;
 
 public class Warrior extends Player {
+    private static final double OPTIMAL_HEIGHT = 1.482;
+
+    public Warrior(Map<Class<? extends Equipment>, Equipment> equipments) {
+        super(OPTIMAL_HEIGHT, equipments);
+    }
+
     public Warrior(double height, Map<Class<? extends Equipment>, Equipment> equipments) {
         super(height, equipments);
     }
@@ -16,6 +22,11 @@ public class Warrior extends Player {
     @Override
     protected double calculateFitness() {
         return 0.6 * (this.attackPoints() + this.defensePoints());
+    }
+
+    @Override
+    public double getOptimalHeight() {
+        return 1.482;
     }
 
     @Override

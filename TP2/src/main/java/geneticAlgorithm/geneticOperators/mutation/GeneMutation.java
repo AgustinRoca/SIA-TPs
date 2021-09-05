@@ -6,8 +6,8 @@ import models.player.Player;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GeneMutation extends Mutation {
-    public GeneMutation(double mutationProbability, boolean randomHeightMutation, double maxIncrement) {
-        super(mutationProbability, randomHeightMutation, maxIncrement);
+    public GeneMutation(double mutationProbability, boolean randomHeightMutation, double maxIncrement, boolean usePrecalculated) {
+        super(mutationProbability, randomHeightMutation, maxIncrement, usePrecalculated);
     }
 
     @Override
