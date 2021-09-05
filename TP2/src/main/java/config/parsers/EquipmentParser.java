@@ -21,8 +21,11 @@ public abstract class EquipmentParser {
 
         while ((line = reader.readLine()) != null) {
             Equipment equipment = EquipmentParser.parseLine(equipmentClass, headerMap, line.split("\t"), chosenId);
-            if (equipment != null)
+            if (equipment != null) {
                 list.add(equipment);
+                if (chosenId != null)
+                    return list;
+            }
         }
 
         return list;
