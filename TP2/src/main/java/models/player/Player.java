@@ -80,8 +80,6 @@ public abstract class Player implements Comparable<Player>, Cloneable{
         this.height = height;
         this.calculateAttackModifier();
         this.calculateDefenseModifier();
-        this.attackPointsCalculated = false;
-        this.defensePointsCalculated = false;
         this.fitnessCalculated = false;
     }
 
