@@ -1,5 +1,4 @@
 import config.containers.EquipmentConfig;
-import config.containers.HeightConfig;
 import engine.Engine;
 import config.containers.Config;
 import models.equipment.*;
@@ -8,7 +7,6 @@ import models.player.Player;
 import config.parsers.ConfigParser;
 import config.parsers.EquipmentParser;
 import serializer.CSVGenerationSerializer;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -83,7 +81,7 @@ public class Resolver {
         } else {
             // TODO: Create File Instance
 
-            throw new NotImplementedException();
+            throw new RuntimeException("Not implemented");
         }
     }
 
