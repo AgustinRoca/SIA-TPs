@@ -104,11 +104,12 @@ public abstract class ConfigParser {
         Map<Class<? extends Equipment>, Integer> equipments = new HashMap<>();
         if (json.has("items")) {
             JSONObject items = json.getJSONObject("items");
-            if (items.has("boots")) equipments.put(Boots.class, json.getInt("boots"));
-            if (items.has("gloves")) equipments.put(Gloves.class, json.getInt("gloves"));
-            if (items.has("helmet")) equipments.put(Helmet.class, json.getInt("helmet"));
-            if (items.has("vest")) equipments.put(Vest.class, json.getInt("vest"));
-            if (items.has("weapon")) equipments.put(Weapon.class, json.getInt("weapon"));
+
+            if (items.has("boots")) equipments.put(Boots.class, items.getInt("boots"));
+            if (items.has("gloves")) equipments.put(Gloves.class, items.getInt("gloves"));
+            if (items.has("helmet")) equipments.put(Helmet.class, items.getInt("helmet"));
+            if (items.has("vest")) equipments.put(Vest.class, items.getInt("vest"));
+            if (items.has("weapon")) equipments.put(Weapon.class, items.getInt("weapon"));
         }
 
         return new EquipmentConfig(
