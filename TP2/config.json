@@ -2,8 +2,8 @@
     "outputPath": "./out.csv",
 
     "player": {
-        "type": "WARRIOR",
-        "count": 50000,
+        "type": "ARCHER",
+        "count": 10000,
         "selection": 500,
         "height": {
             "precalculated": true
@@ -19,12 +19,6 @@
             "helmet": "cascos.tsv",
             "vest": "pecheras.tsv",
             "weapon": "armas.tsv"
-        },
-        "items": {
-            "boots": 1,
-            "gloves": 1,
-            "helmet": 1,
-            "vest": 1
         }
     },
 

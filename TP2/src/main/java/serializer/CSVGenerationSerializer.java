@@ -36,7 +36,13 @@ public class CSVGenerationSerializer implements GenerationSerializer {
         this.write(String.valueOf(stats.getDiversity().getHelmets()));
         this.write(String.valueOf(stats.getDiversity().getVests()));
         this.write(String.valueOf(stats.getDiversity().getWeapons()));
-        this.write(String.valueOf(stats.getDiversity().getHeights()), true);
+        this.write(String.valueOf(stats.getDiversity().getHeights()));
+
+        this.write(String.valueOf(stats.getEquipmentFraction().getForce()));
+        this.write(String.valueOf(stats.getEquipmentFraction().getAgility()));
+        this.write(String.valueOf(stats.getEquipmentFraction().getEndurance()));
+        this.write(String.valueOf(stats.getEquipmentFraction().getExpertise()));
+        this.write(String.valueOf(stats.getEquipmentFraction().getHealth()), true);
     }
 
     public void close() {
@@ -61,7 +67,13 @@ public class CSVGenerationSerializer implements GenerationSerializer {
         this.write("diversity_helmet");
         this.write("diversity_vest");
         this.write("diversity_weapon");
-        this.write("diversity_height", true);
+        this.write("diversity_height");
+
+        this.write("fraction_force");
+        this.write("fraction_agility");
+        this.write("fraction_endurance");
+        this.write("fraction_expertise");
+        this.write("fraction_health", true);
     }
 
     private void write(String s) {

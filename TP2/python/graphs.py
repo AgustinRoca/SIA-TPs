@@ -22,6 +22,14 @@ HEADERS = {
         'weapon': 'diversity_weapon',
         'height': 'diversity_height',
     },
+
+    'fraction': {
+        'force': 'fraction_force',
+        'agility': 'fraction_agility',
+        'endurance': 'fraction_endurance',
+        'expertise': 'fraction_expertise',
+        'health': 'fraction_health',
+    },
 }
 
 PLOTS = {
@@ -84,10 +92,23 @@ PLOTS = {
             'bottom': [],
         },
     },
+    'fraction': {
+        'n': 6,
+        'subplot': None,
+        'initialized': False,
+        'x': [],
+
+        'force': [],
+        'health': [],
+        'endurance': [],
+        'expertise': [],
+        'agility': []
+    }
 }
 
 
 HEADERS_DIVERSITY_KEYS = list(HEADERS['diversity'].keys())
+HEADERS_FRACTION_KEYS = list(HEADERS['fraction'].keys())
 
 
 def open_file_pipe(filename: str):
@@ -189,6 +210,37 @@ def plot_diversity(formatted_line: dict):
     plt.draw()
 
 
+def plot_fraction(formatted_line: dict):
+    ax = PLOTS['fraction']['subplot']
+
+    generation_number = get_formatted_line_generation(formatted_line)
+
+    PLOTS['fraction']['x'].append(generation_number)
+    for i in range(len(HEADERS_FRACTION_KEYS)):
+        diversity = HEADERS_FRACTION_KEYS[i]
+
+        y = float(formatted_line[HEADERS['fraction'][diversity]])
+        PLOTS['fraction'][diversity].append(y)
+
+    if not PLOTS['fraction']['initialized']:
+        PLOTS['fraction']['initialized'] = True
+        ax.set_title('Fraction')
+
+    ax.cla()
+
+    ys = []
+    labels = []
+    for i in range(len(HEADERS_FRACTION_KEYS)):
+        fraction = HEADERS_FRACTION_KEYS[i]
+        ys.append(PLOTS['fraction'][fraction])
+        labels.append(fraction.capitalize())
+
+    ax.stackplot(PLOTS['fraction']['x'], *ys, labels=labels)
+    ax.legend(bbox_to_anchor=(1.325, 1.3))
+
+    plt.draw()
+
+
 def plot_min_max(formatted_line: dict):
     plot_all('Fitness maximo y minimo', formatted_line,
              ['Maximo', 'Minimo', 'Promedio'],
@@ -209,14 +261,14 @@ def run():
 
     header = process_header(f.stdout.readline().strip().decode('ascii'))
 
-    fig, axs = plt.subplots(2)
+    fig, axs = plt.subplots(3)
     plt.tight_layout(h_pad=3, w_pad=3, rect=(0, 0, 0.8, 0.95))
 
     PLOTS['max']['subplot'] = axs[0]
     PLOTS['min']['subplot'] = axs[0]
     PLOTS['avg']['subplot'] = axs[0]
-    # PLOTS['median']['subplot'] = axs[1]
     PLOTS['diversity']['subplot'] = axs[1]
+    PLOTS['fraction']['subplot'] = axs[2]
 
     # plt_maximize()
 
@@ -243,6 +295,7 @@ def run():
 
             plot_min_max(formatted_line)
             plot_diversity(formatted_line)
+            plot_fraction(formatted_line)
         plt.pause(0.001)
 
     plt.pause(0.001)

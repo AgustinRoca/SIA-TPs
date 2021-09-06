@@ -1,5 +1,8 @@
 package models.equipment;
 
+import java.util.Comparator;
+import java.util.TreeMap;
+
 public abstract class Equipment {
     private final int id;
     private final double force;
@@ -7,6 +10,7 @@ public abstract class Equipment {
     private final double endurance;
     private final double intelligence;
     private final double health;
+    private EquipmentSkill bestSkill;
 
     public Equipment(int id, double force, double agility, double endurance, double intelligence, double health) {
         this.id = id;
@@ -15,6 +19,8 @@ public abstract class Equipment {
         this.endurance = endurance;
         this.intelligence = intelligence;
         this.health = health;
+
+        this.setBestSkill();
     }
 
     public int getId() {
@@ -41,6 +47,10 @@ public abstract class Equipment {
         return this.health;
     }
 
+    public EquipmentSkill getBestSkill() {
+        return this.bestSkill;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,5 +73,25 @@ public abstract class Equipment {
                 ", intelligence=" + intelligence +
                 ", health=" + health +
                 '}';
+    }
+
+    private void setBestSkill() {
+        TreeMap<Double, EquipmentSkill> map = new TreeMap<>(Comparator.reverseOrder());
+
+        map.put(this.force, EquipmentSkill.FORCE);
+        map.put(this.agility, EquipmentSkill.AGILITY);
+        map.put(this.endurance, EquipmentSkill.ENDURANCE);
+        map.put(this.intelligence, EquipmentSkill.INTELLIGENCE);
+        map.put(this.health, EquipmentSkill.HEALTH);
+
+        this.bestSkill = map.pollFirstEntry().getValue();
+    }
+
+    public enum EquipmentSkill {
+        FORCE,
+        AGILITY,
+        ENDURANCE,
+        INTELLIGENCE,
+        HEALTH
     }
 }

@@ -1,11 +1,10 @@
 package models.stats;
 
 import models.equipment.*;
+import models.equipment.Equipment.EquipmentSkill;
 import models.player.Player;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static models.player.Player.MIN_HEIGHT;
 
@@ -19,13 +18,15 @@ public class GenerationStats {
     private final double avg;
     private final double median;
     private final GenerationDiversity diversity;
+    private final GenerationEquipmentFraction equipmentFraction;
 
-    private GenerationStats(double min, double max, double avg, double median, GenerationDiversity diversity) {
+    private GenerationStats(double min, double max, double avg, double median, GenerationDiversity diversity, GenerationEquipmentFraction equipmentFraction) {
         this.min = min;
         this.max = max;
         this.avg = avg;
         this.median = median;
         this.diversity = diversity;
+        this.equipmentFraction = equipmentFraction;
     }
 
     public double getMin() {
@@ -48,6 +49,10 @@ public class GenerationStats {
         return this.diversity;
     }
 
+    public GenerationEquipmentFraction getEquipmentFraction() {
+        return this.equipmentFraction;
+    }
+
     /**
      * @param generation is a descending sorted list via each player's fitness. lastGeneration[0] is the player with max fitness
      */
@@ -59,6 +64,8 @@ public class GenerationStats {
         Set<Weapon> weapons = new HashSet<>();
         Set<Double> heights = new HashSet<>();
 
+        Map<EquipmentSkill, Integer> skillMap = new HashMap<>();
+        int totalItems = 0;
         double sum = 0;
         for (Player player : generation) {
             boots.add(player.getBoots());
@@ -68,9 +75,18 @@ public class GenerationStats {
             weapons.add(player.getWeapon());
             heights.add(GenerationStats.height(player.getHeight()));
 
+            skillMap.compute(player.getBoots().getBestSkill(), (equipmentSkill, count) -> count == null ? 1 : (count + 1));
+            skillMap.compute(player.getGloves().getBestSkill(), (equipmentSkill, count) -> count == null ? 1 : (count + 1));
+            skillMap.compute(player.getHelmet().getBestSkill(), (equipmentSkill, count) -> count == null ? 1 : (count + 1));
+            skillMap.compute(player.getVest().getBestSkill(), (equipmentSkill, count) -> count == null ? 1 : (count + 1));
+            skillMap.compute(player.getWeapon().getBestSkill(), (equipmentSkill, count) -> count == null ? 1 : (count + 1));
+
+            totalItems += 5;
+
             sum += player.fitness();
         }
 
+        double totalItemsDouble = totalItems;
         return new GenerationStats(
                 generation.get(generation.size() - 1).fitness(),
                 generation.get(0).fitness(),
@@ -83,6 +99,13 @@ public class GenerationStats {
                         vests.size(),
                         weapons.size(),
                         heights.size()
+                ),
+                new GenerationEquipmentFraction(
+                        skillMap.getOrDefault(EquipmentSkill.FORCE, 0) / totalItemsDouble,
+                        skillMap.getOrDefault(EquipmentSkill.AGILITY, 0) / totalItemsDouble,
+                        skillMap.getOrDefault(EquipmentSkill.ENDURANCE, 0) / totalItemsDouble,
+                        skillMap.getOrDefault(EquipmentSkill.INTELLIGENCE, 0) / totalItemsDouble,
+                        skillMap.getOrDefault(EquipmentSkill.HEALTH, 0) / totalItemsDouble
                 )
         );
     }
