@@ -2,9 +2,8 @@ import os
 import subprocess
 import sys
 from platform import system
-
-
 from matplotlib import pyplot as plt
+from matplotlib.animation import FuncAnimation
 
 
 HEADERS = {
@@ -38,6 +37,7 @@ PLOTS = {
         'x': [],
         'y': [],
         'subplot': None,
+        'l': None,
         'initialized': False,
     },
     'min': {
@@ -45,6 +45,7 @@ PLOTS = {
         'x': [],
         'y': [],
         'subplot': None,
+        'l': None,
         'initialized': False,
     },
     'median': {
@@ -52,6 +53,7 @@ PLOTS = {
         'x': [],
         'y': [],
         'subplot': None,
+        'l': None,
         'initialized': False,
     },
     'avg': {
@@ -59,6 +61,7 @@ PLOTS = {
         'x': [],
         'y': [],
         'subplot': None,
+        'l': None,
         'initialized': False,
     },
     'diversity': {
@@ -68,26 +71,32 @@ PLOTS = {
         'x': [],
 
         'boots': {
+            'l': None,
             'y': [],
             'bottom': [],
         },
         'gloves': {
+            'l': None,
             'y': [],
             'bottom': [],
         },
         'helmet': {
+            'l': None,
             'y': [],
             'bottom': [],
         },
         'vest': {
+            'l': None,
             'y': [],
             'bottom': [],
         },
         'weapon': {
+            'l': None,
             'y': [],
             'bottom': [],
         },
         'height': {
+            'l': None,
             'y': [],
             'bottom': [],
         },
@@ -95,6 +104,7 @@ PLOTS = {
     'fraction': {
         'n': 6,
         'subplot': None,
+        'l': None,
         'initialized': False,
         'x': [],
 
@@ -109,6 +119,8 @@ PLOTS = {
 
 HEADERS_DIVERSITY_KEYS = list(HEADERS['diversity'].keys())
 HEADERS_FRACTION_KEYS = list(HEADERS['fraction'].keys())
+formatted_lines = []
+last_len_formatted_lines = 0
 
 
 def open_file_pipe(filename: str):
@@ -167,17 +179,26 @@ def plot_all(title, formatted_line: dict, titles, keys, ax):
         PLOTS[key]['x'].append(generation_number)
         PLOTS[key]['y'].append(float(formatted_line[HEADERS[key]]))
 
-        if not PLOTS[key]['initialized']:
-            PLOTS[key]['initialized'] = True
-            ax.set_title(title)
+    if not PLOTS[key]['initialized']:
+        for i, key in enumerate(keys):
+            l, = ax.plot(PLOTS[key]['x'], PLOTS[key]['y'], label=titles[i])
+            PLOTS[key]['l'] = l
 
-    ax.cla()
+        PLOTS[key]['initialized'] = True
+        ax.set_title(title)
+        ax.legend(bbox_to_anchor=(1.325, 1.1))
+    else:
+        max_x = 0
+        max_y = 0
+        for i, key in enumerate(keys):
+            l = PLOTS[key]['l']
+            l.set_data(PLOTS[key]['x'], PLOTS[key]['y'])
+            if PLOTS[key]['x'][-1] > max_x:
+                max_x = PLOTS[key]['x'][-1]
+            if PLOTS[key]['y'][-1] > max_y:
+                max_y = PLOTS[key]['y'][-1]
 
-    for i, key in enumerate(keys):
-        ax.plot(PLOTS[key]['x'], PLOTS[key]['y'], label=titles[i])
-    ax.legend(bbox_to_anchor=(1.325, 1.1))
-
-    plt.draw()
+        ax.axes.axis([1, max_x, 0, max_y * 1.25])
 
 
 def plot_diversity(formatted_line: dict):
@@ -186,28 +207,31 @@ def plot_diversity(formatted_line: dict):
     generation_number = get_formatted_line_generation(formatted_line)
 
     PLOTS['diversity']['x'].append(generation_number)
-    cumulative = 0
+    # cumulative = 0
     for i in range(len(HEADERS_DIVERSITY_KEYS)):
         diversity = HEADERS_DIVERSITY_KEYS[i]
 
         y = float(formatted_line[HEADERS['diversity'][diversity]])
         PLOTS['diversity'][diversity]['y'].append(y)
-        PLOTS['diversity'][diversity]['bottom'].append(cumulative)
-        cumulative += y
+        # PLOTS['diversity'][diversity]['bottom'].append(cumulative)
+        # cumulative += y
+
+    ax.cla()
+
+    ys = []
+    labels = []
+    for i in range(len(HEADERS_DIVERSITY_KEYS)):
+        diversity = HEADERS_DIVERSITY_KEYS[i]
+        ys.append(PLOTS['diversity'][diversity]['y'])
+        labels.append(diversity.capitalize())
+
+    ax.stackplot(PLOTS['diversity']['x'], *ys, labels=labels)
 
     if not PLOTS['diversity']['initialized']:
         PLOTS['diversity']['initialized'] = True
         ax.set_title('Diversidad')
 
-    ax.cla()
-
-    for i in range(len(HEADERS_DIVERSITY_KEYS)):
-        diversity = HEADERS_DIVERSITY_KEYS[i]
-        ax.bar(PLOTS['diversity']['x'], PLOTS['diversity'][diversity]['y'], label=diversity.capitalize(), bottom=PLOTS['diversity'][diversity]['bottom'])
-
     ax.legend(bbox_to_anchor=(1.325, 1.3))
-
-    plt.draw()
 
 
 def plot_fraction(formatted_line: dict):
@@ -222,10 +246,6 @@ def plot_fraction(formatted_line: dict):
         y = float(formatted_line[HEADERS['fraction'][diversity]])
         PLOTS['fraction'][diversity].append(y)
 
-    if not PLOTS['fraction']['initialized']:
-        PLOTS['fraction']['initialized'] = True
-        ax.set_title('Fraction')
-
     ax.cla()
 
     ys = []
@@ -236,9 +256,12 @@ def plot_fraction(formatted_line: dict):
         labels.append(fraction.capitalize())
 
     ax.stackplot(PLOTS['fraction']['x'], *ys, labels=labels)
-    ax.legend(bbox_to_anchor=(1.325, 1.3))
 
-    plt.draw()
+    if not PLOTS['fraction']['initialized']:
+        PLOTS['fraction']['initialized'] = True
+        ax.set_title('Fraction')
+
+    ax.legend(bbox_to_anchor=(1.325, 1.3))
 
 
 def plot_min_max(formatted_line: dict):
@@ -246,7 +269,18 @@ def plot_min_max(formatted_line: dict):
              ['Maximo', 'Minimo', 'Promedio'],
              ['max', 'min', 'avg'],
              PLOTS['max']['subplot']
-             )
+     )
+
+
+def update_plot(frame):
+    global last_len_formatted_lines
+
+    if len(formatted_lines) != last_len_formatted_lines:
+        last_len_formatted_lines = len(formatted_lines)
+
+        plot_min_max(formatted_lines[-1])
+        plot_diversity(formatted_lines[-1])
+        plot_fraction(formatted_lines[-1])
 
 
 def run():
@@ -270,9 +304,8 @@ def run():
     PLOTS['diversity']['subplot'] = axs[1]
     PLOTS['fraction']['subplot'] = axs[2]
 
-    # plt_maximize()
+    anim = FuncAnimation(fig, update_plot, interval=25)
 
-    plt.ion()
     finished = False
     previous_empty_line = False
     reading = 0
@@ -291,11 +324,7 @@ def run():
             if reading < step:
                 continue
 
-            formatted_line = format_line(header, line)
-
-            plot_min_max(formatted_line)
-            plot_diversity(formatted_line)
-            plot_fraction(formatted_line)
+            formatted_lines.append(format_line(header, line))
         plt.pause(0.001)
 
     plt.pause(0.001)
