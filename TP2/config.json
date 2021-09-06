@@ -3,10 +3,10 @@
 
     "player": {
         "type": "ARCHER",
-        "count": 10000,
-        "selection": 500,
+        "count": 400,
+        "selection": 200,
         "height": {
-            "precalculated": true
+            "random": true
         }
     },
 
@@ -23,30 +23,40 @@
     },
 
     "crossover": {
-        "type": "ANNULAR"
+        "type": "UNIFORM",
+        "probability": 0.5
     },
 
     "mutation": {
-        "type": "GEN",
-        "probability": 0.5
+        "type": "MULTIGEN_UNIFORM",
+        "probability": 0.15,
+        "multigenLimitedM": 5
     },
 
     "fillMethod": "ALL",
 
     "stopCriteria": {
         "criteria": "GENERATIONS",
-        "parameter": 250
+        "parameter": 200
     },
 
     "selection": {
-        "methodA": "ELITE",
-        "methodB": "ROULETTE",
-        "factor": 0.8
+        "methodA": "TOURNAMENT_DETERMINISTIC",
+        "methodB": "TOURNAMENT_PROBABILISTIC",
+        "factor": 0.1
+    },
+
+    "tournamentDeterministic": {
+        "window": 20
+    },
+
+    "tournamentProbabilistic": {
+        "probability": 0.5
     },
 
     "replacement": {
-        "methodA": "ELITE",
-        "methodB": "ROULETTE",
-        "factor": 0.6
+        "methodA": "TOURNAMENT_DETERMINISTIC",
+        "methodB": "TOURNAMENT_PROBABILISTIC",
+        "factor": 0.1
     }
 }

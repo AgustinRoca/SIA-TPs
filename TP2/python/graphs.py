@@ -127,7 +127,7 @@ def open_file_pipe(filename: str):
     if os.name == 'nt':
         return subprocess.Popen(['powershell', 'Get-Content', filename, '-Wait'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-        return subprocess.Popen(['tail', '-F', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return subprocess.Popen(['tail', '-Fc+1', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
 def process_header(header: str):
