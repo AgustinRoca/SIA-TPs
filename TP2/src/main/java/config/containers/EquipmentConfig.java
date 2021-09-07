@@ -6,18 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EquipmentConfig {
-    private final boolean inMemory;
     private final Map<Class<? extends Equipment>, String> files;
     private final Map<Class<? extends Equipment>, Integer> equipments;
 
-    public EquipmentConfig(boolean inMemory, Map<Class<? extends Equipment>, String> files, Map<Class<? extends Equipment>, Integer> equipments) {
-        this.inMemory = inMemory;
+    public EquipmentConfig(Map<Class<? extends Equipment>, String> files, Map<Class<? extends Equipment>, Integer> equipments) {
         this.files = new HashMap<>(files);
         this.equipments = new HashMap<>(equipments);
-    }
-
-    public boolean isInMemory() {
-        return this.inMemory;
     }
 
     public Map<Class<? extends Equipment>, String> getFiles() {

@@ -113,7 +113,6 @@ public abstract class ConfigParser {
         }
 
         return new EquipmentConfig(
-                json.getBoolean("inMemory"),
                 files,
                 equipments
         );

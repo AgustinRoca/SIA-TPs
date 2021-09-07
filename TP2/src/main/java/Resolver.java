@@ -70,19 +70,13 @@ public class Resolver {
     private static void initialize() throws IOException {
         EquipmentConfig equipmentConfig = Config.getInstance().getEquipmentConfig();
 
-        if (equipmentConfig.isInMemory()) {
-            Map<Class<? extends Equipment>, Collection<Equipment>> equipmentMap = new HashMap<>();
+        Map<Class<? extends Equipment>, Collection<Equipment>> equipmentMap = new HashMap<>();
 
-            for (Map.Entry<Class<? extends Equipment>, String> entry : equipmentConfig.getFiles().entrySet()) {
-                Resolver.parseEquipment(entry.getKey(), equipmentMap, entry.getValue(), equipmentConfig.getEquipments().get(entry.getKey()));
-            }
-
-            Equipments.createInMemoryInstance(equipmentMap);
-        } else {
-            // TODO: Create File Instance
-
-            throw new RuntimeException("Not implemented");
+        for (Map.Entry<Class<? extends Equipment>, String> entry : equipmentConfig.getFiles().entrySet()) {
+            Resolver.parseEquipment(entry.getKey(), equipmentMap, entry.getValue(), equipmentConfig.getEquipments().get(entry.getKey()));
         }
+
+        Equipments.createInMemoryInstance(equipmentMap);
     }
 
     private static void parseEquipment(

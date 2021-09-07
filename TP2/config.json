@@ -2,7 +2,7 @@
     "outputPath": "./out.csv",
 
     "player": {
-        "type": "ARCHER",
+        "type": "WARRIOR",
         "count": 400,
         "selection": 200,
         "height": {
@@ -11,7 +11,6 @@
     },
 
     "equipment": {
-        "inMemory": true,
         "files": {
             "prefix": "./allitems",
             "boots": "botas.tsv",

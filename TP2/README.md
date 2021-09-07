@@ -22,7 +22,6 @@ La aplicacion recibe un unico parametro por linea de comandos, que es la ubicaci
     },
     
     "equipment": {
-        "inMemory": "(Boolean) Si esta seteado almacena la informacion en memoria",
         "files": {
             "[prefix]": "(String) prefix path",
             "boots": "(String) Path to tsv",
@@ -39,7 +38,7 @@ La aplicacion recibe un unico parametro por linea de comandos, que es la ubicaci
     },
 
     "mutation": {
-        "type": "(\"COMPLETE\", \"GEN\"",
+        "type": "(\"COMPLETE\", \"GEN\")",
         "probability": "(Double) en [0, 1]. Probabilidad de mutacion"
     } | {
         "type": "(\"MULTIGEN_LIMITED\", \"MULTIGEN_UNIFORM\")",
