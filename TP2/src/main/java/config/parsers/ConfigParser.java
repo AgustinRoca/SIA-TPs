@@ -198,7 +198,9 @@ public abstract class ConfigParser {
 
     private static BoltzmannConfig getBoltzmannConfig(JSONObject json) {
         return new BoltzmannConfig(
-                json.getDouble("k")
+                json.getDouble("k"),
+                json.getDouble("t0"),
+                json.getDouble("tc")
         );
     }
 

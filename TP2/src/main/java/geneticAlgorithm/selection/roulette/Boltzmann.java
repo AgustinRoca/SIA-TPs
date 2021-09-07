@@ -6,13 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Boltzmann extends Roulette {
-    private static final double TC = 500;
-    private static final double T0 = 20;
+    private final double tc;
+    private final double t0;
     private final double k;
-    private static final double T0_TC = TC - T0;
 
-    public Boltzmann(double k) {
+    public Boltzmann(double k, double t0, double tc) {
         this.k = k;
+        this.t0 = t0;
+        this.tc = tc;
     }
 
     @Override
@@ -27,6 +28,6 @@ public class Boltzmann extends Roulette {
     }
 
     private double getTemperature(int generation){
-        return TC + T0_TC * Math.exp(-k * generation);
+        return tc + (t0 - tc) * Math.exp(-k * generation);
     }
 }

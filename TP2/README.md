@@ -91,6 +91,8 @@ La aplicacion recibe un unico parametro por linea de comandos, que es la ubicaci
     },
     "boltzmann": {
         "k": "(Double) Coeficiente de la exponencial",
+        "t0": "(Double) Temperatura inicial para metodo de Boltzmann",
+        "tk": "(Double) Temperatura base para metodo de Boltzmann",
     },
 }
 ```
