@@ -90,8 +90,7 @@ La aplicacion recibe un unico parametro por linea de comandos, que es la ubicaci
         "window": "(Integer) W > 0 natural que representa la ventana para metodo Torneo Probabilistico"
     },
     "boltzmann": {
-        "t0": "(Double) Temperatura inicial para metodo de Boltzmann",
-        "tk": "(Double) Temperatura base para metodo de Boltzmann",
+        "k": "(Double) Coeficiente de la exponencial",
     },
 }
 ```

@@ -153,7 +153,7 @@ public class Engine {
             case UNIVERSAL:
                 return new Universal();
             case BOLTZMANN:
-                return new Boltzmann();
+                return new Boltzmann(config.getBoltzmannConfig().getK());
             case TOURNAMENT_DETERMINISTIC:
                 return new DeterministicTournament(config.getDeterministicTournamentConfig().getPlayersInMatch());
             case TOURNAMENT_PROBABILISTIC:

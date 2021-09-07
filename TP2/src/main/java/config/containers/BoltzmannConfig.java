@@ -1,19 +1,13 @@
 package config.containers;
 
 public class BoltzmannConfig {
-    private final double t0;
-    private final double tk;
+    private final double k;
 
-    public BoltzmannConfig(double t0, double tk) {
-        this.t0 = t0;
-        this.tk = tk;
+    public BoltzmannConfig(double k) {
+        this.k = k;
     }
 
-    public double getT0() {
-        return this.t0;
-    }
-
-    public double getTk() {
-        return this.tk;
+    public double getK() {
+        return k;
     }
 }
