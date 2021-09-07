@@ -1,15 +1,6 @@
 {
     "outputPath": "./out.csv",
 
-    "player": {
-        "type": "WARRIOR",
-        "count": 400,
-        "selection": 200,
-        "height": {
-            "random": true
-        }
-    },
-
     "equipment": {
         "files": {
             "prefix": "./allitems",
@@ -21,41 +12,41 @@
         }
     },
 
+    "player": {
+        "type": "WARRIOR",
+        "count": 400,
+        "selection": 200,
+        "height": {
+            "random": true
+        }
+    },
+
     "crossover": {
         "type": "UNIFORM",
         "probability": 0.5
     },
 
     "mutation": {
-        "type": "MULTIGEN_UNIFORM",
-        "probability": 0.15,
-        "multigenLimitedM": 5
+        "type": "GEN",
+        "probability": 0.5
     },
 
     "fillMethod": "ALL",
 
     "stopCriteria": {
         "criteria": "GENERATIONS",
-        "parameter": 200
+        "parameter": 150
     },
 
     "selection": {
-        "methodA": "TOURNAMENT_DETERMINISTIC",
-        "methodB": "TOURNAMENT_PROBABILISTIC",
-        "factor": 0.1
-    },
-
-    "tournamentDeterministic": {
-        "window": 20
-    },
-
-    "tournamentProbabilistic": {
-        "probability": 0.5
+        "methodA": "ELITE",
+        "methodB": "ROULETTE",
+        "factor": 0.5
     },
 
     "replacement": {
-        "methodA": "TOURNAMENT_DETERMINISTIC",
-        "methodB": "TOURNAMENT_PROBABILISTIC",
-        "factor": 0.1
+        "methodA": "ELITE",
+        "methodB": "ROULETTE",
+        "factor": 0.5
     }
 }

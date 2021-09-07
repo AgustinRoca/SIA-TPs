@@ -109,7 +109,7 @@ Archivo de ejemplo en: config.example.json
 Correr la siguiente linea en una terminal:
 
 ```bash
-java -jar TP2.jar <path config>
+mvn clean package exec:java -Dexec.mainClass="Resolver" -Dexec.args=<config.json path>
 ```
 
 ### Graficos
