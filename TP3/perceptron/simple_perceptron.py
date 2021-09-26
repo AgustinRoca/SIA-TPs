@@ -8,14 +8,13 @@ class SimplePerceptron:
         self.fs = fs
         self.w = np.zeros(dimension)
         self.input = np.zeros(dimension)
-        self.all_w = np.zeros(dimension)
 
     """
     :param out is a 1D array used when the perceptron is superficial
     :param sup_w is a 2D matrix with W vectors of superior layer if perceptron is not superficial
     :param sup_d is a 1D array with delta values of superior layer if perceptron is not superficial
     """
-    def train(self, eta: float, out: np.ndarray = None, sup_w: np.ndarray = None, sup_delta: np.ndarray = None, epoch: bool = False) -> (np.ndarray, float):
+    def train(self, eta: float, out: np.ndarray = None, sup_w: np.ndarray = None, sup_delta: np.ndarray = None) -> (np.ndarray, float):
         # Activation
         fp = self.fs['fp'](np.dot(self.input, self.w))
 
@@ -26,10 +25,7 @@ class SimplePerceptron:
 
         delta_w = (eta * d_i * self.input)
 
-        if epoch:
-            self.all_w += delta_w
-        else:
-            self.update_w(delta_w=delta_w)
+        self.w += delta_w
 
         return self.w, d_i
 
@@ -43,8 +39,3 @@ class SimplePerceptron:
 
     def randomize_w(self, ref: float) -> None:
         self.w = np.random.uniform(-ref, ref, len(self.w))
-
-    def update_w(self, delta_w: np.ndarray = np.asarray([]), epoch: bool = False):
-        if epoch:
-            delta_w = self.all_w
-        self.w += delta_w
