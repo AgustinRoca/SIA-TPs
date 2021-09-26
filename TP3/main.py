@@ -25,7 +25,6 @@ def run():
 
     training, expected, n_type = data_parser.parse_files(training_c['input'], training_c['output'], constants_c['system_threshold'])
 
-    fs = {}
     if system_c['function'] == "softmax":
         expected = utils.normalize_data(expected)
         fs = activation_functions.get_softmax_activation_function(constants_c['beta'])
