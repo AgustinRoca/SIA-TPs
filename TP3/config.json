@@ -1,0 +1,30 @@
+{
+    "training": {
+        "input": "input/ej3-entrenamiento.txt",
+        "output": "input/ej3b-salida-deseada.txt",
+        "ration": 50,
+        "cross_validation": false,
+        "training_ration": 10
+    },
+    "constants": {
+        "eta": 0.01,
+        "beta": 0.5,
+
+        "system_threshold": 1,
+        "error_threshold": 0.0,
+        "count_threshold": 100,
+        "a": 0.05,
+        "delta_error_decrease_iterations": 10,
+        "b": 0.1,
+        "delta_error_increase_iterations": 15
+    },
+    "system": {
+	    "layout": [10,10,10],
+        "function": "step",
+        "w": {
+            "random": 1.0,
+            "reset_iter": 100,
+            "error_enhance": false
+        }
+    }
+}
