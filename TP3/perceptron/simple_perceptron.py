@@ -37,5 +37,5 @@ class SimplePerceptron:
     def get_error(self, inp: np.ndarray, out: np.ndarray) -> float:
         return np.sum(np.abs((out - self.get_activation_value(inp)) ** 2)) / 2
 
-    def randomize_w(self, ref: float) -> None:
+    def set_w_random(self, ref: float) -> None:
         self.w = np.random.uniform(-ref, ref, len(self.w))
