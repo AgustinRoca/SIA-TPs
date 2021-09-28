@@ -23,7 +23,8 @@ def run():
     system_c = config['system']
     w_c = system_c['w']
 
-    training, expected, n_type = data_parser.parse_files(training_c['input'], training_c['output'], constants_c['system_threshold'])
+    training, expected, n_type = data_parser.parse_files(training_c['input'], training_c['output'],
+                                                         constants_c['system_threshold'])
 
     if system_c['function'] == "softmax":
         expected = utils.normalize_data(expected)
@@ -45,9 +46,13 @@ def run():
 
     i = 0
     while i < cross_validation_count:
-        training_subset, expected_subset, test_training_subset, test_expected_out_subset = utils.subset_data(training, expected, test_ratio, i)
+        training_subset, expected_subset, test_training_subset, test_expected_out_subset = utils.subset_data(training,
+                                                                                                             expected,
+                                                                                                             test_ratio,
+                                                                                                             i)
 
-        multi_perceptron = MultilayerPerceptron(fs, system_c["layout"], len(training_subset[0]), len(expected_subset[0]))
+        multi_perceptron = MultilayerPerceptron(fs, system_c["layout"], len(training_subset[0]),
+                                                len(expected_subset[0]))
 
         if 'random' in w_c:
             multi_perceptron.set_w_random(w_c['random'])

@@ -8,10 +8,13 @@ def normalize_data(data: np.ndarray) -> np.ndarray:
 def randomize_data(training: np.ndarray, expected: np.ndarray) -> (np.ndarray, np.ndarray):
     aux = np.c_[training.reshape(len(training), -1), expected.reshape(len(expected), -1)]
     np.random.shuffle(aux)
-    return aux[:, :training.size // len(training)].reshape(training.shape), aux[:, training.size // len(training):].reshape(expected.shape)
+    return aux[:, :training.size // len(training)].reshape(training.shape), aux[:,
+                                                                            training.size // len(training):].reshape(
+        expected.shape)
 
 
-def subset_data(training: np.ndarray, expected: np.ndarray, ratio: int, cross_validation_count: int) -> (np.ndarray, np.ndarray, np.ndarray, np.ndarray):
+def subset_data(training: np.ndarray, expected: np.ndarray, ratio: int, cross_validation_count: int) -> (
+np.ndarray, np.ndarray, np.ndarray, np.ndarray):
     length_test = int(len(training) * ratio / 100)
 
     test_training_data = []

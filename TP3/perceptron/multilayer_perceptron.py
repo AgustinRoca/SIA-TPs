@@ -1,7 +1,8 @@
 import multiprocessing.pool
+
 import numpy as np
 
-from TP3.perceptron.simple_perceptron import SimplePerceptron
+from TP3.perceptron import SimplePerceptron
 
 
 class MultilayerPerceptron:
@@ -16,7 +17,8 @@ class MultilayerPerceptron:
         superficial_d = np.empty(1)
         for layer in reversed(self.neurons):
             pool = multiprocessing.pool.ThreadPool(processes=len(layer))
-            superficial_w, superficial_d = zip(*pool.map(lambda sp: sp.train(expected_out, superficial_w, superficial_d, eta), layer))
+            superficial_w, superficial_d = zip(
+                *pool.map(lambda sp: sp.train(expected_out, superficial_w, superficial_d, eta), layer))
 
             # Tuples to list
             superficial_w = np.asarray(superficial_w)
@@ -26,7 +28,8 @@ class MultilayerPerceptron:
         activation_values = in_values
         for layer in self.neurons:
             pool = multiprocessing.pool.ThreadPool(processes=len(layer))
-            activation_values = pool.map(lambda sp: sp.get_activation_value(activation_values, training=training), layer)
+            activation_values = pool.map(lambda sp: sp.get_activation_value(activation_values, training=training),
+                                         layer)
             activation_values = np.transpose(np.asarray(activation_values))
 
         return activation_values

@@ -14,7 +14,9 @@ class SimplePerceptron:
     :param sup_w is a 2D matrix with W vectors of superior layer if perceptron is not superficial
     :param sup_d is a 1D array with delta values of superior layer if perceptron is not superficial
     """
-    def train(self, eta: float, out: np.ndarray = None, sup_w: np.ndarray = None, sup_delta: np.ndarray = None) -> (np.ndarray, float):
+
+    def train(self, eta: float, out: np.ndarray = None, sup_w: np.ndarray = None, sup_delta: np.ndarray = None) -> (
+    np.ndarray, float):
         # Activation
         fp = self.fs['fp'](np.dot(self.input, self.w))
 
