@@ -2,7 +2,7 @@
     "training": {
         "input": "input/ej3-entrenamiento.txt",
         "output": "input/ej3b-salida-deseada.txt",
-        "ration": 50,
+        "ratio": 50,
         "cross_validation": false,
         "training_ration": 10
     },

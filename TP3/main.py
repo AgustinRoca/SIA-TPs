@@ -39,7 +39,7 @@ def run():
 
         if test_ratio != 0:
             if len(training) % int(100 / test_ratio) != 0:
-                print("Training set / training ration is not a natural number: " + str(len(training)))
+                print("Training set / training ratio is not a natural number: " + str(len(training)))
                 exit(1)
         else:
             cross_validation_count = int(100 / test_ratio)
