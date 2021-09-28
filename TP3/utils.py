@@ -14,7 +14,7 @@ def randomize_data(training: np.ndarray, expected: np.ndarray) -> (np.ndarray, n
 
 
 def subset_data(training: np.ndarray, expected: np.ndarray, ratio: int, cross_validation_count: int) -> (
-np.ndarray, np.ndarray, np.ndarray, np.ndarray):
+        np.ndarray, np.ndarray, np.ndarray, np.ndarray):
     length_test = int(len(training) * ratio / 100)
 
     test_training_data = []

@@ -1,3 +1,18 @@
+# Perceptron Simple y Multicapa
+
+## Requerimientos
+
+Debe tener instalado python3 y ejecutar
+`pip install -r requirements.txt`
+
+## Ejecución
+Para ejecutar el programa se debe correr la siguiente linea desde el root del proyecto
+
+`python3 main.py`
+
+## Configuracion
+Para poder configurar la red neuronal y los problemas a ejecutar es necesario modificar el archivo config.json como de la siguiente manera:
+```json
 {
     "training": {
         "input": "input/ej3-entrenamiento.txt",
@@ -31,3 +46,4 @@
         }
     }
 }
+```
