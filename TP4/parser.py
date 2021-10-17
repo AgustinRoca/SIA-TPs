@@ -1,4 +1,4 @@
-from TP4.country import Country
+from country import Country
 
 
 class Parser:

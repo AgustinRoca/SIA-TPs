@@ -1,7 +1,7 @@
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
-from TP4.parser import Parser
+from parser import Parser
 
 
 def tp():
