@@ -47,7 +47,7 @@ class Hopfield:
         return
 
     def print_state(self, test_pattern, i):
-        print("\n*Epoch {} - H={}".format(i, self.get_energy(test_pattern)))
+        print("\n*Epoch {} - H={:.05f}".format(i, self.get_energy(test_pattern)))
         self.print_letter(test_pattern)
 
     def train(self, test_pattern, max_iterations):
