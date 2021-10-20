@@ -31,7 +31,7 @@ def print_results(pca1, training_set, countries, method):
 
 
 def get_primary_component_with_sklearn(countries, training_set):
-    df = pd.read_csv('europe.csv')
+    df = pd.read_csv('data/europe.csv')
     cols = ['Area', 'GDP', 'Inflation', 'Life.expect', 'Military', 'Pop.growth', 'Unemployment']
     std_df = StandardScaler().fit_transform(df[cols])
     pca = PCA(n_components=7)
@@ -54,7 +54,7 @@ def get_primary_component_with_oja(eta, training_set, epochs):
 
 
 def run(eta, epochs):
-    (countries, training_set) = parse_csv('europe.csv')
+    (countries, training_set) = parse_csv('data/europe.csv')
 
     pca = get_primary_component_with_sklearn(countries, training_set)
     pca_2 = get_primary_component_with_oja(eta, training_set, epochs)
@@ -67,6 +67,6 @@ def run(eta, epochs):
 
 
 if __name__ == '__main__':
-    eta = int(sys.argv[1])
+    eta = float(sys.argv[1])
     epochs = int(sys.argv[2])
     run(eta, epochs)
