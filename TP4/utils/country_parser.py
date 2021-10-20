@@ -1,7 +1,7 @@
-from country import Country
+from TP4.country import Country
 
 
-class Parser:
+class CountryParser:
     delimiter = ','
 
     def parse(self, filename):

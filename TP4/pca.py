@@ -1,11 +1,11 @@
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
-from parser import Parser
+from TP4x.utils.country_parser import CountryParser
 
 
 def tp():
-    parser = Parser()
+    parser = CountryParser()
     titles, countries = parser.parse('data/europe.csv')
     attributes_matrix = []
     for country in countries:

@@ -3,7 +3,7 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 
 from kohonen import Kohonen
-from parser import Parser
+from TP4x.utils.country_parser import CountryParser
 
 
 def countries_as_matrix(countries):
@@ -38,7 +38,7 @@ def get_matrix_variable(matrix, mean, std, var_index):
 
 def classifier():
     k = 5  # TODO: config
-    parser = Parser()
+    parser = CountryParser()
     titles, countries = parser.parse('data/europe.csv')
     means, stds, standardized_data = countries_as_matrix(countries)
     kohonen_model = Kohonen(k, standardized_data)
