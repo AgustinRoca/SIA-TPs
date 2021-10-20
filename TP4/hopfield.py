@@ -19,9 +19,9 @@ class Hopfield:
         for i in range(len(current_pattern)):
             if h[i] > 0:
                 new_value = 1
-            if h[i] < 0:
+            elif h[i] < 0:
                 new_value = -1
-            if h[i] == 0:
+            else:  # h[i] == 0:
                 new_value = current_pattern[i]
             aux = np.append(aux, new_value)
 
@@ -42,7 +42,7 @@ class Hopfield:
                     character = "▓"
                 else:
                     character = " "
-                sys.stdout.write(character)
+                print(character, end='')
             print("")
         return
 
