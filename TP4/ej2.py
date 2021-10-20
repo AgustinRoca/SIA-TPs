@@ -21,24 +21,29 @@ def parse(filename):
     result = []
 
     with open(filename, 'r') as f:
-        line = f.read()
+        chars = f.read()
         letters = 0
         lines_count = 0
+        line_c_count = 0
 
-        for i in range(len(line)):
-            c = line[i]
-            if c != '\n' and c != ' ':
-                if c == '.':
-                    value = -1
+        for i in range(len(chars)):
+            c = chars[i]
+
+            if c != '\n':
+                if lines_count >= 5:
+                    letters += 1
+                    lines_count = 0
+                    line_c_count = 0
+
                 if c == '*':
                     value = 1
+                else:
+                    value = -1
+                line_c_count += 1
                 result = np.append(result, value)
-
-            if c == '\n':
+            else:
                 lines_count += 1
-            if lines_count == 5:
-                letters += 1
-                lines_count = 0
+
         letters += 1
     return result.reshape(letters, 5*5)
 
