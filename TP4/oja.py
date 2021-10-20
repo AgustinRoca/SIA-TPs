@@ -19,12 +19,12 @@ def parse_csv(file_path):
 
 def print_results(pca1, training_set, countries, method):
     countries_pca1 = [np.inner(pca1, training_set[i]) for i in range(len(training_set))]
-    print('First Primary Component using {method}:'.format(method=method))
+    print(f'First Primary Component using {method}:')
     print(pca1)
     fig, ax = plt.subplots(1, 1)
     ax.bar(countries, countries_pca1)
     ax.set_ylabel('First Primary Component')
-    ax.set_title('First Primary Component per country using {method}'.format(method=method))
+    ax.set_title(f'First Primary Component per country using {method}')
     ax.set_xticks(range(len(countries)))
     ax.set_xticklabels(countries, rotation=90)
     plt.show()
