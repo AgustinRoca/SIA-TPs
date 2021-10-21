@@ -1,4 +1,8 @@
-import numpy as np 
+import random
+
+import numpy as np
+from matplotlib import pyplot as plt
+
 from hopfield import Hopfield
 from TP4.utils.letters import LETTERS_BITS
 
@@ -8,7 +12,7 @@ def noise_letter(letter, p, preserve_letter):
 
     result = [i for row in letter_bits for i in row]
     for i in range(len(result)):
-        if p > np.random.uniform(0, 1):
+        if p > random.random():
             if result[i] == -1:
                 result[i] = 1
             elif not preserve_letter:
@@ -48,12 +52,41 @@ def parse(filename):
     return result.reshape(letters, 5*5)
 
 
+def plot(letter, y):
+    plt.plot(y)
+
+    plt.xlabel('Porcentaje de ruido [%]')
+    plt.xticks([x for x in range(0, 101, 10)])
+
+    plt.yticks([y for y in range(0, 101, 10)])
+    plt.ylabel('Porcentaje aciertos correctos [%]')
+
+    plt.title('Aciertos con letra {}'.format(letter))
+
+    plt.show()
+
+
+def test(hp, letter, noise):
+    test_pattern = noise_letter(letter, noise, True)
+    return hp.train(test_pattern, 10, letter, pprint=False)
+
+
 def run():
     pattern = parse('data/letter_patterns.txt')
     hp = Hopfield(pattern)
 
-    test_pattern = noise_letter("J", 0.4, True)
-    hp.train(test_pattern, 10)
+    for c in ['X', 'V', 'A', 'I']:
+        y = []
+        x = []
+        for f in range(0, 100):
+            ps = 0
+            f = f / 100.0
+            for _ in range(0, 1000):
+                if test(hp, c, f):
+                    ps += 1
+            y.append(ps * 100 / 1000)
+            x.append(f)
+        plot(c, y)
 
 
 if __name__ == '__main__':

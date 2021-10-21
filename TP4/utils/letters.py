@@ -1,9 +1,13 @@
+import json
+
+import numpy as np
+
 LETTERS_BITS = {
     'A': [
         [-1, -1, 1, -1, -1],
         [-1, 1, -1, 1, -1],
-        [-1, 1, 1, 1, -1],
         [1, 1, 1, 1, 1],
+        [1, -1, -1, -1, 1],
         [1, -1, -1, -1, 1]
     ],
     'B': [
@@ -182,3 +186,17 @@ LETTERS_BITS = {
         [1, 1, 1, 1, 1]
     ],
 }
+
+
+def a2s(ar):
+    return ''.join(map(str, ar))
+
+
+BITS_LETTERS = {
+    a2s(np.array(ar, dtype=float).flatten()): c for c, ar in LETTERS_BITS.items()
+}
+
+
+def get_letter_from_bits(ar):
+    k = a2s(ar)
+    return BITS_LETTERS[k] if k in BITS_LETTERS else None

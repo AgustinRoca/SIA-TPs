@@ -1,6 +1,6 @@
-import sys
-
 import numpy as np
+
+from TP4.utils.letters import get_letter_from_bits
 
 
 class Hopfield:
@@ -15,15 +15,12 @@ class Hopfield:
     def update_pattern(self, current_pattern):
         h = np.dot(self.ws, current_pattern)
 
-        aux = np.array([])
+        aux = np.array(current_pattern, dtype=float)
         for i in range(len(current_pattern)):
             if h[i] > 0:
-                new_value = 1
+                aux[i] = 1
             elif h[i] < 0:
-                new_value = -1
-            else:  # h[i] == 0:
-                new_value = current_pattern[i]
-            aux = np.append(aux, new_value)
+                aux[i] = -1
 
         return aux
 
@@ -50,18 +47,21 @@ class Hopfield:
         print("\n*Epoch {} - H={:.05f}".format(i, self.get_energy(test_pattern)))
         self.print_letter(test_pattern)
 
-    def train(self, test_pattern, max_iterations):
+    def train(self, test_pattern, max_iterations, original_letter, pprint=True) -> bool:
         i = 0
 
-        self.print_state(test_pattern, i)
+        if pprint:
+            self.print_state(test_pattern, i)
         new_pattern = self.update_pattern(test_pattern)
         i += 1
-        self.print_state(new_pattern, i)
+        if pprint:
+            self.print_state(new_pattern, i)
 
         while i < 2 or (not np.array_equal(test_pattern, new_pattern) and i <= max_iterations):
             test_pattern = new_pattern
             new_pattern = self.update_pattern(test_pattern)
             i += 1
-            self.print_state(new_pattern, i)
+            if pprint:
+                self.print_state(new_pattern, i)
 
-        return new_pattern
+        return get_letter_from_bits(new_pattern) == original_letter
