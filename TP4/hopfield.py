@@ -1,6 +1,6 @@
 import numpy as np
 
-from TP4.utils.letters import get_letter_from_bits
+from TP4.utils.letters import get_letter_from_bits, a2s
 
 
 class Hopfield:
@@ -47,7 +47,7 @@ class Hopfield:
         print("\n*Epoch {} - H={:.05f}".format(i, self.get_energy(test_pattern)))
         self.print_letter(test_pattern)
 
-    def train(self, test_pattern, max_iterations, original_letter, pprint=True) -> bool:
+    def train(self, test_pattern, max_iterations, original_letter, pprint=True) -> (bool, bool):
         i = 0
 
         if pprint:
@@ -64,4 +64,5 @@ class Hopfield:
             if pprint:
                 self.print_state(new_pattern, i)
 
-        return get_letter_from_bits(new_pattern) == original_letter
+        new_letter = get_letter_from_bits(new_pattern)
+        return new_letter == original_letter, new_letter is None
