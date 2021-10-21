@@ -63,7 +63,7 @@ def plot(letter, y, y2):
     plt.xticks([x for x in range(0, 101, 10)])
 
     plt.yticks([y for y in range(0, 101, 10)])
-    plt.ylabel('[%]')
+    plt.ylabel('Porcentaje [%]')
 
     plt.legend(bbox_to_anchor=(1, 1))
     plt.title('Aciertos y estados espureos letra {}'.format(letter))
@@ -78,7 +78,7 @@ def test(hp, letter, noise):
 
 
 def run():
-    pattern = parse('data/letter_patterns_2.txt')
+    pattern = parse('data/letter_patterns.txt')
     hp = Hopfield(pattern)
 
     letters = [get_letter_from_bits(l) for l in hp.letter_patterns]
@@ -90,15 +90,15 @@ def run():
             v = 0
             sp = 0
             f = f / 100.0
-            for _ in range(0, 100):
+            for _ in range(0, 1000):
                 valid, espureo = test(hp, c, f)
                 if valid:
                     v += 1
                 if espureo:
                     sp += 1
 
-            y.append(v * 100 / 100)
-            y2.append(sp * 100 / 100)
+            y.append(v * 100 / 1000)
+            y2.append(sp * 100 / 1000)
             x.append(f)
         plot(c, y, y2)
 
