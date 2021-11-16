@@ -1,0 +1,22 @@
+{
+    "task": {
+        "ej": "1a",
+        "fontSet": 2
+    },
+
+    "epochs": 1000,
+    "eta": 0.05,
+    "beta": 0.02,
+    "divisionLayer": 3,
+
+    "momentum": {
+        "enabled": true,
+        "factor": 0.5
+    },
+    "adaptiveLearning": {
+        "enabled": true,
+        "epochs": 10,
+        "a": 0.4,
+        "b": 0.6
+    }
+}
