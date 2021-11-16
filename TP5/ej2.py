@@ -120,7 +120,7 @@ def generate(decoder, data_shape):
 
 
 def main():
-    data_shape, train_results, test_results = train_and_test_tf(dataset_name)
+    data_shape, train_results, test_results = train_and_test_tf('quickdraw_bitmap')
 
     input_shape = train_results[0].shape[1]
     latent_shape = 2

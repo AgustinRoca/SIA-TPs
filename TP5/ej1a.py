@@ -60,7 +60,7 @@ def train_normal(config: Config, ae, dataset):
         dataset = utils.randomize(dataset, config.data_random_seed)
 
         for data in dataset:
-            ae.train(data, data, config.eta)
+            ae.train_tf(data, data, config.eta)
 
         ae.update_weights()
         error = ae.error(dataset, dataset, config.trust, config.use_trust)

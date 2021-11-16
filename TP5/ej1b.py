@@ -61,7 +61,7 @@ def train_normal(config: Config, ae, dataset):
         dataset = utils.randomize(dataset, config.data_random_seed)
 
         for data in dataset:
-            ae.train(utils.generate_noise(data, config.den_pm), data, config.eta)
+            ae.train_tf(utils.generate_noise(data, config.den_pm), data, config.eta)
 
         ae.update_weights()
         error = ae.error(utils.generate_noise_dataset(dataset, config.den_pm), dataset, config.trust, config.use_trust)
