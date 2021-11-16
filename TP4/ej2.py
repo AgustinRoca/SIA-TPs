@@ -74,7 +74,7 @@ def plot(letter, y, y2):
 
 def test(hp, letter, noise):
     test_pattern = noise_letter(letter, noise, True)
-    return hp.train(test_pattern, 10, letter, pprint=False)
+    return hp.train_tf(test_pattern, 10, letter, pprint=False)
 
 
 def run():
