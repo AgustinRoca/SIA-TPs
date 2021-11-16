@@ -15,6 +15,7 @@ class Config:
         self.eta = config['eta']
         self.beta = config['beta']
         self.division_layer = config['divisionLayer']
+        self.interval_training = config['interval_training']
 
         aux = config['momentum']
         self.momentum = aux['enabled']

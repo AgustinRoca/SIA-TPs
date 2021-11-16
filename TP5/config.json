@@ -8,6 +8,7 @@
     "eta": 0.05,
     "beta": 0.02,
     "divisionLayer": 3,
+    "interval_training": 4,
 
     "momentum": {
         "enabled": true,
