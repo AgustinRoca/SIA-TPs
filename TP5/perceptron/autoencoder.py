@@ -82,16 +82,16 @@ class AutoEncoder:
                 s_p.w = flat_weights[w_index:w_index + len(s_p.w)]
                 w_index += len(s_p.w)
 
-    def error_minimizer(self, flat_w, data_in, data_out, trust, use_trust):
+    def error_optimizer(self, flat_w, data_in, data_out, trust, use_trust):
         self.unflatten_weights(flat_w)
         err = self.error(data_in, data_out, trust, use_trust)
         self.optimizer_error.append(err)
         print(f'Optimizer error: {err}')
         return err
 
-    def train_minimizer(self, data_in, data_out, trust, use_trust, method, max_iter, max_fev):
+    def train_optimizer(self, data_in, data_out, trust, use_trust, method, max_iter, max_fev):
         flat_weights = self.flatten_weights()
-        res = optimize.minimize(self.error_minimizer, flat_weights, method=method,
+        res = optimize.minimize(self.error_optimizer, flat_weights, method=method,
                                 args=(data_in, data_out, trust, use_trust),
                                 options={'maxiter': max_iter, 'maxfev': max_fev, 'disp': True})
         self.unflatten_weights(res.x)

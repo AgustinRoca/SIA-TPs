@@ -38,7 +38,7 @@ def initialize_plot():
 
 def train_with_optimizer(config: Config, ae, dataset):
     dataset = utils.randomize(dataset, config.data_random_seed)
-    ae.train_minimizer(
+    ae.train_optimizer(
         dataset,
         dataset,
         config.trust,
