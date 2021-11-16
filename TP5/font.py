@@ -1,4 +1,5 @@
 # Usen solo uno de los tres.  Son 32 patrones de 7x5 cada uno
+import numpy as np
 
 FONT1 = [
     [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],   # 0x20, space
@@ -206,18 +207,49 @@ LABEL3 = [
     'DEL',
 ]
 
+COLORS = [
+    [0xFF, 0x00, 0x00],
+    [0x00, 0xFF, 0x00],
+    [0x00, 0x00, 0xFF],
+    [0x73, 0x3B, 0xCE],
+    [0x46, 0x46, 0x4E]
+]
+
+
+def hex_to_bin_array(hex_array):
+    to_ret = []
+    for a in hex_array:
+        matrix = list(map(lambda x: list(bin(x)[2:].zfill(5)), a))
+        print(a)
+        print(matrix)
+        flattened = list(map(lambda b: -1 if int(b) == 0 else 1, np.array(matrix).flatten()))
+        to_ret.append(flattened)
+    return to_ret
+
+
+def hex_to_bin_array2(hex_array):
+    to_ret = []
+    for a in hex_array:
+        matrix = list(map(lambda x: list(bin(x)[2:].zfill(8)), a))
+        flattened = list(map(lambda b: -1 if int(b) == 0 else 1, np.array(matrix).flatten()))
+        to_ret.append(flattened)
+    return to_ret
+
 
 FONTS = {
+    0: {
+        'bytes': hex_to_bin_array2(COLORS),
+    },
     1: {
-        'bytes': FONT1,
+        'bytes': hex_to_bin_array(FONT1),
         'labels': LABEL1,
     },
     2: {
-        'bytes': FONT2,
+        'bytes': hex_to_bin_array(FONT2),
         'labels': LABEL2,
     },
     3: {
-        'bytes': FONT3,
+        'bytes': hex_to_bin_array(FONT3),
         'labels': LABEL3,
     }
 }
