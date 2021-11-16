@@ -1,7 +1,7 @@
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
-from TP4x.utils.country_parser import CountryParser
+from TP4.utils.country_parser import CountryParser
 
 
 def tp():

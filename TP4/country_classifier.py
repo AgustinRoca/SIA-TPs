@@ -3,7 +3,7 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 
 from kohonen import Kohonen
-from TP4x.utils.country_parser import CountryParser
+from TP4.utils.country_parser import CountryParser
 
 
 def countries_as_matrix(countries):
@@ -50,9 +50,11 @@ def classifier():
     for classification in classifications:
         counter[classification[0]][classification[1]] += 1
 
-    sns.heatmap(kohonen_model.weight_distance_matrix(), cmap='gray')
+    heat = sns.heatmap(kohonen_model.weight_distance_matrix(), cmap='gray')
+    heat.set_title('Matriz U')
     plt.show()
-    sns.heatmap(counter, cmap='gray')
+    heat = sns.heatmap(counter, cmap='gray')
+    heat.set_title('Cantidad de países por neurona')
     plt.show()
     for var_index in range(len(standardized_data[0])):
         one_var = get_matrix_variable(kohonen_model.matrix, means[var_index], stds[var_index], var_index)

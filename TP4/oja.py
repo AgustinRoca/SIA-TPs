@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
-
+from matplotlib.pyplot import figure
 
 def parse_csv(file_path):
     parsed_file = pd.read_csv(file_path)
@@ -27,6 +27,7 @@ def print_results(pca1, training_set, countries, method):
     ax.set_title(f'First Primary Component per country using {method}')
     ax.set_xticks(range(len(countries)))
     ax.set_xticklabels(countries, rotation=90)
+    fig.set_size_inches(10, 12)
     plt.show()
 
 
