@@ -13,8 +13,8 @@
 		"use_trust": false
 	},
 	"network": {
-		"system": "tanh",
-		"beta": 0.9,
+		"system": "exp",
+		"beta": 0.5,
 		"mid_layout": [25],
 		"latent_dim": 2,
 		"randomize_w": true,
