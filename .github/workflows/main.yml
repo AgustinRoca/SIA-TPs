@@ -1,6 +1,6 @@
 name: Convert Markdown to PDF
 
-on: [push]
+on: workflow_dispatch
 
 jobs:
   build-pdf:
